@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { fetchLoanEligibility } from "@/services/loanService";
 import { useToast } from "@/components/ui/use-toast";
+import { Terminal } from "@/components/Terminal";
 
 const Loan = () => {
   const navigate = useNavigate();
@@ -43,8 +44,8 @@ const Loan = () => {
     <div className="min-h-screen">
       <Header title="Get a Loan" />
       
-      <div className="p-6">
-        <div className="glass-card p-6 mb-6">
+      <div className="p-6 space-y-6">
+        <div className="glass-card p-6">
           <h2 className="text-2xl font-semibold mb-4">Current Loan Eligibility</h2>
           
           <div className="flex items-center mb-4">
@@ -58,6 +59,8 @@ const Loan = () => {
             <p className="text-gray-600">Duration: {data?.duration || "N/A"}</p>
           </div>
         </div>
+
+        <Terminal />
 
         <button 
           onClick={handleApply}
