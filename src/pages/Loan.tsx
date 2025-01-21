@@ -1,9 +1,43 @@
 import { Header } from "@/components/Header";
 import { Shield } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
+import { fetchLoanEligibility } from "@/services/loanService";
+import { useToast } from "@/components/ui/use-toast";
 
 const Loan = () => {
   const navigate = useNavigate();
+  const { toast } = useToast();
+
+  const { data, isLoading, error } = useQuery({
+    queryKey: ['loanEligibility'],
+    queryFn: fetchLoanEligibility,
+  });
+
+  const handleApply = () => {
+    if (error) {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "Failed to verify loan eligibility. Please try again.",
+      });
+      return;
+    }
+    
+    console.log("Applying for loan...");
+    navigate("/dashboard");
+  };
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen">
+        <Header title="Get a Loan" />
+        <div className="flex justify-center items-center h-[calc(100vh-80px)]">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen">
@@ -19,15 +53,16 @@ const Loan = () => {
           </div>
 
           <div className="space-y-2">
-            <p className="text-gray-600">Loan Amount: $1</p>
-            <p className="text-gray-600">Interest Rate: 2%</p>
-            <p className="text-gray-600">Duration: 30 days</p>
+            <p className="text-gray-600">Loan Amount: {data?.amount || "$0"}</p>
+            <p className="text-gray-600">Interest Rate: {data?.interest || "0%"}</p>
+            <p className="text-gray-600">Duration: {data?.duration || "N/A"}</p>
           </div>
         </div>
 
         <button 
-          onClick={() => navigate("/dashboard")}
+          onClick={handleApply}
           className="glass-button w-full"
+          disabled={isLoading || !!error}
         >
           Apply Now
         </button>
