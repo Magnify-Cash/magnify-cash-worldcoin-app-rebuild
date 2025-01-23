@@ -21,7 +21,7 @@ const Welcome = () => {
       {/* Hero Section */}
       <div className="container mx-auto px-6 pt-20 pb-24">
         <div className="max-w-4xl mx-auto text-center">
-          <h1 className="text-5xl md:text-6xl font-medium mb-6 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 text-transparent bg-clip-text animate-gradient">
+          <h1 className="text-5xl md:text-6xl font-medium mb-6 bg-gradient-to-r from-[#00f5d4] via-white to-[#ff6b6b] text-transparent bg-clip-text animate-gradient">
             Unlock Your Digital Identity's Value
           </h1>
           
@@ -32,7 +32,7 @@ const Welcome = () => {
           <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16">
             <button
               onClick={() => navigate("/wallet")}
-              className="glass-button flex items-center justify-center gap-2 bg-gradient-to-r from-blue-500 to-purple-500"
+              className="glass-button flex items-center justify-center gap-2 bg-gradient-to-r from-[#00f5d4] to-[#ff6b6b]"
             >
               Start Your Journey
               <ArrowRight className="w-5 h-5" />
