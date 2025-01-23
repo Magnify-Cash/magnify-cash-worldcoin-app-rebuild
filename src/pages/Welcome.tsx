@@ -9,12 +9,6 @@ const Welcome = () => {
       {/* Navigation */}
       <nav className="px-6 py-4 flex justify-between items-center border-b border-gray-100">
         <div className="text-gray-900 text-2xl font-medium">Magnify Cash</div>
-        <button 
-          onClick={() => navigate("/wallet")}
-          className="px-4 py-2 text-sm text-gray-600 hover:text-gray-900 transition-all rounded-lg"
-        >
-          Get Started
-        </button>
       </nav>
 
       {/* Hero Section */}
