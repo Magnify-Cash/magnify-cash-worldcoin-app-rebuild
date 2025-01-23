@@ -21,18 +21,18 @@ const Welcome = () => {
       {/* Hero Section */}
       <div className="container mx-auto px-6 pt-20 pb-24">
         <div className="max-w-4xl mx-auto text-center">
-          <h1 className="text-5xl md:text-6xl font-medium mb-6 bg-gradient-to-r from-[#00f5d4] via-white to-[#ff6b6b] text-transparent bg-clip-text animate-gradient">
+          <h1 className="text-5xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-[#00f5d4] to-[#ff6b6b] text-transparent bg-clip-text animate-gradient">
             Unlock Your Digital Identity's Value
           </h1>
           
-          <p className="text-lg md:text-xl text-gray-500 mb-12 max-w-2xl mx-auto">
+          <p className="text-lg md:text-xl text-gray-700 mb-12 max-w-2xl mx-auto font-medium">
             Get instant loans backed by your World ID. No collateral needed, just your verified digital presence.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16">
             <button
               onClick={() => navigate("/wallet")}
-              className="glass-button flex items-center justify-center gap-2 bg-gradient-to-r from-[#00f5d4] to-[#ff6b6b]"
+              className="glass-button flex items-center justify-center gap-2 bg-gradient-to-r from-[#00f5d4] to-[#ff6b6b] hover:shadow-lg"
             >
               Start Your Journey
               <ArrowRight className="w-5 h-5" />
@@ -40,7 +40,7 @@ const Welcome = () => {
             
             <button
               disabled
-              className="flex items-center justify-center gap-2 py-3 px-6 rounded-xl border border-gray-200 text-gray-400 cursor-not-allowed opacity-75 transition-all duration-300"
+              className="flex items-center justify-center gap-2 py-3 px-6 rounded-xl border border-gray-200 text-gray-600 cursor-not-allowed opacity-75 transition-all duration-300 font-medium"
             >
               Become a Lender - Coming Soon
               <ArrowRight className="w-5 h-5" />
@@ -48,9 +48,9 @@ const Welcome = () => {
           </div>
 
           {/* Trust Badge */}
-          <div className="flex items-center justify-center gap-2 text-gray-400">
+          <div className="flex items-center justify-center gap-2 text-gray-600">
             <Shield className="w-5 h-5" />
-            <span className="text-sm">
+            <span className="text-sm font-medium">
               Backed by Industry Leaders in Web3 & DeFi
             </span>
           </div>
