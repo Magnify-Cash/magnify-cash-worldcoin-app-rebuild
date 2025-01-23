@@ -8,7 +8,14 @@ const Welcome = () => {
     <div className="min-h-screen bg-white">
       {/* Navigation */}
       <nav className="px-6 py-4 flex justify-between items-center border-b border-gray-100">
-        <div className="text-gray-900 text-2xl font-medium">Magnify Cash</div>
+        <div className="flex items-center gap-2">
+          <img 
+            src="/lovable-uploads/f590c0ed-415e-4ed0-8f6b-631288f14028.png" 
+            alt="Magnify Cash Logo" 
+            className="w-8 h-8 rounded-[20%]"
+          />
+          <div className="text-gray-900 text-2xl font-medium">Magnify Cash</div>
+        </div>
       </nav>
 
       {/* Hero Section */}
