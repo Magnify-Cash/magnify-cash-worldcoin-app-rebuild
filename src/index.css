@@ -38,15 +38,15 @@
 }
 
 .glass-card {
-  @apply bg-white bg-opacity-50 backdrop-blur-lg rounded-2xl border border-white border-opacity-20 shadow-lg;
+  @apply bg-white shadow-sm hover:shadow-md transition-all rounded-xl border border-gray-100;
 }
 
 .glass-button {
-  @apply text-white font-medium py-3 px-6 rounded-xl hover:opacity-90 transition-all duration-300 shadow-lg;
+  @apply text-white font-medium py-3 px-6 rounded-xl hover:opacity-90 transition-all duration-300 shadow-sm hover:shadow-md;
 }
 
 .tip-card {
-  @apply bg-pink-100 p-4 rounded-xl text-gray-700 my-4;
+  @apply bg-gray-50 p-4 rounded-xl text-gray-700 my-4 border border-gray-100;
 }
 
 /* Add smooth scrolling */

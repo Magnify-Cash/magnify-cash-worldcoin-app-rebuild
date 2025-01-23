@@ -6,7 +6,7 @@ const Wallet = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen bg-white">
       <Header title="Wallet" showBack={false} />
       
       <div className="p-6">
@@ -30,17 +30,17 @@ const Wallet = () => {
         <div className="grid grid-cols-2 gap-4">
           <button
             onClick={() => navigate("/loan")}
-            className="glass-card p-6 text-center"
+            className="bg-white border border-gray-100 shadow-sm hover:shadow-md transition-all p-6 text-center rounded-xl"
           >
             <span className="text-2xl mb-2 block">+</span>
-            <span>Get a loan</span>
+            <span className="text-gray-600">Get a loan</span>
           </button>
           <button
             onClick={() => navigate("/dashboard")}
-            className="glass-card p-6 text-center"
+            className="bg-white border border-gray-100 shadow-sm hover:shadow-md transition-all p-6 text-center rounded-xl"
           >
             <span className="text-2xl mb-2 block">📊</span>
-            <span>Dashboard</span>
+            <span className="text-gray-600">Dashboard</span>
           </button>
         </div>
       </div>
