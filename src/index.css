@@ -42,9 +42,32 @@
 }
 
 .glass-button {
-  @apply bg-black text-white font-medium py-3 px-6 rounded-xl hover:opacity-90 transition-opacity;
+  @apply text-white font-medium py-3 px-6 rounded-xl hover:opacity-90 transition-all duration-300 shadow-lg;
 }
 
 .tip-card {
   @apply bg-pink-100 p-4 rounded-xl text-gray-700 my-4;
+}
+
+/* Add smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Add text gradient animation */
+@keyframes gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.animate-gradient {
+  background-size: 200% 200%;
+  animation: gradient 6s ease infinite;
 }
