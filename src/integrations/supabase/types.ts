@@ -504,6 +504,39 @@ export type Database = {
         }
         Relationships: []
       }
+      jays_work: {
+        Row: {
+          created_at: string
+          description: string | null
+          due_date: string | null
+          id: number
+          metadata: Json | null
+          priority: number
+          status: string
+          title: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          due_date?: string | null
+          id?: number
+          metadata?: Json | null
+          priority?: number
+          status?: string
+          title: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          due_date?: string | null
+          id?: number
+          metadata?: Json | null
+          priority?: number
+          status?: string
+          title?: string
+        }
+        Relationships: []
+      }
       mag_token_analytics: {
         Row: {
           circulating_supply: number | null
