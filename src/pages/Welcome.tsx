@@ -32,8 +32,8 @@ const Welcome = () => {
             </button>
             
             <button
-              onClick={() => navigate("/guide")}
-              className="flex items-center justify-center gap-2 py-3 px-6 rounded-xl border border-gray-200 text-gray-600 hover:text-gray-900 hover:border-gray-400 transition-all duration-300"
+              disabled
+              className="flex items-center justify-center gap-2 py-3 px-6 rounded-xl border border-gray-200 text-gray-400 cursor-not-allowed opacity-75 transition-all duration-300"
             >
               Become a Lender - Coming Soon
               <ArrowRight className="w-5 h-5" />
