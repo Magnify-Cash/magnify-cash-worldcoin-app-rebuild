@@ -537,6 +537,81 @@ export type Database = {
         }
         Relationships: []
       }
+      liquidity_pools: {
+        Row: {
+          apy: number
+          created_at: string
+          id: number
+          metadata: Json | null
+          name: string
+          token_a: string
+          token_a_amount: number
+          token_b: string
+          token_b_amount: number
+          total_value_locked: number
+          updated_at: string
+        }
+        Insert: {
+          apy?: number
+          created_at?: string
+          id?: number
+          metadata?: Json | null
+          name: string
+          token_a: string
+          token_a_amount?: number
+          token_b: string
+          token_b_amount?: number
+          total_value_locked?: number
+          updated_at?: string
+        }
+        Update: {
+          apy?: number
+          created_at?: string
+          id?: number
+          metadata?: Json | null
+          name?: string
+          token_a?: string
+          token_a_amount?: number
+          token_b?: string
+          token_b_amount?: number
+          total_value_locked?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      mag_rewards: {
+        Row: {
+          amount: number
+          claim_deadline: string | null
+          claimed: boolean
+          created_at: string
+          id: number
+          metadata: Json | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          amount?: number
+          claim_deadline?: string | null
+          claimed?: boolean
+          created_at?: string
+          id?: number
+          metadata?: Json | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          amount?: number
+          claim_deadline?: string | null
+          claimed?: boolean
+          created_at?: string
+          id?: number
+          metadata?: Json | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       mag_token_analytics: {
         Row: {
           circulating_supply: number | null
@@ -617,6 +692,47 @@ export type Database = {
           symbol?: string
         }
         Relationships: []
+      }
+      user_pool_positions: {
+        Row: {
+          created_at: string
+          id: number
+          pool_id: number
+          token_a_amount: number
+          token_b_amount: number
+          total_value_locked: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: number
+          pool_id: number
+          token_a_amount?: number
+          token_b_amount?: number
+          total_value_locked?: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: number
+          pool_id?: number
+          token_a_amount?: number
+          token_b_amount?: number
+          total_value_locked?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_pool_positions_pool_id_fkey"
+            columns: ["pool_id"]
+            isOneToOne: false
+            referencedRelation: "liquidity_pools"
+            referencedColumns: ["id"]
+          },
+        ]
       }
     }
     Views: {
