@@ -4,6 +4,7 @@ export interface WalletBalance {
   symbol: string;
   balance: string;
   updated_at: string;
+  user_id?: string;
 }
 
 export interface Transaction {
@@ -13,5 +14,6 @@ export interface Transaction {
   amount: number;
   status: 'pending' | 'completed' | 'failed';
   created_at: string;
+  user_id?: string;
   metadata?: Record<string, any>;
 }

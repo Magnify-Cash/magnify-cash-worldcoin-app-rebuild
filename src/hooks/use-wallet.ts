@@ -15,12 +15,18 @@ export function useWallet() {
   } = useQuery({
     queryKey: ["wallet-balances"],
     queryFn: async () => {
+      console.log("Fetching wallet balances...");
       const { data, error } = await supabase
         .from("wallet_balances")
         .select("*")
         .order("created_at", { ascending: true });
 
-      if (error) throw error;
+      if (error) {
+        console.error("Error fetching wallet balances:", error);
+        throw error;
+      }
+      
+      console.log("Wallet balances fetched:", data);
       return data as WalletBalance[];
     },
   });
@@ -32,19 +38,26 @@ export function useWallet() {
   } = useQuery({
     queryKey: ["transactions"],
     queryFn: async () => {
+      console.log("Fetching transactions...");
       const { data, error } = await supabase
         .from("transactions")
         .select("*")
         .order("created_at", { ascending: false })
         .limit(50);
 
-      if (error) throw error;
+      if (error) {
+        console.error("Error fetching transactions:", error);
+        throw error;
+      }
+
+      console.log("Transactions fetched:", data);
       return data as Transaction[];
     },
   });
 
   // Set up real-time subscription for balance updates
   useEffect(() => {
+    console.log("Setting up wallet balance subscription...");
     const channel = supabase
       .channel("wallet_changes")
       .on(
@@ -66,6 +79,7 @@ export function useWallet() {
       .subscribe();
 
     return () => {
+      console.log("Cleaning up wallet balance subscription...");
       supabase.removeChannel(channel);
     };
   }, [queryClient, toast]);

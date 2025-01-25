@@ -693,6 +693,39 @@ export type Database = {
         }
         Relationships: []
       }
+      transactions: {
+        Row: {
+          amount: number
+          created_at: string
+          currency: string
+          id: number
+          metadata: Json | null
+          status: string
+          type: string
+          user_id: string | null
+        }
+        Insert: {
+          amount: number
+          created_at?: string
+          currency: string
+          id?: number
+          metadata?: Json | null
+          status?: string
+          type: string
+          user_id?: string | null
+        }
+        Update: {
+          amount?: number
+          created_at?: string
+          currency?: string
+          id?: number
+          metadata?: Json | null
+          status?: string
+          type?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       user_pool_positions: {
         Row: {
           created_at: string
@@ -733,6 +766,36 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      wallet_balances: {
+        Row: {
+          balance: string
+          created_at: string
+          currency: string
+          id: number
+          symbol: string
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          balance: string
+          created_at?: string
+          currency: string
+          id?: number
+          symbol: string
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          balance?: string
+          created_at?: string
+          currency?: string
+          id?: number
+          symbol?: string
+          updated_at?: string
+          user_id?: string | null
+        }
+        Relationships: []
       }
     }
     Views: {
