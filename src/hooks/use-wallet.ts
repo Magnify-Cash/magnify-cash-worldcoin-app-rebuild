@@ -4,6 +4,12 @@ import type { WalletBalance, Transaction } from "@/types/wallet";
 import { useEffect } from "react";
 import { useToast } from "@/components/ui/use-toast";
 
+const logAuditEvent = async (event: string, details: any) => {
+  console.log(`[Audit] ${event}:`, details);
+  // In a production environment, you would want to persist these logs
+  // to a secure storage system or dedicated audit log table
+};
+
 export function useWallet() {
   const queryClient = useQueryClient();
   const { toast } = useToast();
@@ -16,6 +22,8 @@ export function useWallet() {
     queryKey: ["wallet-balances"],
     queryFn: async () => {
       console.log("Fetching wallet balances...");
+      await logAuditEvent("FETCH_BALANCES", { timestamp: new Date().toISOString() });
+      
       const { data, error } = await supabase
         .from("wallet_balances")
         .select("*")
@@ -23,10 +31,12 @@ export function useWallet() {
 
       if (error) {
         console.error("Error fetching wallet balances:", error);
+        await logAuditEvent("FETCH_BALANCES_ERROR", { error });
         throw error;
       }
       
       console.log("Wallet balances fetched:", data);
+      await logAuditEvent("FETCH_BALANCES_SUCCESS", { count: data?.length });
       return data as WalletBalance[];
     },
   });
@@ -39,6 +49,8 @@ export function useWallet() {
     queryKey: ["transactions"],
     queryFn: async () => {
       console.log("Fetching transactions...");
+      await logAuditEvent("FETCH_TRANSACTIONS", { timestamp: new Date().toISOString() });
+      
       const { data, error } = await supabase
         .from("transactions")
         .select("*")
@@ -47,10 +59,12 @@ export function useWallet() {
 
       if (error) {
         console.error("Error fetching transactions:", error);
+        await logAuditEvent("FETCH_TRANSACTIONS_ERROR", { error });
         throw error;
       }
 
       console.log("Transactions fetched:", data);
+      await logAuditEvent("FETCH_TRANSACTIONS_SUCCESS", { count: data?.length });
       return data as Transaction[];
     },
   });
@@ -67,8 +81,14 @@ export function useWallet() {
           schema: "public",
           table: "wallet_balances",
         },
-        (payload) => {
+        async (payload) => {
           console.log("Wallet balance changed:", payload);
+          await logAuditEvent("WALLET_BALANCE_CHANGED", { 
+            type: payload.eventType,
+            record: payload.new,
+            timestamp: new Date().toISOString()
+          });
+          
           queryClient.invalidateQueries({ queryKey: ["wallet-balances"] });
           toast({
             title: "Balance Updated",
