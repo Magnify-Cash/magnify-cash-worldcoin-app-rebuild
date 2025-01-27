@@ -10,9 +10,9 @@ const Dashboard = () => {
   const idCollaterals = [
     {
       title: "World ID",
-      amount: "$5,000",
-      interest: "5% APR",
-      duration: "12 months",
+      amount: "$10",
+      interest: "2% APR",
+      duration: "30 days",
       icon: "world" as const
     },
     {
