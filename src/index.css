@@ -11,10 +11,10 @@
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
     
-    --primary: 262 83% 58%;
+    --primary: 0 100% 73%;
     --primary-foreground: 210 40% 98%;
-    --primary-light: 262 83% 68%;
-    --primary-dark: 262 83% 48%;
+    --primary-light: 0 100% 80%;
+    --primary-dark: 0 100% 66%;
     
     --secondary: 217 91% 60%;
     --secondary-foreground: 222.2 47.4% 11.2%;
@@ -24,10 +24,10 @@
     --muted: 210 40% 96.1%;
     --muted-foreground: 215.4 16.3% 46.9%;
     
-    --accent: 191 91% 37%;
+    --accent: 0 100% 73%;
     --accent-foreground: 222.2 47.4% 11.2%;
-    --accent-light: 191 91% 47%;
-    --accent-dark: 191 91% 27%;
+    --accent-light: 0 100% 80%;
+    --accent-dark: 0 100% 66%;
     
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
@@ -46,10 +46,10 @@
     --popover: 222.2 84% 4.9%;
     --popover-foreground: 210 40% 98%;
     
-    --primary: 262 83% 58%;
+    --primary: 0 100% 73%;
     --primary-foreground: 210 40% 98%;
-    --primary-light: 262 83% 68%;
-    --primary-dark: 262 83% 48%;
+    --primary-light: 0 100% 80%;
+    --primary-dark: 0 100% 66%;
     
     --secondary: 217 91% 60%;
     --secondary-foreground: 210 40% 98%;
@@ -59,10 +59,10 @@
     --muted: 217.2 32.6% 17.5%;
     --muted-foreground: 215 20.2% 65.1%;
     
-    --accent: 191 91% 37%;
+    --accent: 0 100% 73%;
     --accent-foreground: 210 40% 98%;
-    --accent-light: 191 91% 47%;
-    --accent-dark: 191 91% 27%;
+    --accent-light: 0 100% 80%;
+    --accent-dark: 0 100% 66%;
     
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 210 40% 98%;
@@ -90,7 +90,7 @@
 }
 
 .glass-button {
-  @apply bg-primary hover:bg-primary-dark text-white font-medium 
+  @apply bg-[#FF7777] hover:bg-[#FF5555] text-white font-medium 
          py-3 px-6 rounded-xl transition-all duration-300 
          shadow-lg hover:shadow-xl disabled:opacity-50 
          disabled:cursor-not-allowed;
@@ -121,7 +121,7 @@ html {
 /* Custom utility classes */
 .text-gradient {
   @apply bg-clip-text text-transparent bg-gradient-to-r 
-         from-primary via-secondary to-accent animate-gradient;
+         from-[#FF7777] via-[#FF9999] to-[#FF5555] animate-gradient;
 }
 
 .hover-lift {
