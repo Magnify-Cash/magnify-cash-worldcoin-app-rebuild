@@ -13,21 +13,21 @@ const Dashboard = () => {
       amount: "$5,000",
       interest: "5% APR",
       duration: "12 months",
-      icon: "passport"
+      icon: "passport" as const
     },
     {
       title: "Device Credential",
       amount: "$2,000",
       interest: "7% APR",
       duration: "6 months",
-      icon: "device"
+      icon: "device" as const
     },
     {
       title: "Orb Scan",
       amount: "$10,000",
       interest: "4.5% APR",
       duration: "24 months",
-      icon: "orb"
+      icon: "orb" as const
     }
   ];
 
@@ -35,7 +35,7 @@ const Dashboard = () => {
     <div className="min-h-screen bg-background">
       <Header title="Dashboard" />
       
-      <div className="p-6 max-w-2xl mx-auto">
+      <div className="p-6 max-w-4xl mx-auto">
         {/* User Info Section */}
         <div className="text-center mb-8">
           <motion.div
@@ -63,7 +63,7 @@ const Dashboard = () => {
             Available ID Collaterals
           </h2>
           
-          <div className="space-y-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {idCollaterals.map((collateral, index) => (
               <motion.div
                 key={collateral.title}
