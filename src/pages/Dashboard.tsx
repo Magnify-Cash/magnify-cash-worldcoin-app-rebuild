@@ -21,7 +21,7 @@ const Dashboard = () => {
             <div className="flex items-center justify-center mb-4">
               <User className="w-12 h-12 text-primary" />
             </div>
-            <h2 className="text-2xl font-bold text-gradient mb-2">@ty</h2>
+            <h2 className="text-2xl font-bold text-gradient mb-2">@Tytan</h2>
             <p className="text-muted-foreground">Verified User</p>
           </motion.div>
         </div>
