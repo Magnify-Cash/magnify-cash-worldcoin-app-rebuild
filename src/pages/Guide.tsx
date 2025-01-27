@@ -18,11 +18,11 @@ const Guide = () => {
           </p>
 
           <LoanCard
-            title="DEVICE"
+            title="WORLD ID"
             amount="$1"
             interest="2%"
             duration="30 days"
-            icon="device"
+            icon="world"
           />
           <LoanCard
             title="PASSPORT"
