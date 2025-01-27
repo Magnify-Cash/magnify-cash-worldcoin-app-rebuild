@@ -51,38 +51,12 @@ const Dashboard = () => {
           </motion.div>
         </div>
 
-        {/* ID Vault Section */}
+        {/* Loan Information */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
           className="glass-card p-6 mb-8"
-        >
-          <h2 className="text-xl font-semibold mb-6 flex items-center gap-2">
-            <ShieldCheck className="w-6 h-6 text-primary" />
-            Available ID Collaterals
-          </h2>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {idCollaterals.map((collateral, index) => (
-              <motion.div
-                key={collateral.title}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.1 * (index + 1) }}
-              >
-                <LoanCard {...collateral} />
-              </motion.div>
-            ))}
-          </div>
-        </motion.div>
-
-        {/* Loan Information */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
-          className="glass-card p-6"
         >
           <h2 className="text-xl font-semibold mb-6 flex items-center gap-2">
             <DollarSign className="w-6 h-6 text-primary" />
@@ -102,6 +76,32 @@ const Dashboard = () => {
                 View Details
               </button>
             </div>
+          </div>
+        </motion.div>
+
+        {/* ID Vault Section */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
+          className="glass-card p-6"
+        >
+          <h2 className="text-xl font-semibold mb-6 flex items-center gap-2">
+            <ShieldCheck className="w-6 h-6 text-primary" />
+            Available ID Collaterals
+          </h2>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {idCollaterals.map((collateral, index) => (
+              <motion.div
+                key={collateral.title}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.1 * (index + 1) }}
+              >
+                <LoanCard {...collateral} />
+              </motion.div>
+            ))}
           </div>
         </motion.div>
       </div>
