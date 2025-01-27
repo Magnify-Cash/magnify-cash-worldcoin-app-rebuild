@@ -2,9 +2,34 @@ import { Header } from "@/components/Header";
 import { useNavigate } from "react-router-dom";
 import { User, CreditCard, DollarSign, ShieldCheck } from "lucide-react";
 import { motion } from "framer-motion";
+import { LoanCard } from "@/components/LoanCard";
 
 const Dashboard = () => {
   const navigate = useNavigate();
+
+  const idCollaterals = [
+    {
+      title: "World ID",
+      amount: "$5,000",
+      interest: "5% APR",
+      duration: "12 months",
+      icon: "passport"
+    },
+    {
+      title: "Device Credential",
+      amount: "$2,000",
+      interest: "7% APR",
+      duration: "6 months",
+      icon: "device"
+    },
+    {
+      title: "Orb Scan",
+      amount: "$10,000",
+      interest: "4.5% APR",
+      duration: "24 months",
+      icon: "orb"
+    }
+  ];
 
   return (
     <div className="min-h-screen bg-background">
@@ -35,20 +60,20 @@ const Dashboard = () => {
         >
           <h2 className="text-xl font-semibold mb-6 flex items-center gap-2">
             <ShieldCheck className="w-6 h-6 text-primary" />
-            ID Vault
+            Available ID Collaterals
           </h2>
           
           <div className="space-y-4">
-            <div className="flex items-center justify-between p-4 bg-primary/10 dark:bg-primary/20 rounded-lg">
-              <div className="flex items-center gap-3">
-                <CreditCard className="w-6 h-6 text-primary" />
-                <div>
-                  <p className="font-semibold">World ID</p>
-                  <p className="text-sm text-muted-foreground">Verified Credential</p>
-                </div>
-              </div>
-              <ShieldCheck className="w-6 h-6 text-green-500" />
-            </div>
+            {idCollaterals.map((collateral, index) => (
+              <motion.div
+                key={collateral.title}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.1 * (index + 1) }}
+              >
+                <LoanCard {...collateral} />
+              </motion.div>
+            ))}
           </div>
         </motion.div>
 
