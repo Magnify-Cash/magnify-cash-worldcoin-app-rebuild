@@ -10,9 +10,9 @@ const Dashboard = () => {
   const idCollaterals = [
     {
       title: "World ID",
-      amount: "$10",
-      interest: "2% APR",
-      duration: "30 days",
+      amount: "$5,000",
+      interest: "5% APR",
+      duration: "12 months",
       icon: "world" as const
     },
     {
@@ -24,9 +24,9 @@ const Dashboard = () => {
     },
     {
       title: "Orb Scan",
-      amount: "$10,000",
-      interest: "4.5% APR",
-      duration: "24 months",
+      amount: "$10",
+      interest: "2% APR",
+      duration: "30 days",
       icon: "orb" as const
     }
   ];
