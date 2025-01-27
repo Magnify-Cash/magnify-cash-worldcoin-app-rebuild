@@ -1,6 +1,6 @@
 import { Header } from "@/components/Header";
 import { useNavigate } from "react-router-dom";
-import { User, CreditCard, DollarSign, ShieldCheck } from "lucide-react";
+import { User, DollarSign, Shield, Globe } from "lucide-react";
 import { motion } from "framer-motion";
 import { LoanCard } from "@/components/LoanCard";
 
@@ -13,14 +13,14 @@ const Dashboard = () => {
       amount: "$5,000",
       interest: "5% APR",
       duration: "12 months",
-      icon: "passport" as const
+      icon: "world" as const
     },
     {
-      title: "Device Credential",
+      title: "Passport Credential",
       amount: "$2,000",
       interest: "7% APR",
       duration: "6 months",
-      icon: "device" as const
+      icon: "passport" as const
     },
     {
       title: "Orb Scan",
@@ -37,19 +37,17 @@ const Dashboard = () => {
       
       <div className="p-6 max-w-4xl mx-auto">
         {/* User Info Section */}
-        <div className="text-center mb-8">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="glass-card p-6 mb-4"
-          >
-            <div className="flex items-center justify-center mb-4">
-              <User className="w-12 h-12 text-primary" />
-            </div>
-            <h2 className="text-2xl font-bold text-gradient mb-2">@Tytan</h2>
-            <p className="text-muted-foreground">Verified User</p>
-          </motion.div>
-        </div>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="glass-card p-6 mb-8"
+        >
+          <div className="flex items-center justify-center mb-4">
+            <User className="w-12 h-12 text-primary" />
+          </div>
+          <h2 className="text-2xl font-bold text-gradient mb-2 text-center">@Tytan</h2>
+          <p className="text-muted-foreground text-center">Verified User</p>
+        </motion.div>
 
         {/* Loan Information */}
         <motion.div
@@ -87,7 +85,7 @@ const Dashboard = () => {
           className="glass-card p-6"
         >
           <h2 className="text-xl font-semibold mb-6 flex items-center gap-2">
-            <ShieldCheck className="w-6 h-6 text-primary" />
+            <Shield className="w-6 h-6 text-primary" />
             Available ID Collaterals
           </h2>
           
