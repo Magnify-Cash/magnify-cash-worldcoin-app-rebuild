@@ -19,20 +19,20 @@ export const WalletCard = ({
   const getIcon = () => {
     switch (symbol.toLowerCase()) {
       case 'wld':
-        return <Wallet className="w-6 h-6 text-blue-500" />;
+        return <Wallet className="w-6 h-6 text-primary" />;
       case 'usdc.e':
-        return <DollarSign className="w-6 h-6 text-green-500" />;
+        return <DollarSign className="w-6 h-6 text-secondary" />;
       default:
-        return <CreditCard className="w-6 h-6 text-purple-500" />;
+        return <CreditCard className="w-6 h-6 text-accent" />;
     }
   };
 
   if (isLoading) {
     return (
-      <div className="bg-white border border-gray-100 shadow-sm rounded-xl p-4">
+      <div className="glass-card p-6">
         <div className="flex justify-between items-center">
           <div className="flex items-center gap-3">
-            <Skeleton className="w-6 h-6 rounded-full" />
+            <Skeleton className="w-8 h-8 rounded-full" />
             <div>
               <Skeleton className="h-5 w-24" />
               <Skeleton className="h-4 w-16 mt-1" />
@@ -49,14 +49,16 @@ export const WalletCard = ({
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3 }}
-      className="bg-white border border-gray-100 shadow-sm hover:shadow-md transition-all rounded-xl p-4"
+      className="glass-card p-6 hover-lift"
     >
       <div className="flex justify-between items-center">
-        <div className="flex items-center gap-3">
-          {getIcon()}
+        <div className="flex items-center gap-4">
+          <div className="p-3 rounded-full bg-primary/10 dark:bg-primary/20">
+            {getIcon()}
+          </div>
           <div>
-            <h3 className="text-lg font-medium text-gray-900">{currency}</h3>
-            <p className="text-sm text-gray-500">{symbol}</p>
+            <h3 className="text-lg font-semibold text-foreground">{currency}</h3>
+            <p className="text-sm text-muted-foreground">{symbol}</p>
           </div>
         </div>
         <motion.div 
@@ -66,7 +68,7 @@ export const WalletCard = ({
           animate={{ scale: 1, opacity: 1 }}
           transition={{ duration: 0.2 }}
         >
-          <p className="text-xl font-medium text-gray-900">{balance}</p>
+          <p className="text-xl font-bold text-gradient">{balance}</p>
         </motion.div>
       </div>
     </motion.div>

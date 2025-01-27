@@ -11,10 +11,10 @@ const Wallet = () => {
   const { balances, transactions, isLoading, error } = useWallet();
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-background">
       <Header title="Wallet" showBack={false} />
       
-      <div className="p-6">
+      <div className="p-6 max-w-2xl mx-auto">
         {error && (
           <Alert variant="destructive" className="mb-6">
             <AlertCircle className="h-4 w-4" />
@@ -25,7 +25,7 @@ const Wallet = () => {
         )}
 
         <div className="text-center mb-8">
-          <span className="text-4xl">@</span>
+          <span className="text-4xl text-gradient">@</span>
         </div>
 
         <div className="grid grid-cols-1 gap-4 mb-8">
@@ -59,21 +59,21 @@ const Wallet = () => {
         <div className="grid grid-cols-2 gap-4 mb-8">
           <button
             onClick={() => navigate("/loan")}
-            className="bg-white border border-gray-100 shadow-sm hover:shadow-md transition-all p-6 text-center rounded-xl"
+            className="glass-card p-6 text-center hover-lift"
           >
-            <span className="text-2xl mb-2 block">+</span>
-            <span className="text-gray-600">Get a loan</span>
+            <span className="text-2xl mb-2 block text-primary">+</span>
+            <span className="text-muted-foreground">Get a loan</span>
           </button>
           <button
             onClick={() => navigate("/dashboard")}
-            className="bg-white border border-gray-100 shadow-sm hover:shadow-md transition-all p-6 text-center rounded-xl"
+            className="glass-card p-6 text-center hover-lift"
           >
-            <span className="text-2xl mb-2 block">📊</span>
-            <span className="text-gray-600">Dashboard</span>
+            <span className="text-2xl mb-2 block text-secondary">📊</span>
+            <span className="text-muted-foreground">Dashboard</span>
           </button>
         </div>
 
-        <h2 className="text-xl font-semibold mb-4">Recent Transactions</h2>
+        <h2 className="text-xl font-semibold mb-4 text-foreground">Recent Transactions</h2>
         <TransactionList 
           transactions={transactions}
           isLoading={isLoading}
