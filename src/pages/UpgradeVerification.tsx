@@ -11,6 +11,10 @@ const UpgradeVerification = () => {
   // Mock verification level - replace with actual user verification level later
   const verificationLevel: VerificationLevel = "device";
 
+  const isMaxLevel = (level: VerificationLevel): boolean => {
+    return level === "orb";
+  };
+
   return (
     <div className="min-h-screen bg-background">
       <Header title="Upgrade Verification" />
@@ -32,7 +36,7 @@ const UpgradeVerification = () => {
           </p>
         </motion.div>
 
-        {verificationLevel === "orb" ? (
+        {isMaxLevel(verificationLevel) ? (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
