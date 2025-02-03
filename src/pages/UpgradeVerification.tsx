@@ -3,12 +3,13 @@ import { Shield, FileCheck, Globe } from "lucide-react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 
-type VerificationLevel = "device" | "passport" | "orb";
+const verificationLevels = ["device", "passport", "orb"] as const;
+type VerificationLevel = typeof verificationLevels[number];
 
 const UpgradeVerification = () => {
   const navigate = useNavigate();
   // Mock verification level - replace with actual user verification level later
-  const verificationLevel: VerificationLevel = "device"; // Options: "device", "passport", "orb"
+  const verificationLevel: VerificationLevel = "device";
 
   return (
     <div className="min-h-screen bg-background">
