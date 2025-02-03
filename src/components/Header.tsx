@@ -42,6 +42,9 @@ export const Header = ({ title, showBack = true }: { title: string; showBack?: b
           <DropdownMenuItem onClick={() => navigate("/guide")}>
             Guide
           </DropdownMenuItem>
+          <DropdownMenuItem onClick={() => navigate("/profile")}>
+            Profile
+          </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
     </div>

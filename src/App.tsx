@@ -8,6 +8,7 @@ import Wallet from "./pages/Wallet";
 import Loan from "./pages/Loan";
 import Dashboard from "./pages/Dashboard";
 import Guide from "./pages/Guide";
+import Profile from "./pages/Profile";
 
 const queryClient = new QueryClient();
 
@@ -23,6 +24,7 @@ const App = () => (
           <Route path="/loan" element={<Loan />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/guide" element={<Guide />} />
+          <Route path="/profile" element={<Profile />} />
         </Routes>
       </BrowserRouter>
     </TooltipProvider>
