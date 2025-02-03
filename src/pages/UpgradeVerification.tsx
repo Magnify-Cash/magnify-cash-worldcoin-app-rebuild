@@ -1,12 +1,14 @@
 import { Header } from "@/components/Header";
-import { Shield, Passport, Globe } from "lucide-react";
+import { Shield, FileCheck, Globe } from "lucide-react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
+
+type VerificationLevel = "device" | "passport" | "orb";
 
 const UpgradeVerification = () => {
   const navigate = useNavigate();
   // Mock verification level - replace with actual user verification level later
-  const verificationLevel = "device"; // Options: "device", "passport", "orb"
+  const verificationLevel: VerificationLevel = "device"; // Options: "device", "passport", "orb"
 
   return (
     <div className="min-h-screen bg-background">
@@ -52,7 +54,7 @@ const UpgradeVerification = () => {
               transition={{ delay: 0.2 }}
               className="glass-card p-6 opacity-50 cursor-not-allowed"
             >
-              <Passport className="w-12 h-12 mx-auto mb-4 text-secondary" />
+              <FileCheck className="w-12 h-12 mx-auto mb-4 text-secondary" />
               <h3 className="text-xl font-semibold mb-2 text-center">
                 Passport Verification
               </h3>
