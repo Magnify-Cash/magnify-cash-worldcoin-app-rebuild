@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 
 const verificationLevels = ["device", "passport", "orb"] as const;
-type VerificationLevel = typeof verificationLevels[number];
+type VerificationLevel = (typeof verificationLevels)[number];
 
 const UpgradeVerification = () => {
   const navigate = useNavigate();
