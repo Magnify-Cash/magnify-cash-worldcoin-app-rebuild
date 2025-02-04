@@ -11,9 +11,9 @@ const Profile = () => {
   };
 
   const mockNFTs = [
-    { type: "World ID", status: "Available", amount: 500 },
-    { type: "Passport", status: "In Use", amount: 1000 },
-    { type: "Orb Scan", status: "Available", amount: 2000 },
+    { type: "World ID", status: "Available", amount: 1 },
+    { type: "Passport", status: "In Use", amount: 5 },
+    { type: "Orb Scan", status: "Available", amount: 10 },
   ];
 
   return (
