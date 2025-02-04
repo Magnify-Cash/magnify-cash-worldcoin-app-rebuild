@@ -1,6 +1,5 @@
 import { Header } from "@/components/Header";
 import { WalletCard } from "@/components/WalletCard";
-import { TransactionList } from "@/components/TransactionList";
 import { useNavigate } from "react-router-dom";
 import { useWallet } from "@/hooks/use-wallet";
 import { Alert, AlertDescription } from "@/components/ui/alert";
@@ -121,15 +120,6 @@ const Wallet = () => {
               <span className="text-sm text-muted-foreground">Dashboard</span>
             </div>
           </Button>
-        </div>
-
-        {/* Recent Transactions */}
-        <div className="mt-8">
-          <h2 className="text-xl font-semibold mb-4 text-foreground">Recent Transactions</h2>
-          <TransactionList 
-            transactions={transactions}
-            isLoading={isLoading}
-          />
         </div>
       </div>
     </div>
