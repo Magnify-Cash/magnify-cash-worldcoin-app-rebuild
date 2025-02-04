@@ -1,4 +1,4 @@
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Home } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import {
   DropdownMenu,
@@ -70,6 +70,10 @@ export const Header = ({ title, showBack = true }: HeaderProps) => {
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-56">
               <DropdownMenuLabel>Quick Access</DropdownMenuLabel>
+              <DropdownMenuItem onClick={() => navigate("/welcome")}>
+                <Home className="mr-2 h-4 w-4" />
+                Welcome
+              </DropdownMenuItem>
               <DropdownMenuItem onClick={() => navigate("/announcements")}>
                 Announcements
               </DropdownMenuItem>
