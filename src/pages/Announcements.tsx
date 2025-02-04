@@ -71,6 +71,35 @@ const getBadgeText = (type: string) => {
   }
 };
 
+// Helper function to group announcements by month
+const groupAnnouncementsByMonth = (announcements: typeof announcements) => {
+  const groups = announcements.reduce((acc, announcement) => {
+    const date = new Date(announcement.date);
+    const monthYear = date.toLocaleString('default', { month: 'long', year: 'numeric' });
+    
+    if (!acc[monthYear]) {
+      acc[monthYear] = [];
+    }
+    acc[monthYear].push(announcement);
+    return acc;
+  }, {} as Record<string, typeof announcements>);
+
+  return Object.entries(groups).sort((a, b) => {
+    const dateA = new Date(a[1][0].date);
+    const dateB = new Date(b[1][0].date);
+    return dateB.getTime() - dateA.getTime();
+  });
+};
+
+// Helper function to check if announcement is recent (less than 7 days old)
+const isRecent = (date: string) => {
+  const announcementDate = new Date(date);
+  const now = new Date();
+  const diffTime = Math.abs(now.getTime() - announcementDate.getTime());
+  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+  return diffDays <= 7;
+};
+
 const Announcements = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
@@ -95,66 +124,86 @@ const Announcements = () => {
   };
 
   const isRead = (id: number) => readAnnouncements.includes(id);
+  const groupedAnnouncements = groupAnnouncementsByMonth(announcements);
 
   return (
     <div className="min-h-screen bg-background">
       <Header title="Announcements" showBack={false} />
       
-      <div className="container max-w-2xl mx-auto p-6 space-y-6">
-        {announcements.map((announcement, index) => (
+      <div className="container max-w-2xl mx-auto p-6 space-y-8">
+        {groupedAnnouncements.map(([monthYear, monthAnnouncements], groupIndex) => (
           <motion.div
-            key={announcement.id}
+            key={monthYear}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: index * 0.1 }}
-            className={`glass-card p-6 hover-lift transition-all duration-200 hover:shadow-lg relative ${
-              announcement.isHighlighted 
-                ? "border-2 border-secondary ring-2 ring-secondary/20" 
-                : ""
-            }`}
+            transition={{ delay: groupIndex * 0.1 }}
           >
-            {announcement.isNew && !isRead(announcement.id) && (
-              <div className="absolute -top-1 -right-1 w-3 h-3 bg-primary rounded-full animate-pulse" />
-            )}
-            <div className="flex justify-between items-start mb-2">
-              <div className="flex items-center gap-2">
-                {announcement.isHighlighted && (
-                  <Star className="h-5 w-5 text-secondary animate-pulse" />
-                )}
-                <h3 className="text-lg font-semibold text-foreground">
-                  {announcement.title}
-                </h3>
-                <Badge variant={getBadgeVariant(announcement.type)}>
-                  {getBadgeText(announcement.type)}
-                </Badge>
-              </div>
-              <div className="flex items-center gap-2">
-                <span className="text-sm text-muted-foreground">
-                  {new Date(announcement.date).toLocaleDateString()}
-                </span>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className={`${isRead(announcement.id) ? 'text-primary' : 'text-muted-foreground'}`}
-                  onClick={() => markAsRead(announcement.id)}
+            <h2 className="text-xl font-semibold mb-4 text-foreground">{monthYear}</h2>
+            <div className="space-y-4">
+              {monthAnnouncements.map((announcement, index) => (
+                <motion.div
+                  key={announcement.id}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: (groupIndex + index) * 0.1 }}
+                  className={`glass-card p-6 hover-lift transition-all duration-200 hover:shadow-lg relative ${
+                    announcement.isHighlighted 
+                      ? "border-2 border-secondary ring-2 ring-secondary/20" 
+                      : ""
+                  }`}
                 >
-                  <Check className="h-4 w-4" />
-                </Button>
-              </div>
+                  {announcement.isNew && !isRead(announcement.id) && (
+                    <div className="absolute -top-1 -right-1 w-3 h-3 bg-primary rounded-full animate-pulse" />
+                  )}
+                  <div className="flex justify-between items-start mb-2">
+                    <div className="flex items-center gap-2 flex-wrap">
+                      {announcement.isHighlighted && (
+                        <Star className="h-5 w-5 text-secondary animate-pulse" />
+                      )}
+                      <h3 className="text-lg font-semibold text-foreground">
+                        {announcement.title}
+                      </h3>
+                      <div className="flex gap-2">
+                        <Badge variant={getBadgeVariant(announcement.type)}>
+                          {getBadgeText(announcement.type)}
+                        </Badge>
+                        {isRecent(announcement.date) && (
+                          <Badge variant="default" className="bg-primary hover:bg-primary">
+                            New
+                          </Badge>
+                        )}
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-sm text-muted-foreground">
+                        {new Date(announcement.date).toLocaleDateString()}
+                      </span>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className={`${isRead(announcement.id) ? 'text-primary' : 'text-muted-foreground'}`}
+                        onClick={() => markAsRead(announcement.id)}
+                      >
+                        <Check className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  </div>
+                  <p className="text-muted-foreground mt-2">
+                    {announcement.content}
+                  </p>
+                  {announcement.action && (
+                    <Button
+                      onClick={() => navigate(announcement.action)}
+                      className="mt-4"
+                      variant="outline"
+                      size="sm"
+                    >
+                      Try it now
+                    </Button>
+                  )}
+                </motion.div>
+              ))}
             </div>
-            <p className="text-muted-foreground mt-2">
-              {announcement.content}
-            </p>
-            {announcement.action && (
-              <Button
-                onClick={() => navigate(announcement.action)}
-                className="mt-4"
-                variant="outline"
-                size="sm"
-              >
-                Try it now
-              </Button>
-            )}
           </motion.div>
         ))}
 
