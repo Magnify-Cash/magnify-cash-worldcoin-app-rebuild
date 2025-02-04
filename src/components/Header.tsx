@@ -67,6 +67,9 @@ export const Header = ({ title, showBack = true }: HeaderProps) => {
               </button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
+              <DropdownMenuItem onClick={() => navigate("/announcements")}>
+                Announcements
+              </DropdownMenuItem>
               <DropdownMenuItem onClick={() => navigate("/dashboard")}>
                 Dashboard
               </DropdownMenuItem>
