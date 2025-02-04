@@ -36,7 +36,8 @@ const announcements: Announcement[] = [
     date: "2024-03-20",
     content: "We're excited to launch the new version of Magnify Cash with improved features and user experience.",
     type: "announcement",
-    isNew: true
+    isNew: true,
+    isHighlighted: true
   },
   {
     id: 3,
@@ -52,7 +53,8 @@ const announcements: Announcement[] = [
     date: "2024-03-18",
     content: "We've implemented additional security measures to keep your assets safe.",
     type: "security",
-    isNew: false
+    isNew: false,
+    isHighlighted: true
   },
 ];
 
@@ -159,11 +161,11 @@ const Announcements = () => {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: (groupIndex + index) * 0.1 }}
-                  className={`glass-card p-6 hover-lift transition-all duration-200 hover:shadow-lg relative ${
-                    announcement.isHighlighted 
-                      ? "border-2 border-secondary ring-2 ring-secondary/20" 
+                  className={`glass-card p-6 hover-lift transition-all duration-200 hover:shadow-lg relative 
+                    ${announcement.isHighlighted 
+                      ? "border-2 border-primary ring-2 ring-primary/20 bg-primary/5" 
                       : ""
-                  }`}
+                    }`}
                 >
                   {announcement.isNew && !isRead(announcement.id) && (
                     <div className="absolute -top-1 -right-1 w-3 h-3 bg-primary rounded-full animate-pulse" />
@@ -171,7 +173,7 @@ const Announcements = () => {
                   <div className="flex justify-between items-start mb-2">
                     <div className="flex items-center gap-2 flex-wrap">
                       {announcement.isHighlighted && (
-                        <Star className="h-5 w-5 text-secondary animate-pulse" />
+                        <Star className="h-5 w-5 text-primary animate-pulse" />
                       )}
                       <h3 className="text-lg font-semibold text-foreground">
                         {announcement.title}
