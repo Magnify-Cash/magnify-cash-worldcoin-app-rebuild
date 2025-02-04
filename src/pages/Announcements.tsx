@@ -7,8 +7,19 @@ import { Star, Check } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useToast } from "@/hooks/use-toast";
 
+interface Announcement {
+  id: number;
+  title: string;
+  date: string;
+  content: string;
+  action?: string;
+  type: "new-feature" | "security" | "update" | "announcement";
+  isHighlighted?: boolean;
+  isNew?: boolean;
+}
+
 // Sample announcements data - can be moved to an API/database later
-const announcements = [
+const announcements: Announcement[] = [
   {
     id: 1,
     title: "V2 is live",
@@ -45,7 +56,7 @@ const announcements = [
   },
 ];
 
-const getBadgeVariant = (type: string) => {
+const getBadgeVariant = (type: Announcement['type']) => {
   switch (type) {
     case "new-feature":
       return "secondary";
@@ -58,7 +69,7 @@ const getBadgeVariant = (type: string) => {
   }
 };
 
-const getBadgeText = (type: string) => {
+const getBadgeText = (type: Announcement['type']) => {
   switch (type) {
     case "new-feature":
       return "New Feature";
@@ -71,8 +82,10 @@ const getBadgeText = (type: string) => {
   }
 };
 
+type GroupedAnnouncements = [string, Announcement[]][];
+
 // Helper function to group announcements by month
-const groupAnnouncementsByMonth = (announcements: typeof announcements) => {
+const groupAnnouncementsByMonth = (announcements: Announcement[]): GroupedAnnouncements => {
   const groups = announcements.reduce((acc, announcement) => {
     const date = new Date(announcement.date);
     const monthYear = date.toLocaleString('default', { month: 'long', year: 'numeric' });
@@ -82,7 +95,7 @@ const groupAnnouncementsByMonth = (announcements: typeof announcements) => {
     }
     acc[monthYear].push(announcement);
     return acc;
-  }, {} as Record<string, typeof announcements>);
+  }, {} as Record<string, Announcement[]>);
 
   return Object.entries(groups).sort((a, b) => {
     const dateA = new Date(a[1][0].date);
@@ -193,7 +206,7 @@ const Announcements = () => {
                   </p>
                   {announcement.action && (
                     <Button
-                      onClick={() => navigate(announcement.action)}
+                      onClick={() => navigate(announcement.action!)}
                       className="mt-4"
                       variant="outline"
                       size="sm"
