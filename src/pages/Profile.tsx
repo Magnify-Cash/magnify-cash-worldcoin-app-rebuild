@@ -2,8 +2,11 @@ import { Header } from "@/components/Header";
 import { Shield, User, FileText } from "lucide-react";
 import { motion } from "framer-motion";
 import { Card } from "@/components/ui/card";
+import { useNavigate } from "react-router-dom";
 
 const Profile = () => {
+  const navigate = useNavigate();
+  
   // Mock data for UI implementation
   const mockUser = {
     username: "Demo User",
@@ -15,6 +18,10 @@ const Profile = () => {
     { type: "Passport", status: "In Use", amount: 5 },
     { type: "Orb Scan", status: "Available", amount: 10 },
   ];
+
+  const handleNFTClick = () => {
+    navigate("/loan");
+  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -58,6 +65,8 @@ const Profile = () => {
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.2 + index * 0.1 }}
+                onClick={handleNFTClick}
+                className="cursor-pointer transition-transform hover:scale-105"
               >
                 <Card className="p-4">
                   <div className="flex items-center justify-between">
