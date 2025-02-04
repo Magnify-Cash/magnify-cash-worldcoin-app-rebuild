@@ -24,7 +24,7 @@ const UpgradeVerification = () => {
       type: "Passport",
       icon: FileCheck,
       value: 5,
-      available: false, // Coming soon
+      available: true, // Changed from false to true
       description: "Enhanced verification with your passport",
     },
     {
