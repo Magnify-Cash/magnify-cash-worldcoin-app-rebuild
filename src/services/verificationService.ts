@@ -1,5 +1,7 @@
 import { supabase } from "@/integrations/supabase/client";
 
+export type VerificationLevel = "device" | "passport" | "orb";
+
 export type VerificationStatus = {
   hasDeviceVerification: boolean;
   hasPassportVerification: boolean;
@@ -21,7 +23,7 @@ export const checkVerificationEligibility = async (worldId: string): Promise<Ver
 
 export const upgradeVerification = async (
   worldId: string,
-  type: "device" | "passport" | "orb"
+  type: VerificationLevel
 ): Promise<boolean> => {
   console.log(`Upgrading verification for World ID ${worldId} to ${type}`);
   
