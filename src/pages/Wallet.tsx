@@ -3,7 +3,7 @@ import { WalletCard } from "@/components/WalletCard";
 import { useNavigate } from "react-router-dom";
 import { useWallet } from "@/hooks/use-wallet";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { AlertCircle, Plus, ArrowUpRight, MoreHorizontal } from "lucide-react";
+import { AlertCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const Wallet = () => {
@@ -47,25 +47,25 @@ const Wallet = () => {
           </h1>
 
           {/* Action Buttons */}
-          <div className="flex justify-center gap-4 mb-8">
+          <div className="grid grid-cols-2 gap-4 mb-8">
             <Button
               onClick={() => navigate("/loan")}
               variant="outline"
-              className="h-12 px-6 hover:bg-accent/10"
+              className="h-20 hover:bg-accent/10"
             >
-              <div className="flex items-center gap-2">
-                <span className="text-xl">💰</span>
-                <span>Get a Loan</span>
+              <div className="text-center">
+                <div className="text-2xl mb-1">💰</div>
+                <span className="text-sm text-muted-foreground">Get a loan</span>
               </div>
             </Button>
             <Button
               onClick={() => navigate("/dashboard")}
               variant="outline"
-              className="h-12 px-6 hover:bg-accent/10"
+              className="h-20 hover:bg-accent/10"
             >
-              <div className="flex items-center gap-2">
-                <span className="text-xl">📊</span>
-                <span>Loan Dashboard</span>
+              <div className="text-center">
+                <div className="text-2xl mb-1">📊</div>
+                <span className="text-sm text-muted-foreground">Loan Dashboard</span>
               </div>
             </Button>
           </div>
@@ -98,30 +98,6 @@ const Wallet = () => {
               />
             ))
           )}
-        </div>
-
-        {/* Loan and Dashboard Buttons */}
-        <div className="grid grid-cols-2 gap-4 mb-8">
-          <Button
-            onClick={() => navigate("/loan")}
-            variant="outline"
-            className="h-20 hover:bg-accent/10"
-          >
-            <div className="text-center">
-              <div className="text-2xl mb-1">💰</div>
-              <span className="text-sm text-muted-foreground">Get a loan</span>
-            </div>
-          </Button>
-          <Button
-            onClick={() => navigate("/dashboard")}
-            variant="outline"
-            className="h-20 hover:bg-accent/10"
-          >
-            <div className="text-center">
-              <div className="text-2xl mb-1">📊</div>
-              <span className="text-sm text-muted-foreground">Loan Dashboard</span>
-            </div>
-          </Button>
         </div>
       </div>
     </div>
