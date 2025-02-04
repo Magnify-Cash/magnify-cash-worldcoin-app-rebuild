@@ -22,34 +22,34 @@ export function useWallet() {
       console.log("Fetching wallet balances...");
       await logAuditEvent("FETCH_BALANCES", { timestamp: new Date().toISOString() });
       
-      // For demo purposes, return mock data
+      // For demo purposes, return mock data that adds up to $30.41
       const mockBalances = [
         {
           id: 1,
           currency: "Worldcoin",
           symbol: "WLD",
-          balance: "$1,234.56",
+          balance: "$12.55",
           updated_at: new Date().toISOString(),
         },
         {
           id: 2,
           currency: "USD Coin",
           symbol: "USDC.e",
-          balance: "$5,678.90",
+          balance: "$10.21",
           updated_at: new Date().toISOString(),
         },
         {
           id: 3,
           currency: "Wrapped Bitcoin",
           symbol: "WBTC",
-          balance: "$10,234.56",
+          balance: "$4.32",
           updated_at: new Date().toISOString(),
         },
         {
           id: 4,
           currency: "Wrapped Ethereum",
           symbol: "WETH",
-          balance: "$2,345.67",
+          balance: "$3.33",
           updated_at: new Date().toISOString(),
         }
       ];

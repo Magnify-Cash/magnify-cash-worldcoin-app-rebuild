@@ -10,7 +10,19 @@ const Wallet = () => {
   const navigate = useNavigate();
   const { balances, transactions, isLoading, error } = useWallet();
 
-  const totalBalance = "30.41"; // This would come from your wallet integration
+  // Calculate total balance from the individual balances
+  const calculateTotal = () => {
+    if (isLoading || !balances.length) return "30.41";
+    
+    const total = balances.reduce((sum, balance) => {
+      const amount = parseFloat(balance.balance.replace('$', ''));
+      return sum + amount;
+    }, 0);
+    
+    return total.toFixed(2);
+  };
+
+  const totalBalance = calculateTotal();
 
   return (
     <div className="min-h-screen bg-background">
