@@ -7,18 +7,25 @@ import { Button } from "@/components/ui/button";
 const announcements = [
   {
     id: 1,
+    title: "V2 is live",
+    date: "2024-03-21",
+    content: "V2 is now live featuring a new loan type \"Passport Verification\". Try it out!",
+    action: "/loan"
+  },
+  {
+    id: 2,
     title: "Welcome to Magnify Cash v2",
     date: "2024-03-20",
     content: "We're excited to launch the new version of Magnify Cash with improved features and user experience.",
   },
   {
-    id: 2,
+    id: 3,
     title: "New Wallet Features",
     date: "2024-03-19",
     content: "Check out our enhanced wallet functionality with better transaction tracking and real-time updates.",
   },
   {
-    id: 3,
+    id: 4,
     title: "Security Updates",
     date: "2024-03-18",
     content: "We've implemented additional security measures to keep your assets safe.",
@@ -52,6 +59,16 @@ const Announcements = () => {
             <p className="text-muted-foreground">
               {announcement.content}
             </p>
+            {announcement.action && (
+              <Button
+                onClick={() => navigate(announcement.action)}
+                className="mt-4"
+                variant="outline"
+                size="sm"
+              >
+                Try it now
+              </Button>
+            )}
           </motion.div>
         ))}
 
