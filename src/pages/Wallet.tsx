@@ -4,27 +4,14 @@ import { TransactionList } from "@/components/TransactionList";
 import { useNavigate } from "react-router-dom";
 import { useWallet } from "@/hooks/use-wallet";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { AlertCircle } from "lucide-react";
+import { AlertCircle, Plus, ArrowUpRight, MoreHorizontal } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 const Wallet = () => {
   const navigate = useNavigate();
   const { balances, transactions, isLoading, error } = useWallet();
 
-  // Mock WorldChain wallet data - this would come from your WorldChain integration
-  const worldchainBalances = [
-    {
-      currency: "World ID Token",
-      symbol: "WID",
-      balance: "1,000",
-      type: "worldchain"
-    },
-    {
-      currency: "Verification NFT",
-      symbol: "vNFT",
-      balance: "2",
-      type: "worldchain"
-    }
-  ];
+  const totalBalance = "30.41"; // This would come from your wallet integration
 
   return (
     <div className="min-h-screen bg-background">
@@ -40,86 +27,110 @@ const Wallet = () => {
           </Alert>
         )}
 
-        <div className="text-center mb-8">
-          <span className="text-4xl text-gradient">@</span>
+        {/* Total Balance */}
+        <div className="text-center mb-12">
+          <h1 className="text-5xl font-bold mb-8">
+            <span className="text-2xl align-top">$</span>
+            {totalBalance.split('.')[0]}
+            <span className="text-muted-foreground">.{totalBalance.split('.')[1]}</span>
+          </h1>
+
+          {/* Action Buttons */}
+          <div className="flex justify-center gap-8 mb-8">
+            <div className="text-center">
+              <Button 
+                variant="outline" 
+                size="icon" 
+                className="h-14 w-14 rounded-full mb-2 bg-background"
+              >
+                <Plus className="h-6 w-6" />
+              </Button>
+              <div className="text-sm">Buy</div>
+            </div>
+            <div className="text-center">
+              <Button 
+                variant="outline" 
+                size="icon" 
+                className="h-14 w-14 rounded-full mb-2 bg-background"
+              >
+                <ArrowUpRight className="h-6 w-6" />
+              </Button>
+              <div className="text-sm">Send</div>
+            </div>
+            <div className="text-center">
+              <Button 
+                variant="outline" 
+                size="icon" 
+                className="h-14 w-14 rounded-full mb-2 bg-background"
+              >
+                <MoreHorizontal className="h-6 w-6" />
+              </Button>
+              <div className="text-sm">More</div>
+            </div>
+          </div>
         </div>
 
-        {/* WorldChain Wallet Section */}
-        <div className="mb-8">
-          <h2 className="text-xl font-semibold mb-4 text-foreground flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-blue-500"></span>
-            WorldChain Wallet
-          </h2>
-          <div className="grid grid-cols-1 gap-4">
-            {worldchainBalances.map((balance, index) => (
+        {/* Wallet Cards */}
+        <div className="space-y-4 mb-8">
+          {isLoading ? (
+            <>
               <WalletCard
-                key={index}
+                currency=""
+                symbol=""
+                balance=""
+                isLoading={true}
+              />
+              <WalletCard
+                currency=""
+                symbol=""
+                balance=""
+                isLoading={true}
+              />
+            </>
+          ) : (
+            balances.map((balance) => (
+              <WalletCard
+                key={balance.id}
                 currency={balance.currency}
                 symbol={balance.symbol}
                 balance={balance.balance}
-                type="worldchain"
               />
-            ))}
-          </div>
+            ))
+          )}
         </div>
 
-        {/* Regular Wallet Section */}
-        <div className="mb-8">
-          <h2 className="text-xl font-semibold mb-4 text-foreground flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-primary"></span>
-            Main Wallet
-          </h2>
-          <div className="grid grid-cols-1 gap-4">
-            {isLoading ? (
-              <>
-                <WalletCard
-                  currency=""
-                  symbol=""
-                  balance=""
-                  isLoading={true}
-                />
-                <WalletCard
-                  currency=""
-                  symbol=""
-                  balance=""
-                  isLoading={true}
-                />
-              </>
-            ) : (
-              balances.map((balance) => (
-                <WalletCard
-                  key={balance.id}
-                  currency={balance.currency}
-                  symbol={balance.symbol}
-                  balance={balance.balance}
-                />
-              ))
-            )}
-          </div>
-        </div>
-
+        {/* Loan and Dashboard Buttons */}
         <div className="grid grid-cols-2 gap-4 mb-8">
-          <button
+          <Button
             onClick={() => navigate("/loan")}
-            className="glass-card p-6 text-center hover-lift"
+            variant="outline"
+            className="h-20 hover:bg-accent/10"
           >
-            <span className="text-2xl mb-2 block text-primary">+</span>
-            <span className="text-muted-foreground">Get a loan</span>
-          </button>
-          <button
+            <div className="text-center">
+              <div className="text-2xl mb-1">💰</div>
+              <span className="text-sm text-muted-foreground">Get a loan</span>
+            </div>
+          </Button>
+          <Button
             onClick={() => navigate("/dashboard")}
-            className="glass-card p-6 text-center hover-lift"
+            variant="outline"
+            className="h-20 hover:bg-accent/10"
           >
-            <span className="text-2xl mb-2 block text-secondary">📊</span>
-            <span className="text-muted-foreground">Dashboard</span>
-          </button>
+            <div className="text-center">
+              <div className="text-2xl mb-1">📊</div>
+              <span className="text-sm text-muted-foreground">Dashboard</span>
+            </div>
+          </Button>
         </div>
 
-        <h2 className="text-xl font-semibold mb-4 text-foreground">Recent Transactions</h2>
-        <TransactionList 
-          transactions={transactions}
-          isLoading={isLoading}
-        />
+        {/* Recent Transactions */}
+        <div className="mt-8">
+          <h2 className="text-xl font-semibold mb-4 text-foreground">Recent Transactions</h2>
+          <TransactionList 
+            transactions={transactions}
+            isLoading={isLoading}
+          />
+        </div>
       </div>
     </div>
   );
