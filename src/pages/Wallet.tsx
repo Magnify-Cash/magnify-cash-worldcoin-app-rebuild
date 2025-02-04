@@ -35,37 +35,27 @@ const Wallet = () => {
           </h1>
 
           {/* Action Buttons */}
-          <div className="flex justify-center gap-8 mb-8">
-            <div className="text-center">
-              <Button 
-                variant="outline" 
-                size="icon" 
-                className="h-14 w-14 rounded-full mb-2 bg-background"
-              >
-                <Plus className="h-6 w-6" />
-              </Button>
-              <div className="text-sm">Buy</div>
-            </div>
-            <div className="text-center">
-              <Button 
-                variant="outline" 
-                size="icon" 
-                className="h-14 w-14 rounded-full mb-2 bg-background"
-              >
-                <ArrowUpRight className="h-6 w-6" />
-              </Button>
-              <div className="text-sm">Send</div>
-            </div>
-            <div className="text-center">
-              <Button 
-                variant="outline" 
-                size="icon" 
-                className="h-14 w-14 rounded-full mb-2 bg-background"
-              >
-                <MoreHorizontal className="h-6 w-6" />
-              </Button>
-              <div className="text-sm">More</div>
-            </div>
+          <div className="flex justify-center gap-4 mb-8">
+            <Button
+              onClick={() => navigate("/loan")}
+              variant="outline"
+              className="h-12 px-6 hover:bg-accent/10"
+            >
+              <div className="flex items-center gap-2">
+                <span className="text-xl">💰</span>
+                <span>Get a Loan</span>
+              </div>
+            </Button>
+            <Button
+              onClick={() => navigate("/dashboard")}
+              variant="outline"
+              className="h-12 px-6 hover:bg-accent/10"
+            >
+              <div className="flex items-center gap-2">
+                <span className="text-xl">📊</span>
+                <span>Loan Dashboard</span>
+              </div>
+            </Button>
           </div>
         </div>
 
