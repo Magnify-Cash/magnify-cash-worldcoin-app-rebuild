@@ -1,24 +1,17 @@
 import { Header } from "@/components/Header";
-import { useNavigate } from "react-router-dom";
+import { DashboardHeader } from "@/components/Dashboard/DashboardHeader";
+import { LoanStatus } from "@/components/Dashboard/LoanStatus";
+import { CollateralSection } from "@/components/Dashboard/CollateralSection";
 
 const Dashboard = () => {
-  const navigate = useNavigate();
-
   return (
-    <div className="min-h-screen">
-      <Header title="Loan Dashboard" />
+    <div className="min-h-screen bg-background">
+      <Header title="Dashboard" />
       
-      <div className="p-6">
-        <div className="glass-card p-6 text-center">
-          <p className="text-xl mb-6">No active loans.</p>
-          
-          <button 
-            onClick={() => navigate("/loan")}
-            className="glass-button w-full"
-          >
-            Request a new loan
-          </button>
-        </div>
+      <div className="p-6 max-w-4xl mx-auto space-y-8">
+        <DashboardHeader />
+        <LoanStatus />
+        <CollateralSection />
       </div>
     </div>
   );

@@ -10,20 +10,66 @@
     --card-foreground: 222.2 84% 4.9%;
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
-    --primary: 222.2 47.4% 11.2%;
+    
+    --primary: 0 100% 73%;
     --primary-foreground: 210 40% 98%;
-    --secondary: 210 40% 96.1%;
+    --primary-light: 0 100% 80%;
+    --primary-dark: 0 100% 66%;
+    
+    --secondary: 217 91% 60%;
     --secondary-foreground: 222.2 47.4% 11.2%;
+    --secondary-light: 217 91% 70%;
+    --secondary-dark: 217 91% 50%;
+    
     --muted: 210 40% 96.1%;
     --muted-foreground: 215.4 16.3% 46.9%;
-    --accent: 210 40% 96.1%;
+    
+    --accent: 0 100% 73%;
     --accent-foreground: 222.2 47.4% 11.2%;
+    --accent-light: 0 100% 80%;
+    --accent-dark: 0 100% 66%;
+    
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
+    
     --border: 214.3 31.8% 91.4%;
     --input: 214.3 31.8% 91.4%;
     --ring: 222.2 84% 4.9%;
-    --radius: 0.5rem;
+    --radius: 0.75rem;
+  }
+
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+    
+    --primary: 0 100% 73%;
+    --primary-foreground: 210 40% 98%;
+    --primary-light: 0 100% 80%;
+    --primary-dark: 0 100% 66%;
+    
+    --secondary: 217 91% 60%;
+    --secondary-foreground: 210 40% 98%;
+    --secondary-light: 217 91% 70%;
+    --secondary-dark: 217 91% 50%;
+    
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+    
+    --accent: 0 100% 73%;
+    --accent-foreground: 210 40% 98%;
+    --accent-light: 0 100% 80%;
+    --accent-dark: 0 100% 66%;
+    
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+    
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 212.7 26.8% 83.9%;
   }
 }
 
@@ -38,13 +84,46 @@
 }
 
 .glass-card {
-  @apply bg-white bg-opacity-50 backdrop-blur-lg rounded-2xl border border-white border-opacity-20 shadow-lg;
+  @apply bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm 
+         shadow-lg hover:shadow-xl transition-all duration-300 
+         rounded-xl border border-gray-100/20 dark:border-gray-800/20;
 }
 
 .glass-button {
-  @apply bg-black text-white font-medium py-3 px-6 rounded-xl hover:opacity-90 transition-opacity;
+  @apply bg-[#FF7777] hover:bg-[#FF5555] text-white font-medium 
+         py-3 px-6 rounded-xl transition-all duration-300 
+         shadow-lg hover:shadow-xl disabled:opacity-50 
+         disabled:cursor-not-allowed;
 }
 
 .tip-card {
-  @apply bg-pink-100 p-4 rounded-xl text-gray-700 my-4;
+  @apply bg-muted/50 dark:bg-muted/20 p-4 rounded-xl 
+         text-muted-foreground my-4 border border-border;
+}
+
+/* Add smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Add text gradient animation */
+@keyframes gradient {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.animate-gradient {
+  background-size: 200% 200%;
+  animation: gradient 6s ease infinite;
+}
+
+/* Custom utility classes */
+.text-gradient {
+  @apply bg-clip-text text-transparent bg-gradient-to-r 
+         from-[#FF7777] via-[#FF9999] to-[#FF5555] animate-gradient;
+}
+
+.hover-lift {
+  @apply transition-transform duration-300 hover:-translate-y-1;
 }

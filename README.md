@@ -1,69 +1,189 @@
-# Welcome to your Lovable project
+# Magnify World App V2 🌟
 
-## Project info
+## Overview
+A modern DeFi dashboard application built with React, TypeScript, and Supabase. This application provides users with a comprehensive interface for managing digital assets, tracking loans, and monitoring market analytics.
 
-**URL**: https://lovable.dev/projects/f467fed4-7ba0-4572-8b29-853708cc561f
+## 🚀 Features
 
-## How can I edit this code?
+### User Management
+- Profile management with verification tiers
+- Secure authentication via Supabase
+- Customizable user settings
 
-There are several ways of editing your application.
+### Asset Management
+- Real-time wallet balance tracking
+- NFT collateral management
+- Transaction history
 
-**Use Lovable**
+### DeFi Integration
+- Loan management system
+- Liquidity pool interactions
+- MAG token rewards system
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/f467fed4-7ba0-4572-8b29-853708cc561f) and start prompting.
+## 🛠 Technical Stack
 
-Changes made via Lovable will be committed automatically to this repo.
+### Frontend
+- **React 18** - Modern UI library
+- **TypeScript** - Type-safe development
+- **Vite** - Next-generation frontend tooling
+- **Tailwind CSS** - Utility-first CSS framework
+- **shadcn/ui** - High-quality UI components
+- **Framer Motion** - Animation library
 
-**Use your preferred IDE**
+### Backend & Data
+- **Supabase** - Backend-as-a-Service
+  - Authentication
+  - PostgreSQL Database
+  - Real-time subscriptions
+  - Edge Functions
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+### State Management & Data Fetching
+- **TanStack Query** - Server state management
+- **React Context** - Local state management
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+## 📦 Project Structure
 
-Follow these steps:
+```
+src/
+├── components/         # Reusable UI components
+│   ├── Dashboard/     # Dashboard-specific components
+│   ├── Header/        # Navigation components
+│   └── ui/            # shadcn/ui components
+├── hooks/             # Custom React hooks
+├── lib/               # Utility functions
+├── pages/             # Route components
+├── services/          # API service layers
+└── types/             # TypeScript definitions
+```
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+## 🔧 Component Documentation
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+### Profile Component
+The Profile component (`src/pages/Profile.tsx`) displays user information and NFT collaterals.
 
-# Step 3: Install the necessary dependencies.
-npm i
+#### Features:
+- User information display
+- NFT collateral management
+- Verification status
+- Interactive card layout
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
+#### Props:
+```typescript
+interface ProfileProps {
+  // Component currently doesn't accept props
+}
+```
+
+#### Usage:
+```typescript
+import Profile from '@/pages/Profile';
+
+// In your router
+<Route path="/profile" element={<Profile />} />
+```
+
+### Header Component
+The Header component (`src/components/Header/`) provides navigation and menu functionality.
+
+#### Features:
+- Back navigation
+- Title display
+- Dropdown menu
+- Mobile responsiveness
+
+#### Props:
+```typescript
+interface HeaderProps {
+  title: string;
+  showBack?: boolean;
+}
+```
+
+## 🚀 Getting Started
+
+1. **Clone the repository**
+```bash
+git clone <repository-url>
+```
+
+2. **Install dependencies**
+```bash
+npm install
+```
+
+3. **Start development server**
+```bash
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+4. **Build for production**
+```bash
+npm run build
+```
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+## 🔒 Environment Variables
 
-**Use GitHub Codespaces**
+Create a `.env` file in the root directory with the following variables:
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+```env
+VITE_SUPABASE_URL=your_supabase_url
+VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
+```
 
-## What technologies are used for this project?
+## 🤝 Contributing
 
-This project is built with .
+1. Fork the repository
+2. Create a feature branch
+3. Commit your changes
+4. Push to the branch
+5. Open a Pull Request
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+## 📝 Code Style Guide
 
-## How can I deploy this project?
+- Use TypeScript for all new components
+- Follow the existing component structure
+- Use shadcn/ui components when possible
+- Implement responsive design
+- Add proper TypeScript types
+- Use meaningful component and variable names
 
-Simply open [Lovable](https://lovable.dev/projects/f467fed4-7ba0-4572-8b29-853708cc561f) and click on Share -> Publish.
+## 🔍 Testing
 
-## I want to use a custom domain - is that possible?
+```bash
+# Run tests
+npm run test
 
-We don't support custom domains (yet). If you want to deploy your project under your own domain then we recommend using Netlify. Visit our docs for more details: [Custom domains](https://docs.lovable.dev/tips-tricks/custom-domain/)
+# Run tests in watch mode
+npm run test:watch
+```
+
+## 📱 Responsive Design
+
+The application is fully responsive with breakpoints:
+- Mobile: < 640px
+- Tablet: 640px - 1024px
+- Desktop: > 1024px
+
+## 🔐 Security
+
+- Authentication handled by Supabase
+- Row Level Security (RLS) policies in place
+- Environment variables for sensitive data
+- Input validation on all forms
+
+## 🌐 Deployment
+
+The application can be deployed using:
+1. Lovable's built-in deployment
+2. Manual deployment to services like Netlify
+3. Custom deployment pipeline
+
+## 📚 Additional Resources
+
+- [Lovable Documentation](https://docs.lovable.dev/)
+- [shadcn/ui Documentation](https://ui.shadcn.com/)
+- [Supabase Documentation](https://supabase.com/docs)
+
+## 📄 License
+
+This project is licensed under the MIT License - see the LICENSE file for details.

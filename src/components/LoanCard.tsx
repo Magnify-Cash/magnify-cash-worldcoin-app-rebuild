@@ -1,39 +1,48 @@
-import { Shield } from "lucide-react";
+import { Globe, IdCard, ScanLine } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
+
+type IconType = "passport" | "world" | "orb";
 
 export const LoanCard = ({
   title,
   amount,
   interest,
   duration,
-  icon = "device",
+  icon = "world",
 }: {
   title: string;
   amount: string;
   interest: string;
   duration: string;
-  icon?: "device" | "passport" | "orb";
+  icon?: IconType;
 }) => {
-  const getIconColor = () => {
+  const getIcon = (): { Icon: LucideIcon; color: string } => {
     switch (icon) {
       case "passport":
-        return "text-yellow-500";
+        return { Icon: IdCard, color: "text-blue-500" };
       case "orb":
-        return "text-green-500";
+        return { Icon: ScanLine, color: "text-green-500" };
       default:
-        return "text-gray-500";
+        return { Icon: Globe, color: "text-primary" };
     }
   };
 
+  const { Icon, color } = getIcon();
+
   return (
-    <div className="glass-card p-6 mb-4">
-      <div className="flex items-center mb-4">
-        <Shield className={`w-6 h-6 mr-2 ${getIconColor()}`} />
-        <h3 className="text-lg font-medium">{title}</h3>
+    <div className="glass-card w-64 aspect-square p-6 mb-4 flex flex-col justify-between hover:scale-105 transition-transform duration-300">
+      <div>
+        <div className="flex items-center mb-4">
+          <Icon className={`w-8 h-8 mr-3 ${color}`} />
+          <h3 className="text-lg font-medium">{title}</h3>
+        </div>
+        <div className="mt-4 text-center">
+          <p className="text-2xl font-bold text-primary mb-2">{amount}</p>
+        </div>
       </div>
-      <div className="space-y-2">
-        <p className="text-gray-600">Loan Amount: {amount}</p>
-        <p className="text-gray-600">Interest Rate: {interest}</p>
-        <p className="text-gray-600">Duration: {duration}</p>
+      <div className="space-y-2 mt-auto">
+        <p className="text-gray-600 dark:text-gray-400">{interest}</p>
+        <p className="text-gray-600 dark:text-gray-400">{duration}</p>
       </div>
     </div>
   );
