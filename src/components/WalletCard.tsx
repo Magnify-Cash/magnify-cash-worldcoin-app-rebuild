@@ -22,13 +22,13 @@ export const WalletCard = ({
     switch (symbol.toLowerCase()) {
       case 'wld':
         return (
-          <div className="w-10 h-10 rounded-full bg-gray-900 flex items-center justify-center">
-            <span className="text-white">©</span>
+          <div className="w-10 h-10 rounded-full bg-blue-500 flex items-center justify-center">
+            <span className="text-white font-bold">W</span>
           </div>
         );
       case 'usdc.e':
         return (
-          <div className="w-10 h-10 rounded-full bg-green-500 flex items-center justify-center">
+          <div className="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center">
             <span className="text-white">$</span>
           </div>
         );
@@ -40,7 +40,7 @@ export const WalletCard = ({
         );
       case 'weth':
         return (
-          <div className="w-10 h-10 rounded-full bg-blue-500 flex items-center justify-center">
+          <div className="w-10 h-10 rounded-full bg-blue-400 flex items-center justify-center">
             <span className="text-white">Ξ</span>
           </div>
         );
@@ -74,7 +74,7 @@ export const WalletCard = ({
       case 'wld':
         return '+10.13%';
       case 'usdc.e':
-        return '+0%';
+        return '+0.01%';
       case 'wbtc':
         return '+4.57%';
       case 'weth':

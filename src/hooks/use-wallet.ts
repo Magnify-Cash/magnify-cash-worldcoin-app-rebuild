@@ -6,8 +6,6 @@ import { useToast } from "@/components/ui/use-toast";
 
 const logAuditEvent = async (event: string, details: any) => {
   console.log(`[Audit] ${event}:`, details);
-  // In a production environment, you would want to persist these logs
-  // to a secure storage system or dedicated audit log table
 };
 
 export function useWallet() {
@@ -24,20 +22,39 @@ export function useWallet() {
       console.log("Fetching wallet balances...");
       await logAuditEvent("FETCH_BALANCES", { timestamp: new Date().toISOString() });
       
-      const { data, error } = await supabase
-        .from("wallet_balances")
-        .select("*")
-        .order("created_at", { ascending: true });
+      // For demo purposes, return mock data
+      const mockBalances = [
+        {
+          id: 1,
+          currency: "Worldcoin",
+          symbol: "WLD",
+          balance: "$1,234.56",
+          updated_at: new Date().toISOString(),
+        },
+        {
+          id: 2,
+          currency: "USD Coin",
+          symbol: "USDC.e",
+          balance: "$5,678.90",
+          updated_at: new Date().toISOString(),
+        },
+        {
+          id: 3,
+          currency: "Wrapped Bitcoin",
+          symbol: "WBTC",
+          balance: "$10,234.56",
+          updated_at: new Date().toISOString(),
+        },
+        {
+          id: 4,
+          currency: "Wrapped Ethereum",
+          symbol: "WETH",
+          balance: "$2,345.67",
+          updated_at: new Date().toISOString(),
+        }
+      ];
 
-      if (error) {
-        console.error("Error fetching wallet balances:", error);
-        await logAuditEvent("FETCH_BALANCES_ERROR", { error });
-        throw error;
-      }
-      
-      console.log("Wallet balances fetched:", data);
-      await logAuditEvent("FETCH_BALANCES_SUCCESS", { count: data?.length });
-      return data as WalletBalance[];
+      return mockBalances as WalletBalance[];
     },
   });
 
@@ -50,22 +67,7 @@ export function useWallet() {
     queryFn: async () => {
       console.log("Fetching transactions...");
       await logAuditEvent("FETCH_TRANSACTIONS", { timestamp: new Date().toISOString() });
-      
-      const { data, error } = await supabase
-        .from("transactions")
-        .select("*")
-        .order("created_at", { ascending: false })
-        .limit(50);
-
-      if (error) {
-        console.error("Error fetching transactions:", error);
-        await logAuditEvent("FETCH_TRANSACTIONS_ERROR", { error });
-        throw error;
-      }
-
-      console.log("Transactions fetched:", data);
-      await logAuditEvent("FETCH_TRANSACTIONS_SUCCESS", { count: data?.length });
-      return data as Transaction[];
+      return [] as Transaction[];
     },
   });
 
