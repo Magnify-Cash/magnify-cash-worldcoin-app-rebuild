@@ -5,6 +5,7 @@ import Guide from "@/pages/Guide";
 import Dashboard from "@/pages/Dashboard";
 import Wallet from "@/pages/Wallet";
 import Loan from "@/pages/Loan";
+import RepayLoan from "@/pages/RepayLoan";
 import Profile from "@/pages/Profile";
 import UpgradeVerification from "@/pages/UpgradeVerification";
 import Announcements from "@/pages/Announcements";
@@ -21,6 +22,7 @@ function App() {
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/wallet" element={<Wallet />} />
         <Route path="/loan" element={<Loan />} />
+        <Route path="/repay-loan" element={<RepayLoan />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/upgrade-verification" element={<UpgradeVerification />} />
       </Routes>

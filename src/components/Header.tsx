@@ -4,6 +4,8 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuLabel,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
@@ -66,19 +68,29 @@ export const Header = ({ title, showBack = true }: HeaderProps) => {
                 </svg>
               </button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
+            <DropdownMenuContent align="end" className="w-56">
+              <DropdownMenuLabel>Quick Access</DropdownMenuLabel>
               <DropdownMenuItem onClick={() => navigate("/announcements")}>
                 Announcements
               </DropdownMenuItem>
               <DropdownMenuItem onClick={() => navigate("/dashboard")}>
                 Dashboard
               </DropdownMenuItem>
+              
+              <DropdownMenuSeparator />
+              <DropdownMenuLabel>Finance</DropdownMenuLabel>
               <DropdownMenuItem onClick={() => navigate("/wallet")}>
                 Wallet
               </DropdownMenuItem>
               <DropdownMenuItem onClick={() => navigate("/loan")}>
                 Get a Loan
               </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => navigate("/repay-loan")}>
+                Repay Loan
+              </DropdownMenuItem>
+              
+              <DropdownMenuSeparator />
+              <DropdownMenuLabel>Account</DropdownMenuLabel>
               <DropdownMenuItem onClick={() => navigate("/profile")}>
                 Profile
               </DropdownMenuItem>
