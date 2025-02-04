@@ -117,7 +117,7 @@ const Wallet = () => {
           >
             <div className="text-center">
               <div className="text-2xl mb-1">📊</div>
-              <span className="text-sm text-muted-foreground">Dashboard</span>
+              <span className="text-sm text-muted-foreground">Loan Dashboard</span>
             </div>
           </Button>
         </div>
