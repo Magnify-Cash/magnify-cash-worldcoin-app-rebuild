@@ -10,6 +10,9 @@ import UpgradeVerification from "@/pages/UpgradeVerification";
 import Announcements from "@/pages/Announcements";
 import ProtectedRoute from "@/pages/ProtectedPage";
 import "./App.css";
+import eruda from "eruda";
+
+eruda.init();
 
 function App() {
   return (
