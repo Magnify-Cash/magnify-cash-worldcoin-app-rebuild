@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { Header } from "@/components/Header";
 import { WalletCard } from "@/components/WalletCard";
 import { useNavigate } from "react-router-dom";
@@ -8,26 +9,127 @@ import { Button } from "@/components/ui/button";
 
 const Wallet = () => {
   const navigate = useNavigate();
-  const { balances, transactions, isLoading, error } = useWallet();
+  const ls_wallet = localStorage.getItem("ls_wallet_address");
+  const ls_username = localStorage.getItem("ls_username");
+  const [tokens, setBalances] = useState([]);
+  const [isLoading, setLoading] = useState(false);
+  const [error, setError] = useState(null); // New error state
 
-  // Calculate total balance from the individual balances
-  const calculateTotal = () => {
-    if (isLoading || !balances.length) return "30.41";
-    
-    const total = balances.reduce((sum, balance) => {
-      const amount = parseFloat(balance.balance.replace('$', ''));
-      return sum + amount;
-    }, 0);
-    
-    return total.toFixed(2);
-  };
 
-  const totalBalance = calculateTotal();
+  useEffect(() => {
+    const url = `https://worldchain-mainnet.g.alchemy.com/v2/j-_GFK85PRHN59YaKb8lmVbV0LHmFGBL`;
+    const fetchBalances = async () => {
+      try {
+        setLoading(true); // Set loading to true before starting the fetch operations
+        setError(null); // Clear any previous error before new fetch
+
+        const ethBalanceResponse = await fetch(url, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            jsonrpc: "2.0",
+            method: "eth_getBalance",
+            params: [ls_wallet, "latest"], // "latest" for the latest block
+            id: 1,
+          }),
+        });
+
+        const ethBalanceResult = await ethBalanceResponse.json();
+        const ethBalance = parseInt(ethBalanceResult.result, 16) / 1e18; // Convert from wei to ether
+
+        const tokenBalancesResponse = await fetch(url, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            jsonrpc: "2.0",
+            method: "alchemy_getTokenBalances",
+            params: [ls_wallet],
+            id: 2,
+          }),
+        });
+
+        const tokenBalancesResult = await tokenBalancesResponse.json();
+        const tokenBalances = tokenBalancesResult.result.tokenBalances;
+
+        // Fetch metadata for each token and convert balances
+        const detailedBalances = await Promise.all(
+          tokenBalances.map(async (token) => {
+            const metadataResponse = await fetch(url, {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                jsonrpc: "2.0",
+                method: "alchemy_getTokenMetadata",
+                params: [token.contractAddress],
+                id: 1,
+              }),
+            });
+            const metadata = await metadataResponse.json();
+            const decimals = metadata.result.decimals || 18; // Default to 18 if decimals are missing
+
+            // Convert token balance from hex to decimal, considering decimals
+            const balanceDecimal = parseInt(token.tokenBalance, 16) / Math.pow(10, decimals);
+
+            // Only return token if balance is greater than 0
+            if (balanceDecimal > 0) {
+              return {
+                contractAddress: token.contractAddress,
+                balance: balanceDecimal,
+                symbol: metadata.result.symbol,
+                decimals: decimals,
+                name: metadata.result.name,
+              };
+            } else {
+              return null;
+            }
+          }),
+        );
+
+        // Combine native token balance with ERC-20 token tokens, only if ETH balance is greater than 0
+        const balancesToAdd = [];
+
+        // Add ETH if balance is greater than 0
+        if (ethBalance > 0) {
+          balancesToAdd.push({
+            symbol: "ETH",
+            name: "Ether",
+            balance: ethBalance,
+            decimals: 18,
+            contractAddress: "0x0000000000000000000000000000000000000000", // Native token's pseudo address
+          });
+        }
+
+        // Add ERC-20 tokens with non-zero balance
+        detailedBalances.forEach((token) => {
+          if (token) {
+            balancesToAdd.push(token);
+          }
+        });
+
+        setBalances(balancesToAdd);
+      } catch (error) {
+        console.error("Failed to fetch tokens:", error);
+        setError(error.message); // Set the error state
+        setBalances([]); // Set to empty array on error
+      } finally {
+        setLoading(false);
+      }
+    };
+    if (ls_wallet) {
+      fetchBalances();
+    }
+  }, [ls_wallet]);
 
   return (
     <div className="min-h-screen bg-background">
       <Header title="Wallet" showBack={false} />
-      
+
       <div className="p-6 max-w-2xl mx-auto">
         {error && (
           <Alert variant="destructive" className="mb-6">
@@ -41,10 +143,17 @@ const Wallet = () => {
         {/* Total Balance */}
         <div className="text-center mb-12">
           <h1 className="text-5xl font-bold mb-8">
+            @{ls_username}
+          </h1>
+          {/*
+          TODO: TOTAL BALANCE
+          ALCHEMY API DOES NOT PROVIDE USD PRICES
+          <h1 className="text-5xl font-bold mb-8">
             <span className="text-2xl align-top">$</span>
             {totalBalance.split('.')[0]}
             <span className="text-muted-foreground">.{totalBalance.split('.')[1]}</span>
           </h1>
+          */}
 
           {/* Action Buttons */}
           <div className="grid grid-cols-2 gap-4 mb-8">
@@ -89,12 +198,12 @@ const Wallet = () => {
               />
             </>
           ) : (
-            balances.map((balance) => (
+            tokens.map((token) => (
               <WalletCard
-                key={balance.id}
-                currency={balance.currency}
-                symbol={balance.symbol}
-                balance={balance.balance}
+                key={token.contractAddress}
+                currency={token.name}
+                symbol={token.symbol}
+                balance={token.balance}
               />
             ))
           )}
