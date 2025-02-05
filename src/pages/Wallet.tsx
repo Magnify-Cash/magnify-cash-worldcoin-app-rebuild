@@ -197,7 +197,7 @@ const Wallet = () => {
                 isLoading={true}
               />
             </>
-          ) : (
+          ) : tokens.length > 0 ? (
             tokens.map((token) => (
               <WalletCard
                 key={token.contractAddress}
@@ -206,6 +206,10 @@ const Wallet = () => {
                 balance={token.balance}
               />
             ))
+          ) : (
+            <div className="text-center py-4">
+              No tokens found. Add some to see your balance!
+            </div>
           )}
         </div>
       </div>
