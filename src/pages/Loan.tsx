@@ -1,32 +1,37 @@
-import { Header } from "@/components/Header";
+import { useState, useCallback } from "react";
+import { formatUnits } from "viem";
 import { Shield } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
-import { fetchLoanEligibility } from "@/services/loanService";
+import { Header } from "@/components/Header";
 import { useToast } from "@/components/ui/use-toast";
+import { useMagnifyWorld } from "@/hooks/useMagnifyWorld";
+import useRequestLoan from "@/hooks/useRequestLoan";
 
 const Loan = () => {
-  const navigate = useNavigate();
+  // hooks
   const { toast } = useToast();
+  const navigate = useNavigate();
+  const ls_wallet = localStorage.getItem("ls_wallet_address");
+  const { data, isLoading, isError, refetch } = useMagnifyWorld(ls_wallet);
+  const { requestNewLoan, error, transactionId, isConfirming, isConfirmed } = useRequestLoan();
 
-  const { data, isLoading, error } = useQuery({
-    queryKey: ['loanEligibility'],
-    queryFn: fetchLoanEligibility,
-  });
+  // state
+  const nftInfo = data?.nftInfo || { tokenId: null, tier: null };
+  const hasActiveLoan = data?.loans?.some((loan) => loan.isActive);
 
-  const handleApply = () => {
-    if (error) {
-      toast({
-        variant: "destructive",
-        title: "Error",
-        description: "Failed to verify loan eligibility. Please try again.",
-      });
-      return;
-    }
-    
-    console.log("Applying for loan...");
-    navigate("/dashboard");
-  };
+  // Handle loan application
+  const handleApplyLoan = useCallback(
+    async (event: React.FormEvent) => {
+      event.preventDefault();
+      if (data?.nftInfo?.tokenId) {
+        await requestNewLoan();
+      } else {
+        alert("Unable to apply for loan. Ensure you have a verified NFT.");
+      }
+    },
+    [data, requestNewLoan],
+  );
+
 
   if (isLoading) {
     return (
@@ -39,28 +44,52 @@ const Loan = () => {
     );
   }
 
+  if (!nftInfo) {
+    return (
+      <div className="min-h-screen">
+        <div className="p-6 space-y-6">
+        <Header title="Get a Loan" />
+        <div className="flex-column justify-center items-center h-[calc(100vh-80px)]">
+          <h2 className="text-2xl font-semibold mb-4">You Don't Have the Required NFT</h2>
+          <p className="mb-4">
+            To be eligible for a loan, you need to own a specific NFT.
+            Please upgrade your account to include this NFT.
+          </p>
+          <button
+            onClick={() => navigate("/upgrade-verification")}
+            className="glass-button w-full"
+            disabled={isLoading}
+          >
+            Upgrade Now
+          </button>
+        </div>
+         </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen">
       <Header title="Get a Loan" />
-      
+
       <div className="p-6 space-y-6">
         <div className="glass-card p-6">
           <h2 className="text-2xl font-semibold mb-4">Current Loan Eligibility</h2>
-          
+
           <div className="flex items-center mb-4">
             <Shield className="w-6 h-6 mr-2" />
-            <span>Device-Verified with World ID</span>
+            <span>{nftInfo.tier?.verificationStatus.description}</span>
           </div>
 
           <div className="space-y-2">
-            <p className="text-gray-600">Loan Amount: {data?.amount || "$0"}</p>
-            <p className="text-gray-600">Interest Rate: {data?.interest || "0%"}</p>
-            <p className="text-gray-600">Duration: {data?.duration || "N/A"}</p>
+            <p className="text-gray-600">Loan Amount: ${formatUnits(nftInfo.tier?.loanAmount || 0, 6) || "$0"}</p>
+            <p className="text-gray-600">Interest Rate: {((nftInfo.tier?.interestRate || BigInt(0)) / BigInt(100)).toString() || "0"}%</p>
+            <p className="text-gray-600">Duration: {((nftInfo.tier?.loanPeriod || BigInt(0)) / BigInt(60 * 24 * 60)).toString() || "N/A"} days</p>
           </div>
         </div>
 
-        <button 
-          onClick={handleApply}
+        <button
+          onClick={handleApplyLoan}
           className="glass-button w-full"
           disabled={isLoading || !!error}
         >
