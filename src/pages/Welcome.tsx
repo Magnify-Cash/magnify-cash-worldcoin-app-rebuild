@@ -19,6 +19,12 @@ const Welcome = () => {
   };
 
   const handleSignIn = async () => {
+    const wallet_address = localStorage.getItem("ls_wallet_address");
+    const username = localStorage.getItem("ls_username");
+    if (username && wallet_address) {
+      navigate("/wallet");
+      return;
+    }
     try {
       console.log("Initiating wallet authentication...");
       const nonce = crypto.randomUUID().replace(/-/g, "");
@@ -82,12 +88,13 @@ const Welcome = () => {
           </h1>
 
           <p className="text-lg md:text-xl text-gray-700 mb-12 max-w-2xl mx-auto font-medium">
-            Get instant loans backed by your World ID. No collateral needed, just your verified digital presence.
+            Get instant loans backed by your World ID. No collateral needed, just your verified digital
+            presence.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16">
             <button
-              onClick={handleSignIn}  // Changed to call handleSignIn
+              onClick={handleSignIn} // Changed to call handleSignIn
               className="glass-button flex items-center justify-center gap-2 bg-gradient-to-r from-[#2DFFF9] to-[#FF7777] hover:shadow-lg"
             >
               Start Your Journey
@@ -106,9 +113,7 @@ const Welcome = () => {
           {/* Trust Badge */}
           <div className="flex items-center justify-center gap-2 text-gray-600">
             <Shield className="w-5 h-5" />
-            <span className="text-sm font-medium">
-              Backed by Industry Leaders in Web3 & DeFi
-            </span>
+            <span className="text-sm font-medium">Backed by Industry Leaders in Web3 & DeFi</span>
           </div>
         </div>
       </div>
