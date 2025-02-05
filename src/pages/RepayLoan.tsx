@@ -100,25 +100,25 @@ const RepayLoan = () => {
               <div className="flex items-center gap-2">
                 <DollarSign className="w-5 h-5 text-primary" />
                 <div>
-                  <p className="text-sm text-muted-foreground">Loan Amount</p>
-                  <p className="font-semibold">${loanData.amount?.toString()}</p>
+                  <p className="text-sm text-muted-foreground text-start">Loan Amount</p>
+                  <p className="text-start font-semibold">${loanData.amount?.toString()}</p>
                 </div>
               </div>
 
               <div className="flex items-center gap-2">
                 <Calendar className="w-5 h-5 text-primary" />
                 <div>
-                  <p className="text-sm text-muted-foreground">Due Date</p>
-                  <p className="font-semibold">{dueDate.toLocaleDateString()}</p>
+                  <p className="text-sm text-muted-foreground text-start">Due Date</p>
+                  <p className="text-start font-semibold">{dueDate.toLocaleDateString()}</p>
                 </div>
               </div>
 
               <div className="flex items-center gap-2">
                 <Clock className="w-5 h-5 text-primary" />
                 <div>
-                  <p className="text-sm text-muted-foreground">Time Remaining</p>
-                  <p className="font-semibold">
-                    Due In: {daysRemaining} days, {hoursRemaining} hours, {minutesRemaining} minutes
+                  <p className="text-sm text-muted-foreground text-start">Time Remaining</p>
+                  <p className="text-start font-semibold">
+                    {daysRemaining} days, {hoursRemaining} hours, {minutesRemaining} minutes
                   </p>
                 </div>
               </div>
@@ -126,8 +126,8 @@ const RepayLoan = () => {
               <div className="flex items-center gap-2">
                 <DollarSign className="w-5 h-5 text-primary" />
                 <div>
-                  <p className="text-sm text-muted-foreground">Repayment Amount</p>
-                  <p className="font-semibold">${loanData.amount?.toString()}</p>
+                  <p className="text-sm text-muted-foreground text-start">Repayment Amount</p>
+                  <p className="text-start font-semibold">${loanData.amount?.toString()}</p>
                 </div>
               </div>
             </div>
