@@ -1,0 +1,85 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 252 20% 98%;
+    --foreground: 220 10% 22%;
+    
+    --card: 0 0% 100%;
+    --card-foreground: 220 10% 22%;
+    
+    --popover: 0 0% 100%;
+    --popover-foreground: 220 10% 22%;
+    
+    --primary: 0 0% 0%;
+    --primary-foreground: 0 0% 100%;
+    
+    --secondary: 0 0% 100%;
+    --secondary-foreground: 220 10% 22%;
+    
+    --muted: 252 20% 98%;
+    --muted-foreground: 220 9% 46%;
+    
+    --accent: 0 100% 73%;
+    --accent-foreground: 0 0% 100%;
+    
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+    
+    --border: 0 0% 100%;
+    --input: 0 0% 100%;
+    --ring: 0 0% 0%;
+    
+    --radius: 0.75rem;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  
+  body {
+    @apply bg-[#F8F7FC] text-brand-text-primary;
+    background-image: var(--radial-gradient);
+  }
+}
+
+@layer components {
+  .glass-card {
+    @apply backdrop-blur-md bg-white/10 shadow-glass border border-white/20 transition-all hover:shadow-glass-hover;
+  }
+  
+  .primary-button {
+    @apply bg-black text-white font-semibold shadow-glow hover:bg-main-gradient hover:scale-105 transition-all duration-300 hover:shadow-glow-hover !important;
+  }
+  
+  .secondary-button {
+    @apply bg-black text-white font-medium shadow-sm hover:bg-brand-coral/10 hover:text-brand-coral transition-all border border-transparent hover:border-brand-coral !important;
+  }
+  
+  .input-field {
+    @apply bg-white/10 backdrop-blur-md border border-white/20 rounded-lg px-4 py-2 focus:ring-2 focus:ring-black/20 focus:border-black transition-all;
+  }
+}
+
+@keyframes pulse-glow {
+  0% {
+    box-shadow: 0 0 15px rgba(6, 182, 212, 0.3);
+    transform: scale(1);
+  }
+  50% {
+    box-shadow: 0 0 30px rgba(6, 182, 212, 0.5);
+    transform: scale(1.02);
+  }
+  100% {
+    box-shadow: 0 0 15px rgba(6, 182, 212, 0.3);
+    transform: scale(1);
+  }
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 3s ease-in-out infinite;
+}
