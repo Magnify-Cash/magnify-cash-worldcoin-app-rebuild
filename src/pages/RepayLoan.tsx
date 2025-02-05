@@ -54,7 +54,7 @@ const RepayLoan = () => {
   if (isError) return <div className="container mx-auto p-6 text-center">Error fetching data.</div>;
 
   // No loan found
-  if (loan[0] === true) {
+  if (loan[0] === false) {
     return (
       <div className="min-h-screen bg-background">
         <Header title="Loan Status" />
@@ -74,7 +74,7 @@ const RepayLoan = () => {
   }
 
   // active loan
-  if (loan[0] === false) {
+  if (loan[0] === true) {
     const dueDateBigInt = BigInt(loanData.startTime) + BigInt(loanData.loanPeriod);
     const dueDateMs = Number(dueDateBigInt) * 1000; // Convert seconds to milliseconds and to Number type
     const [daysRemaining, hoursRemaining, minutesRemaining, dueDate] = calculateRemainingTime(

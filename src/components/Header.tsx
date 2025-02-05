@@ -31,9 +31,9 @@ export const Header = ({ title, showBack = true }: HeaderProps) => {
           ) : (
             <div className="w-9" />
           )}
-          
+
           <h1 className="text-lg font-semibold">{title}</h1>
-          
+
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <button className="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 hover:bg-accent hover:text-accent-foreground h-9 w-9">
@@ -74,30 +74,14 @@ export const Header = ({ title, showBack = true }: HeaderProps) => {
                 <Home className="mr-2 h-4 w-4" />
                 Welcome
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => navigate("/announcements")}>
-                Announcements
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => navigate("/dashboard")}>
-                Dashboard
-              </DropdownMenuItem>
-              
+              <DropdownMenuItem onClick={() => navigate("/announcements")}>Announcements</DropdownMenuItem>
+              <DropdownMenuItem onClick={() => navigate("/dashboard")}>Dashboard</DropdownMenuItem>
+
               <DropdownMenuSeparator />
               <DropdownMenuLabel>Finance</DropdownMenuLabel>
-              <DropdownMenuItem onClick={() => navigate("/wallet")}>
-                Wallet
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => navigate("/loan")}>
-                Get a Loan
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => navigate("/repay-loan")}>
-                Repay Loan
-              </DropdownMenuItem>
-              
-              <DropdownMenuSeparator />
-              <DropdownMenuLabel>Account</DropdownMenuLabel>
-              <DropdownMenuItem onClick={() => navigate("/profile")}>
-                Profile
-              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => navigate("/wallet")}>Wallet</DropdownMenuItem>
+              <DropdownMenuItem onClick={() => navigate("/loan")}>Get a Loan</DropdownMenuItem>
+              <DropdownMenuItem onClick={() => navigate("/repay-loan")}>Repay Loan</DropdownMenuItem>
               <DropdownMenuItem onClick={() => navigate("/upgrade-verification")}>
                 Upgrade Verification
               </DropdownMenuItem>
