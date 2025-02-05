@@ -1,29 +1,34 @@
-// Utility function to calculate the remaining time (days, hours, minutes) and due date
 export function calculateRemainingTime(
   startTime: bigint,
   loanPeriod: bigint,
 ): [number, number, number, Date] {
-  // Get the current time as a BigInt in seconds
-  const currentTimeInSeconds = BigInt(Math.floor(Date.now() / 1000));
+  // Get the current time in milliseconds as a BigInt
+  const currentTimeInMilliseconds = BigInt(Date.now());
 
-  // Calculate the end time of the loan in seconds
-  const endTimeInSeconds = startTime + loanPeriod;
+  // Calculate the end time of the loan in milliseconds
+  const endTimeInMilliseconds = (startTime + loanPeriod) * 1000n;
 
-  // Calculate the remaining time in seconds
-  const remainingTimeInSeconds = endTimeInSeconds - currentTimeInSeconds;
+  // Calculate the remaining time in milliseconds
+  let remainingTimeInMilliseconds = endTimeInMilliseconds - currentTimeInMilliseconds;
 
-  // If the remaining time is less than or equal to zero, the loan is overdue
-  if (remainingTimeInSeconds <= 0n) {
-    return [0, 0, 0, new Date(Number(startTime + loanPeriod) * 1000)]; // No remaining time, but return due date
+  if (remainingTimeInMilliseconds <= 0n) {
+    // If the loan is overdue, return zero for all time components with the due date
+    return [0, 0, 0, new Date(Number(endTimeInMilliseconds) / 1000)];
   }
 
-  // Convert the remaining time into days, hours, and minutes
-  const daysRemaining = Number(remainingTimeInSeconds / 86400n); // 86400 seconds = 1 day
-  const hoursRemaining = Number((remainingTimeInSeconds % 86400n) / 3600n); // 3600 seconds = 1 hour
-  const minutesRemaining = Number((remainingTimeInSeconds % 3600n) / 60n); // 60 seconds = 1 minute
+  // Convert milliseconds to days, hours, and minutes
+  const millisecondsPerDay = 86400000n; // 1000 * 60 * 60 * 24
+  const millisecondsPerHour = 3600000n; // 1000 * 60 * 60
+  const millisecondsPerMinute = 60000n; // 1000 * 60
+
+  const daysRemaining = Number(remainingTimeInMilliseconds / millisecondsPerDay);
+  remainingTimeInMilliseconds %= millisecondsPerDay;
+  const hoursRemaining = Number(remainingTimeInMilliseconds / millisecondsPerHour);
+  remainingTimeInMilliseconds %= millisecondsPerHour;
+  const minutesRemaining = Number(remainingTimeInMilliseconds / millisecondsPerMinute);
 
   // Calculate due date
-  const dueDate = new Date(Number(startTime + loanPeriod) * 1000);
+  const dueDate = new Date(Number(endTimeInMilliseconds) / 1000);
 
   return [daysRemaining, hoursRemaining, minutesRemaining, dueDate];
 }

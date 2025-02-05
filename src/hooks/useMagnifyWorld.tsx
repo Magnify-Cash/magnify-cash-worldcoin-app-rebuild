@@ -63,7 +63,7 @@ export interface ContractData {
     tokenId: bigint | null;
     tier: Tier | null;
   };
-  loans: Loan[] | null;
+  loan: Loan | null;
   allTiers: Record<number, Tier> | null;
 }
 
@@ -137,30 +137,12 @@ export function useMagnifyWorld(walletAddress: `0x${string}`): {
         }
       }
 
-      const loansArray = await readContract(config, {
+      const loan = await readContract(config, {
         address: MAGNIFY_WORLD_ADDRESS,
         abi: magnifyworldabi,
-        functionName: "fetchLoansByAddress",
+        functionName: "fetchLoanByAddress",
         args: [walletAddress],
       });
-
-      const loans = await Promise.all(
-        ((loansArray as bigint[]) || []).map(async (loanId) => {
-          const loanData = await readContract(config, {
-            address: MAGNIFY_WORLD_ADDRESS,
-            abi: magnifyworldabi,
-            functionName: "loans",
-            args: [loanId],
-          });
-          return {
-            amount: loanData[0],
-            startTime: loanData[1],
-            isActive: loanData[2],
-            interestRate: loanData[3],
-            loanPeriod: loanData[4],
-          };
-        }),
-      );
 
       const allTiers = await fetchAllTiers(Number(tierCount));
 
@@ -171,7 +153,7 @@ export function useMagnifyWorld(walletAddress: `0x${string}`): {
           tokenId,
           tier: nftTier,
         },
-        loans,
+        loan,
         allTiers,
       };
 
