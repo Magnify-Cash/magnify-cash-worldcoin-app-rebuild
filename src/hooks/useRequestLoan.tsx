@@ -1,13 +1,14 @@
-import { useCallback, useState, useEffect } from "react";
+import { useCallback, useState } from "react";
 import { MiniKit } from "@worldcoin/minikit-js";
-import { MAGNIFY_WORLD_ADDRESS, WORLDCOIN_CLIENT_ID } from "@/utils/constants";
 import { useWaitForTransactionReceipt } from "@worldcoin/minikit-react";
 import { createPublicClient, http } from "viem";
 import { worldchain } from "wagmi/chains";
+import { MAGNIFY_WORLD_ADDRESS, WORLDCOIN_CLIENT_ID } from "@/utils/constants";
 
 type LoanDetails = {
   amount: number;
-  duration: number;
+  interest: number;
+  totalDue: number;
   transactionId: string;
 };
 
@@ -21,10 +22,8 @@ const useRequestLoan = () => {
   const client = createPublicClient({
     chain: worldchain,
     transport: http("https://worldchain-mainnet.g.alchemy.com/public"),
-    account: undefined
   });
 
-  // Use the hook at the top level of your custom hook
   const { isLoading: isConfirmingTransaction, isSuccess: isTransactionConfirmed } =
     useWaitForTransactionReceipt({
       client: client,
@@ -34,12 +33,7 @@ const useRequestLoan = () => {
       },
     });
 
-  useEffect(() => {
-    setIsConfirming(isConfirmingTransaction);
-    setIsConfirmed(isTransactionConfirmed);
-  }, [isConfirmingTransaction, isTransactionConfirmed]);
-
-  const requestNewLoan = useCallback(async () => {
+  const requestLoan = useCallback(async () => {
     setError(null);
     setTransactionId(null);
     setIsConfirming(false);
@@ -68,20 +62,17 @@ const useRequestLoan = () => {
 
       if (finalPayload.status === "success") {
         setTransactionId(finalPayload.transaction_id);
-        console.log("Loan initialization transaction sent:", finalPayload.transaction_id);
-        // Optional: Fetch loan details if available from the transaction response
+        console.log("Loan request transaction sent:", finalPayload.transaction_id);
+
         setLoanDetails({
-          amount: 1000, // Replace with actual logic if amount comes from transaction or another source
-          duration: 30, // Replace with actual logic for duration
+          amount: 0, // Set based on contract terms
+          interest: 0, // Set based on contract terms
+          totalDue: 0, // Calculate total with interest
           transactionId: finalPayload.transaction_id,
         });
       } else {
-        console.error("Error sending transaction", finalPayload);
-        if (finalPayload.error_code === "user_rejected") {
-          setError(`User rejected transaction`);
-        } else {
-          setError(`Transaction failed: ${finalPayload.details.simulationError.split("string: ")[1]}`);
-        }
+        console.error("Error sending transaction", finalPayload, commandPayload);
+        setError(`Transaction failed: ${finalPayload.details.simulationError.split("string: ")[1]}`);
       }
     } catch (err) {
       console.error("Error sending transaction", err);
@@ -89,7 +80,14 @@ const useRequestLoan = () => {
     }
   }, []);
 
-  return { requestNewLoan, error, transactionId, isConfirming, isConfirmed, loanDetails };
+  return {
+    requestLoan,
+    error,
+    transactionId,
+    isConfirming: isConfirmingTransaction,
+    isConfirmed: isTransactionConfirmed,
+    loanDetails,
+  };
 };
 
 export default useRequestLoan;

@@ -34,6 +34,12 @@ const Loan = () => {
     [data, requestNewLoan],
   );
 
+  const handleLoanAmount = (amount: bigint) => {
+    // Ensure amount is always bigint
+    const bigIntAmount = typeof amount === 'number' ? BigInt(amount) : amount;
+    // Rest of the implementation
+  };
+
   // Handle navigation after claiming loan
   const handleNavigateAfterTransaction = () => {
     refetch();

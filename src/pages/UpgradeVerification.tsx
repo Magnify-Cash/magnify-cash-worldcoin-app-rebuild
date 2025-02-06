@@ -9,10 +9,10 @@ import { motion } from "framer-motion";
 const UpgradeVerification = () => {
   const navigate = useNavigate();
   const ls_wallet = localStorage.getItem("ls_wallet_address");
-  const walletAddress = ls_wallet ? `0x${ls_wallet.slice(2)}` as `0x${string}` : undefined;
-  const { data, isLoading, isError, refetch } = useMagnifyWorld(walletAddress as `0x${string}`);
+  const walletAddress = ls_wallet ? (`0x${ls_wallet.slice(2)}` as `0x${string}`) : undefined;
+  const { data, isLoading, isError } = useMagnifyWorld(walletAddress as `0x${string}`);
   
-  const IconMapping = ({ type, className, ...otherProps }) => {
+  const IconMapping = ({ type, className, ...otherProps }: { type: string; className?: string; [key: string]: any }) => {
     let IconComponent;
     if (type === "Orb Scan") {
       IconComponent = Globe;
@@ -23,7 +23,7 @@ const UpgradeVerification = () => {
     } else {
       return null;
     }
-    return <IconComponent className={className} {...otherProps} />;
+    return IconComponent ? <IconComponent className={className} {...otherProps} /> : null;
   };
 
   // Loading & error states
@@ -49,6 +49,19 @@ const UpgradeVerification = () => {
   // state
   if (data) {
     const nftInfo = data?.nftInfo || { tokenId: null, tier: null };
+    const currentVerificationStatus = nftInfo?.tier?.verificationStatus;
+
+    if (!currentVerificationStatus) {
+      return (
+        <div className="min-h-screen">
+          <Header title="Upgrade Verification" />
+          <div className="flex justify-center items-center h-[calc(100vh-80px)]">
+            No verification status available.
+          </div>
+        </div>
+      );
+    }
+
     return (
       <div className="min-h-screen bg-background">
         <Header title="Upgrade Verification" />
@@ -64,19 +77,20 @@ const UpgradeVerification = () => {
             </div>
             <h2 className="text-2xl font-bold text-gradient mb-2 text-center">Verification Level</h2>
             <p className="text-muted-foreground text-center capitalize">
-              Currently: {nftInfo.tier.verificationStatus.level} Verified
+              Currently: {currentVerificationStatus.level} Verified
             </p>
           </motion.div>
 
           {/* Verification cards */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {Object.entries(data?.allTiers).map(([index, tier]) => (
+            {data?.allTiers && Object.entries(data.allTiers).map(([index, tier]) => (
               <motion.div
+                key={index}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.1 + parseInt(index) * 0.1 }}
                 className={`glass-card p-6 ${
-                  tier.verificationStatus !== nftInfo.tier.verificationStatus
+                  tier.verificationStatus !== currentVerificationStatus
                     ? "opacity-50"
                     : "hover:shadow-lg transition-shadow"
                 }`}
@@ -97,40 +111,22 @@ const UpgradeVerification = () => {
                 <Button
                   className="w-full"
                   variant="default"
-                  disabled={tier.verificationStatus === nftInfo.tier.verificationStatus}
+                  disabled={tier.verificationStatus === currentVerificationStatus}
                   onClick={() => {}}
                 >
-                  {tier.verificationStatus === nftInfo.tier.verificationStatus
+                  {tier.verificationStatus === currentVerificationStatus
                     ? "Already claimed"
                     : `Upgrade to ${tier.verificationStatus.level}`}
                 </Button>
               </motion.div>
             ))}
           </div>
-
-          <Dialog open={false} onOpenChange={() => {}}>
-            <DialogContent>
-              <DialogHeader>
-                <DialogTitle>Confirm Verification Upgrade</DialogTitle>
-                <DialogDescription>
-                  Are you sure you want to upgrade to verification? This will mint an NFT collateral to your
-                  WorldChain wallet.
-                </DialogDescription>
-              </DialogHeader>
-              <div className="flex justify-end space-x-2">
-                <Button variant="outline" onClick={() => {}}>
-                  Cancel
-                </Button>
-                <Button onClick={() => {}} disabled={isLoading}>
-                  {isLoading ? "Processing..." : "Confirm Upgrade"}
-                </Button>
-              </div>
-            </DialogContent>
-          </Dialog>
         </div>
       </div>
     );
   }
+
+  return null;
 };
 
 export default UpgradeVerification;

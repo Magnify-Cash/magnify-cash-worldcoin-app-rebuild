@@ -32,7 +32,11 @@ const RepayLoan = () => {
       if (data?.nftInfo?.tokenId) {
         await repayLoanWithPermit2(loanAmountDue.toString());
       } else {
-        toast.error("Unable to pay back loan.");
+        toast({
+          title: "Error",
+          description: "Unable to pay back loan.",
+          variant: "destructive",
+        });
       }
     },
     [data, repayLoanWithPermit2, loanAmountDue, toast],
