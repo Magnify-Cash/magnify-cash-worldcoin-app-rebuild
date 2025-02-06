@@ -1,7 +1,7 @@
 import { readContract } from "@wagmi/core";
 import { magnifyworldabi } from "@/utils/magnifyworldabi";
 import { MAGNIFY_WORLD_ADDRESS } from "@/utils/constants";
-import { config } from "@/providers/Wagmi"; // Assuming this is where your Wagmi config lives
+import { config } from "@/providers/Wagmi";
 import { useEffect, useState, useCallback } from "react";
 
 export const VERIFICATION_TIERS = {
@@ -10,12 +10,14 @@ export const VERIFICATION_TIERS = {
     description: "World ID ORB Verified",
     color: "text-brand-success",
     message: "You're fully verified and eligible for maximum loan amounts!",
+    maxLoanAmount: 10,
   },
   PASSPORT: {
     level: "Passport",
     description: "World ID Passport Verified",
     color: "text-brand-warning",
     message: "Get ORB verified to unlock $10 loans!",
+    maxLoanAmount: 5,
   },
   NONE: {
     level: "World ID",
@@ -23,17 +25,19 @@ export const VERIFICATION_TIERS = {
     color: "text-brand-info",
     message:
       "Get World ID verified to unlock higher loan amounts! Verify with Passport for $5 loans or get ORB verified for $10 loans.",
+    maxLoanAmount: 1,
   },
 };
 
 export type VerificationLevel = keyof typeof VERIFICATION_TIERS;
 export interface VerificationTier {
-  level: VerificationLevel;
+  level: string;
   maxLoanAmount: number;
   description: string;
   color: string;
   message: string;
 }
+
 export interface Tier {
   loanAmount: bigint;
   interestRate: bigint;
@@ -67,20 +71,13 @@ export interface ContractData {
   allTiers: Record<number, Tier> | null;
 }
 
-// Global cache for all components
 let globalCache: Record<string, ContractData> = {};
 
-// Function to invalidate cache for a specific wallet address
 export function invalidateCache(walletAddress: `0x${string}`) {
   delete globalCache[walletAddress];
 }
 
-export function useMagnifyWorld(walletAddress: `0x${string}`): {
-  data: ContractData | null;
-  isLoading: boolean;
-  isError: boolean;
-  refetch: () => void;
-} {
+export function useMagnifyWorld(walletAddress: `0x${string}`) {
   const [data, setData] = useState<ContractData | null>(globalCache[walletAddress] || null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isError, setIsError] = useState<boolean>(false);
@@ -90,7 +87,6 @@ export function useMagnifyWorld(walletAddress: `0x${string}`): {
       setIsLoading(true);
       setIsError(false);
 
-      // Basic contract information
       const loanToken = await readContract(config, {
         address: MAGNIFY_WORLD_ADDRESS,
         abi: magnifyworldabi,
@@ -103,37 +99,42 @@ export function useMagnifyWorld(walletAddress: `0x${string}`): {
         functionName: "tierCount",
       });
 
-      const userNFT = (await readContract(config, {
+      const userNFT = await readContract(config, {
         address: MAGNIFY_WORLD_ADDRESS,
         abi: magnifyworldabi,
         functionName: "userNFT",
         args: [walletAddress],
-      })) as bigint;
+      });
 
       let tokenId: bigint | null = null;
       let nftTier: Tier | null = null;
-      if (userNFT !== BigInt(0)) {
-        tokenId = userNFT;
+
+      if (userNFT && BigInt(userNFT) !== BigInt(0)) {
+        tokenId = BigInt(userNFT);
         const tierId = await readContract(config, {
           address: MAGNIFY_WORLD_ADDRESS,
           abi: magnifyworldabi,
           functionName: "nftToTier",
           args: [tokenId],
         });
-        const tierData = await readContract(config, {
-          address: MAGNIFY_WORLD_ADDRESS,
-          abi: magnifyworldabi,
-          functionName: "tiers",
-          args: [tierId],
-        });
-        if (tierData) {
-          nftTier = {
-            loanAmount: tierData[0],
-            interestRate: tierData[1],
-            loanPeriod: tierData[2],
-            tierId: tierId,
-            verificationStatus: getVerificationStatus(tierId),
-          };
+
+        if (tierId) {
+          const tierData = await readContract(config, {
+            address: MAGNIFY_WORLD_ADDRESS,
+            abi: magnifyworldabi,
+            functionName: "tiers",
+            args: [BigInt(tierId)],
+          });
+
+          if (tierData) {
+            nftTier = {
+              loanAmount: BigInt(tierData[0] || 0),
+              interestRate: BigInt(tierData[1] || 0),
+              loanPeriod: BigInt(tierData[2] || 0),
+              tierId: BigInt(tierId),
+              verificationStatus: getVerificationStatus(Number(tierId)),
+            };
+          }
         }
       }
 
@@ -142,7 +143,7 @@ export function useMagnifyWorld(walletAddress: `0x${string}`): {
         abi: magnifyworldabi,
         functionName: "fetchLoanByAddress",
         args: [walletAddress],
-      });
+      }) as Loan;
 
       const allTiers = await fetchAllTiers(Number(tierCount));
 
@@ -157,7 +158,7 @@ export function useMagnifyWorld(walletAddress: `0x${string}`): {
         allTiers,
       };
 
-      globalCache[walletAddress] = newData; // Update global cache
+      globalCache[walletAddress] = newData;
       setData(newData);
     } catch (error) {
       console.error("Error fetching contract data:", error);
@@ -175,7 +176,6 @@ export function useMagnifyWorld(walletAddress: `0x${string}`): {
     }
   }, [walletAddress, fetchData]);
 
-  // Refetch function for user action invalidation
   const refetch = useCallback(() => {
     invalidateCache(walletAddress);
     fetchData();
@@ -184,30 +184,33 @@ export function useMagnifyWorld(walletAddress: `0x${string}`): {
   return { data, isLoading, isError, refetch };
 }
 
-// Helper function to fetch all tiers
 async function fetchAllTiers(tierCount: number): Promise<Record<number, Tier> | null> {
   const allTiers: Record<number, Tier> = {};
   for (let i = 1; i <= tierCount; i++) {
-    const tierData = await readContract(config, {
-      address: MAGNIFY_WORLD_ADDRESS,
-      abi: magnifyworldabi,
-      functionName: "tiers",
-      args: [BigInt(i)],
-    });
-    if (tierData) {
-      allTiers[i] = {
-        loanAmount: tierData[0],
-        interestRate: tierData[1],
-        loanPeriod: tierData[2],
-        tierId: BigInt(i),
-        verificationStatus: getVerificationStatus(Number(i)),
-      };
+    try {
+      const tierData = await readContract(config, {
+        address: MAGNIFY_WORLD_ADDRESS,
+        abi: magnifyworldabi,
+        functionName: "tiers",
+        args: [BigInt(i)],
+      });
+      
+      if (tierData) {
+        allTiers[i] = {
+          loanAmount: BigInt(tierData[0] || 0),
+          interestRate: BigInt(tierData[1] || 0),
+          loanPeriod: BigInt(tierData[2] || 0),
+          tierId: BigInt(i),
+          verificationStatus: getVerificationStatus(i),
+        };
+      }
+    } catch (error) {
+      console.error(`Error fetching tier ${i}:`, error);
     }
   }
-  return allTiers;
+  return Object.keys(allTiers).length > 0 ? allTiers : null;
 }
 
-// Helper function to get verification status based on tier ID
 function getVerificationStatus(tierId: number): VerificationTier {
   let verificationLevel: VerificationLevel;
   switch (Number(tierId)) {
@@ -221,7 +224,6 @@ function getVerificationStatus(tierId: number): VerificationTier {
       verificationLevel = "ORB";
       break;
     default:
-      // You can decide what to do with unexpected tier IDs. Here, we default to NONE.
       verificationLevel = "NONE";
   }
 
