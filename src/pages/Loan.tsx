@@ -13,7 +13,8 @@ const Loan = () => {
   const { toast } = useToast();
   const navigate = useNavigate();
   const ls_wallet = localStorage.getItem("ls_wallet_address");
-  const { data, isLoading, isError, refetch } = useMagnifyWorld(ls_wallet);
+  const walletAddress = ls_wallet ? `0x${ls_wallet.slice(2)}` as `0x${string}` : undefined;
+  const { data, isLoading, isError, refetch } = useMagnifyWorld(walletAddress as `0x${string}`);
   const { requestNewLoan, error, transactionId, isConfirming, isConfirmed } = useRequestLoan();
 
   // state

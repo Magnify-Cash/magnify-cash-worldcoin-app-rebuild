@@ -22,6 +22,7 @@ const useRepayLoan = () => {
   const client = createPublicClient({
     chain: worldchain,
     transport: http("https://worldchain-mainnet.g.alchemy.com/public"),
+    account: undefined
   });
 
   const { isLoading: isConfirmingTransaction, isSuccess: isTransactionConfirmed } =

@@ -21,6 +21,7 @@ const useRequestLoan = () => {
   const client = createPublicClient({
     chain: worldchain,
     transport: http("https://worldchain-mainnet.g.alchemy.com/public"),
+    account: undefined
   });
 
   // Use the hook at the top level of your custom hook

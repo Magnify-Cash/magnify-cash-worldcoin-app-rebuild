@@ -13,7 +13,8 @@ const RepayLoan = () => {
   const toast = useToast();
   const navigate = useNavigate();
   const ls_wallet = localStorage.getItem("ls_wallet_address");
-  const { data, isLoading, isError, refetch } = useMagnifyWorld(ls_wallet);
+  const walletAddress = ls_wallet ? `0x${ls_wallet.slice(2)}` as `0x${string}` : undefined;
+  const { data, isLoading, isError, refetch } = useMagnifyWorld(walletAddress as `0x${string}`);
   const loan = data?.loan;
   const loanData: Loan = loan && loan[1];
 
@@ -34,7 +35,7 @@ const RepayLoan = () => {
         toast.error("Unable to pay back loan.");
       }
     },
-    [data, repayLoanWithPermit2, loanAmountDue],
+    [data, repayLoanWithPermit2, loanAmountDue, toast],
   );
 
   // Call refetch after loan repayment is confirmed

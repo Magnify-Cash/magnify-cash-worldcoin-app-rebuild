@@ -7,12 +7,11 @@ import { Shield, FileCheck, Globe } from "lucide-react";
 import { motion } from "framer-motion";
 
 const UpgradeVerification = () => {
-  // hooks
   const navigate = useNavigate();
   const ls_wallet = localStorage.getItem("ls_wallet_address");
-  const { data, isLoading, isError, refetch } = useMagnifyWorld(ls_wallet);
-
-  // icon mapping
+  const walletAddress = ls_wallet ? `0x${ls_wallet.slice(2)}` as `0x${string}` : undefined;
+  const { data, isLoading, isError, refetch } = useMagnifyWorld(walletAddress as `0x${string}`);
+  
   const IconMapping = ({ type, className, ...otherProps }) => {
     let IconComponent;
     if (type === "Orb Scan") {

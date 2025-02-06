@@ -109,8 +109,8 @@ export function useMagnifyWorld(walletAddress: `0x${string}`) {
       let tokenId: bigint | null = null;
       let nftTier: Tier | null = null;
 
-      if (userNFT && BigInt(userNFT) !== BigInt(0)) {
-        tokenId = BigInt(userNFT);
+      if (userNFT && BigInt(String(userNFT)) !== BigInt(0)) {
+        tokenId = BigInt(String(userNFT));
         const tierId = await readContract(config, {
           address: MAGNIFY_WORLD_ADDRESS,
           abi: magnifyworldabi,
@@ -123,15 +123,15 @@ export function useMagnifyWorld(walletAddress: `0x${string}`) {
             address: MAGNIFY_WORLD_ADDRESS,
             abi: magnifyworldabi,
             functionName: "tiers",
-            args: [BigInt(tierId)],
+            args: [BigInt(String(tierId))],
           });
 
           if (tierData) {
             nftTier = {
-              loanAmount: BigInt(tierData[0] || 0),
-              interestRate: BigInt(tierData[1] || 0),
-              loanPeriod: BigInt(tierData[2] || 0),
-              tierId: BigInt(tierId),
+              loanAmount: BigInt(String(tierData[0] || 0)),
+              interestRate: BigInt(String(tierData[1] || 0)),
+              loanPeriod: BigInt(String(tierData[2] || 0)),
+              tierId: BigInt(String(tierId)),
               verificationStatus: getVerificationStatus(Number(tierId)),
             };
           }
