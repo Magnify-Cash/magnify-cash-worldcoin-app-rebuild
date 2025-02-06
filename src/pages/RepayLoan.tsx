@@ -16,26 +16,14 @@ const RepayLoan = () => {
   const { data, isLoading, isError, refetch } = useMagnifyWorld(ls_wallet);
   const loan = data?.loan;
   const loanData: Loan = loan && loan[1];
-  /*
-  const loanData = {
-    amount: 100000n, // 100,000 units of currency (e.g., dollars, assuming smallest unit is 1)
-    interestRate: 500n, // 5% annual interest rate (500 basis points)
-    isActive: true,
-    loanPeriod: 31536000n, // 1 year in seconds (365 days * 24 hours * 60 minutes * 60 seconds)
-    startTime: 1672531200n, // Example start time in UNIX timestamp (e.g., January 1, 2023, 00:00:00 UTC)
-  };
-  */
 
   // loan repayment
-  // TODO: DONT RUN THIS LOAN REPAYMENT BLOCK UNTIL isLoading IS FALSE
-  // Use useMemo to memoize calculation only when loanData changes
   const loanAmountDue = useMemo(() => {
     if (loanData) {
       return loanData.amount + (loanData.amount * loanData.interestRate) / 10000n;
     }
     return 0n; // Default value if loanData is not available
   }, [loanData]);
-
   const { repayLoanWithPermit2, error, transactionId, isConfirming, isConfirmed } = useRepayLoan();
   const handleApplyLoan = useCallback(
     async (event: React.FormEvent) => {
