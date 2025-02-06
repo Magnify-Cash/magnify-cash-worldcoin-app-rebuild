@@ -77,9 +77,10 @@ const Wallet = () => {
 
             // Only return token if balance is greater than 0
             if (balanceDecimal > 0) {
+              const balanceString = balanceDecimal.toFixed(3);
               return {
                 contractAddress: token.contractAddress,
-                balance: balanceDecimal,
+                balance: balanceString,
                 symbol: metadata.result.symbol,
                 decimals: decimals,
                 name: metadata.result.name,
@@ -129,7 +130,7 @@ const Wallet = () => {
     <div className="min-h-screen bg-background">
       <Header title="Wallet" showBack={false} />
 
-      <div className="p-6 max-w-2xl mx-auto">
+      <div className="py-6 max-w-2xl mx-auto">
         {error && (
           <Alert variant="destructive" className="mb-6">
             <AlertCircle className="h-4 w-4" />
@@ -139,7 +140,11 @@ const Wallet = () => {
 
         {/* Total Balance */}
         <div className="text-center mb-12">
-          <h1 className="text-5xl font-bold mb-8 break-words">@{ls_username}</h1>
+          <h1 className="text text-2xl font-bold mb-8">
+            {ls_wallet.substring(0, 6)}
+            ...
+            {ls_wallet.substring(ls_wallet.length - 6)}
+          </h1>
           {/*
           TODO: TOTAL BALANCE
           ALCHEMY API DOES NOT PROVIDE USD PRICES
@@ -159,13 +164,13 @@ const Wallet = () => {
               </div>
             </Button>
             <Button
-              onClick={() => navigate("/dashboard")}
+              onClick={() => navigate("/repay-loan")}
               variant="outline"
               className="h-20 hover:bg-accent/10"
             >
               <div className="text-center">
                 <div className="text-2xl mb-1">📊</div>
-                <span className="text-sm text-muted-foreground">Loan Dashboard</span>
+                <span className="text-sm text-muted-foreground">Repay Loan</span>
               </div>
             </Button>
           </div>
