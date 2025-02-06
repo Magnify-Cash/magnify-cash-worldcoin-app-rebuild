@@ -18,7 +18,7 @@ export const VERIFICATION_TIERS = {
     message: "Get ORB verified to unlock $10 loans!",
   },
   NONE: {
-    level: "World ID",
+    level: "Device",
     description: "Device-Verified with World ID",
     color: "text-brand-info",
     message:

@@ -36,7 +36,7 @@ const Loan = () => {
   // Handle navigation after claiming loan
   const handleNavigateAfterTransaction = () => {
     refetch();
-    setTimeout(() => navigate("/dashboard"), 1000);
+    setTimeout(() => navigate("/profile"), 1000);
   };
 
   if (isLoading) {
@@ -84,7 +84,7 @@ const Loan = () => {
             <p className="mt-4 text-gray-600">
               You currently have an active loan. Please navigate to your dashboard for more details.
             </p>
-            <Button type="button" onClick={() => navigate("/dashboard")} className="mt-4 w-full sm:w-auto">
+            <Button type="button" onClick={() => navigate("/profile")} className="mt-4 w-full sm:w-auto">
               Go to Dashboard
             </Button>
           </div>

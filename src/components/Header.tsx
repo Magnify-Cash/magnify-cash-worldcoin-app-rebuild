@@ -82,7 +82,7 @@ export const Header = ({ title, showBack = true }: HeaderProps) => {
               <DropdownMenuSeparator />
 
               <DropdownMenuLabel>Account</DropdownMenuLabel>
-              <DropdownMenuItem onClick={() => navigate("/dashboard")}>Dashboard</DropdownMenuItem>
+              <DropdownMenuItem onClick={() => navigate("/profile")}>Profile</DropdownMenuItem>
               <DropdownMenuItem onClick={() => navigate("/upgrade-verification")}>
                 Upgrade Verification
               </DropdownMenuItem>

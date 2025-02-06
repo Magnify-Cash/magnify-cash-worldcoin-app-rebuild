@@ -44,12 +44,15 @@ const Dashboard = () => {
             <div className="flex items-center justify-center mb-6">
               <User className="w-16 h-16 text-primary" />
             </div>
-            <h2 className="text-3xl font-bold text-gradient mb-3 text-center break-words">@{ls_username}</h2>
-            <p className="text-muted-foreground text-center text-lg">Verified User</p>
+            <h2 className="text-xl font-bold text-gradient mb-3 text-center break-words">@{ls_username}</h2>
+            <p className="text-muted-foreground text-center text-lg">
+              {nftInfo?.tier.verificationStatus.level} Verified User
+            </p>
           </motion.div>
 
           {/* Loan Status */}
           {/* Loan Status */}
+          {/*
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -60,6 +63,7 @@ const Dashboard = () => {
               <DollarSign className="w-8 h-8 text-primary" />
               Loan Status
             </h2>
+
 
             {hasActiveLoan ? (
               <div className="space-y-4">
@@ -91,6 +95,7 @@ const Dashboard = () => {
               </div>
             )}
           </motion.div>
+          */}
 
           {/* Collateral section */}
           <motion.div
@@ -101,53 +106,44 @@ const Dashboard = () => {
           >
             <h2 className="text-2xl font-semibold mb-6 flex items-center gap-3">
               <Shield className="w-8 h-8 text-primary" />
-              Available ID Collaterals
+              Your NFT Tier
             </h2>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {Object.entries(data?.allTiers).map(([index, tier]) => (
+              <motion.div
+                key={nftInfo.tokenId}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.1 * (1 + 1) }}
+                className="transform hover:scale-105 transition-transform duration-300"
+              >
                 <motion.div
-                  key={tier.tierId}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.1 * (index + 1) }}
-                  className="transform hover:scale-105 transition-transform duration-300"
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 0.2 + 1 * 0.1 }}
+                  className="cursor-pointer transition-transform hover:scale-105"
                 >
-                  <motion.div
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: 0.2 + index * 0.1 }}
-                    className="cursor-pointer transition-transform hover:scale-105"
-                  >
-                    <Card className="p-4">
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center space-x-3">
-                          <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center">
-                            <FileText className="h-5 w-5 text-primary" />
-                          </div>
-                          <div>
-                            <h4 className="font-medium">{tier.verificationStatus.level}</h4>
-                            <p className="text-sm text-muted-foreground">
-                              ${formatUnits(tier.loanAmount, 6)}
-                            </p>
-                          </div>
+                  <Card className="p-4">
+                    <div className="flex-column items-center justify-between">
+                      <div className="flex items-center space-x-3">
+                        <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center">
+                          <FileText className="h-5 w-5 text-primary" />
                         </div>
-                        <span
-                          className={`px-3 py-1 rounded-full text-sm ${
-                            data?.nftInfo.tier.verificationStatus == tier.verificationStatus
-                              ? "bg-yellow-100 text-yellow-700"
-                              : "bg-green-100 text-green-700"
-                          }`}
-                        >
-                          {data?.nftInfo.tier.verificationStatus == tier.verificationStatus
-                            ? "In use"
-                            : "Available"}
-                        </span>
+                        <div>
+                          <h4 className="font-medium">{nftInfo?.tier.verificationStatus.level} Verified</h4>
+                        </div>
                       </div>
-                    </Card>
-                  </motion.div>
+                      <div
+                        className={`px-3 py-1 rounded-full text-sm my-3 ${
+                          hasActiveLoan ? "bg-yellow-100 text-yellow-700" : "bg-green-100 text-green-700"
+                        }`}
+                      >
+                        {hasActiveLoan ? "Locked as Collateral" : "Available for Collateral"}
+                      </div>
+                    </div>
+                  </Card>
                 </motion.div>
-              ))}
+              </motion.div>
             </div>
           </motion.div>
         </div>

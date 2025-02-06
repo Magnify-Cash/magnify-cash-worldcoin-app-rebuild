@@ -2,7 +2,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-d
 import Index from "@/pages/Index";
 import Welcome from "@/pages/Welcome";
 import Guide from "@/pages/Guide";
-import Dashboard from "@/pages/Dashboard";
+import Profile from "@/pages/Profile";
 import Wallet from "@/pages/Wallet";
 import Loan from "@/pages/Loan";
 import RepayLoan from "@/pages/RepayLoan";
@@ -39,10 +39,10 @@ function App() {
             }
           />
           <Route
-            path="/dashboard"
+            path="/profile"
             element={
               <ProtectedRoute>
-                <Dashboard />
+                <Profile />
               </ProtectedRoute>
             }
           />
