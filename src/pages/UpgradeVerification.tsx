@@ -31,7 +31,7 @@ const UpgradeVerification = () => {
   if (isLoading || !data) {
     return (
       <div className="min-h-screen">
-        <Header title="Upgrade Verification" />
+        <Header title="Verification Level" />
         <div className="flex justify-center items-center h-[calc(100vh-80px)]">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
         </div>
@@ -41,7 +41,7 @@ const UpgradeVerification = () => {
   if (isError) {
     return (
       <div className="min-h-screen">
-        <Header title="Upgrade Verification" />
+        <Header title="Verification Level" />
         <div className="flex justify-center items-center h-[calc(100vh-80px)]">Error fetching data.</div>
       </div>
     );
@@ -52,7 +52,7 @@ const UpgradeVerification = () => {
     const nftInfo = data?.nftInfo || { tokenId: null, tier: null };
     return (
       <div className="min-h-screen bg-background">
-        <Header title="Upgrade Verification" />
+        <Header title="Verification Level" />
         <div className="p-6 max-w-4xl mx-auto">
           {/* Verification header */}
           <motion.div
@@ -89,19 +89,15 @@ const UpgradeVerification = () => {
                 <h3 className="text-xl font-semibold mb-2 text-center">
                   {tier.verificationStatus.level} Verification
                 </h3>
-                <p className="text-muted-foreground text-center mb-4">
-                  {tier.verificationStatus.description}
-                </p>
-                <div className="text-2xl font-bold text-center mb-4 text-primary">
-                  {tier.verificationStatus.maxLoanAmount}
-                </div>
+
                 <Button
                   className="w-full"
                   variant="default"
                   disabled={tier.verificationStatus === nftInfo.tier.verificationStatus}
                   onClick={() => {}}
                 >
-                  {tier.verificationStatus === nftInfo.tier.verificationStatus
+                  {nftInfo.tier.tierId > tier.tierId ||
+                  tier.verificationStatus === nftInfo.tier.verificationStatus
                     ? "Already claimed"
                     : `Upgrade to ${tier.verificationStatus.level}`}
                 </Button>
