@@ -15,7 +15,7 @@ const Loan = () => {
   const ls_wallet = localStorage.getItem("ls_wallet_address");
   const walletAddress = ls_wallet ? `0x${ls_wallet.slice(2)}` as `0x${string}` : undefined;
   const { data, isLoading, isError, refetch } = useMagnifyWorld(walletAddress as `0x${string}`);
-  const { requestNewLoan, error, transactionId, isConfirming, isConfirmed } = useRequestLoan();
+  const { requestLoan, error, transactionId, isConfirming, isConfirmed } = useRequestLoan();
 
   // state
   const nftInfo = data?.nftInfo || { tokenId: null, tier: null };
@@ -26,12 +26,12 @@ const Loan = () => {
     async (event: React.FormEvent) => {
       event.preventDefault();
       if (data?.nftInfo?.tokenId) {
-        await requestNewLoan();
+        await requestLoan();
       } else {
         alert("Unable to apply for loan. Ensure you have a verified NFT.");
       }
     },
-    [data, requestNewLoan],
+    [data, requestLoan],
   );
 
   const handleLoanAmount = (amount: bigint) => {
