@@ -15,7 +15,6 @@ const Wallet = () => {
   const [isLoading, setLoading] = useState(false);
   const [error, setError] = useState(null); // New error state
 
-
   useEffect(() => {
     const url = `https://worldchain-mainnet.g.alchemy.com/v2/j-_GFK85PRHN59YaKb8lmVbV0LHmFGBL`;
     const fetchBalances = async () => {
@@ -134,17 +133,13 @@ const Wallet = () => {
         {error && (
           <Alert variant="destructive" className="mb-6">
             <AlertCircle className="h-4 w-4" />
-            <AlertDescription>
-              Failed to load wallet data. Please try again later.
-            </AlertDescription>
+            <AlertDescription>Failed to load wallet data. Please try again later.</AlertDescription>
           </Alert>
         )}
 
         {/* Total Balance */}
         <div className="text-center mb-12">
-          <h1 className="text-5xl font-bold mb-8">
-            @{ls_username}
-          </h1>
+          <h1 className="text-5xl font-bold mb-8 break-words">@{ls_username}</h1>
           {/*
           TODO: TOTAL BALANCE
           ALCHEMY API DOES NOT PROVIDE USD PRICES
@@ -157,11 +152,7 @@ const Wallet = () => {
 
           {/* Action Buttons */}
           <div className="grid grid-cols-2 gap-4 mb-8">
-            <Button
-              onClick={() => navigate("/loan")}
-              variant="outline"
-              className="h-20 hover:bg-accent/10"
-            >
+            <Button onClick={() => navigate("/loan")} variant="outline" className="h-20 hover:bg-accent/10">
               <div className="text-center">
                 <div className="text-2xl mb-1">💰</div>
                 <span className="text-sm text-muted-foreground">Get a loan</span>
@@ -184,18 +175,8 @@ const Wallet = () => {
         <div className="space-y-4 mb-8">
           {isLoading ? (
             <>
-              <WalletCard
-                currency=""
-                symbol=""
-                balance=""
-                isLoading={true}
-              />
-              <WalletCard
-                currency=""
-                symbol=""
-                balance=""
-                isLoading={true}
-              />
+              <WalletCard currency="" symbol="" balance="" isLoading={true} />
+              <WalletCard currency="" symbol="" balance="" isLoading={true} />
             </>
           ) : tokens.length > 0 ? (
             tokens.map((token) => (
@@ -207,9 +188,7 @@ const Wallet = () => {
               />
             ))
           ) : (
-            <div className="text-center py-4">
-              No tokens found. Add some to see your balance!
-            </div>
+            <div className="text-center py-4">No tokens found. Add some to see your balance!</div>
           )}
         </div>
       </div>

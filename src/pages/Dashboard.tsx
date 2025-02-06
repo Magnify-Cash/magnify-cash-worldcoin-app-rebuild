@@ -44,7 +44,7 @@ const Dashboard = () => {
             <div className="flex items-center justify-center mb-6">
               <User className="w-16 h-16 text-primary" />
             </div>
-            <h2 className="text-3xl font-bold text-gradient mb-3 text-center">@{ls_username}</h2>
+            <h2 className="text-3xl font-bold text-gradient mb-3 text-center break-words">@{ls_username}</h2>
             <p className="text-muted-foreground text-center text-lg">Verified User</p>
           </motion.div>
 
