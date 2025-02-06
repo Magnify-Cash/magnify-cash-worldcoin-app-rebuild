@@ -90,6 +90,7 @@ export const Header = ({ title, showBack = true }: HeaderProps) => {
 
               <DropdownMenuLabel>Support</DropdownMenuLabel>
               <DropdownMenuItem onClick={() => navigate("/announcements")}>Announcements</DropdownMenuItem>
+              <DropdownMenuItem onClick={() => navigate("/guide")}>Help Center</DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>

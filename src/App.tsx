@@ -1,5 +1,4 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
-import Index from "@/pages/Index";
 import Welcome from "@/pages/Welcome";
 import Guide from "@/pages/Guide";
 import Profile from "@/pages/Profile";
