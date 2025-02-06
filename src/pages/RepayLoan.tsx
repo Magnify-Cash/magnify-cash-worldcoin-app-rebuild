@@ -1,4 +1,4 @@
-import { useCallback, useMemo } from "react";
+import { useCallback, useEffect, useMemo } from "react";
 import { Header } from "@/components/Header";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
@@ -37,7 +37,17 @@ const RepayLoan = () => {
     [data, repayLoanWithPermit2, loanAmountDue],
   );
 
-  // Loading & error states
+  // Call refetch after loan repayment is confirmed
+  useEffect(() => {
+    if (isConfirmed) {
+      const timeout = setTimeout(() => {
+        refetch();
+      }, 1000);
+
+      return () => clearTimeout(timeout);
+    }
+  }, [isConfirmed, refetch]);
+
   // Loading & error states
   if (isLoading || !loan) {
     return (
