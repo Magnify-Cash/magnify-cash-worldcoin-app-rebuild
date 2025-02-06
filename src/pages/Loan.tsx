@@ -19,7 +19,6 @@ const Loan = () => {
   // state
   const nftInfo = data?.nftInfo || { tokenId: null, tier: null };
   const hasActiveLoan = data?.loan[0] === true;
-  console.log(hasActiveLoan);
 
   // Handle loan application
   const handleApplyLoan = useCallback(

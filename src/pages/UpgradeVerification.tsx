@@ -14,7 +14,6 @@ const UpgradeVerification = () => {
 
   // icon mapping
   const IconMapping = ({ type, className, ...otherProps }) => {
-    console.log(type, type);
     let IconComponent;
     if (type === "Orb Scan") {
       IconComponent = Globe;
@@ -25,7 +24,6 @@ const UpgradeVerification = () => {
     } else {
       return null;
     }
-    console.log(type);
     return <IconComponent className={className} {...otherProps} />;
   };
 

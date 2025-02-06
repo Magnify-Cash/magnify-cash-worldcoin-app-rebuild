@@ -18,7 +18,6 @@ const Dashboard = () => {
   const hasActiveLoan = data?.loan[0] === true;
   const loan = data?.loan;
   const loanData: Loan = loan && loan[1];
-  console.log(data);
 
   if (isLoading) {
     return (
