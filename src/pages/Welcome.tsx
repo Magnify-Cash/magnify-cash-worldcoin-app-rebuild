@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { MiniKit } from "@worldcoin/minikit-js";
-import { ArrowRight, Shield } from "lucide-react";
+import { ArrowRight, Shield, TestTubes } from "lucide-react";
 import { toast } from "sonner";
 
 const Welcome = () => {
@@ -39,7 +39,6 @@ const Welcome = () => {
         setWalletAddress(finalPayload.address); // Store wallet address in state
         localStorage.setItem("ls_wallet_address", finalPayload.address);
         toast.success("Successfully signed in!");
-        // Instead of calling onSignIn, we'll navigate directly to the wallet page
         navigate("/wallet");
       } else {
         toast.error("Failed to retrieve wallet address.");
@@ -48,6 +47,17 @@ const Welcome = () => {
       console.error("Authentication failed:", error);
       toast.error("Failed to sign in. Please try again.");
     }
+  };
+
+  const handleMockSignIn = () => {
+    const mockAddress = "0x742d35Cc6634C0532925a3b844Bc454e4438f44e";
+    const mockUsername = "test_user";
+    localStorage.setItem("ls_wallet_address", mockAddress);
+    localStorage.setItem("ls_username", mockUsername);
+    setWalletAddress(mockAddress);
+    setUsername(mockUsername);
+    toast.success("Successfully signed in with mock credentials!");
+    navigate("/wallet");
   };
 
   // Watch for updates to MiniKit.user and handle username assignment
@@ -62,7 +72,7 @@ const Welcome = () => {
   // UseEffect to trigger navigation once the sign-in conditions are met
   useEffect(() => {
     if (isSignInReady()) {
-      navigate("/wallet"); // Navigate to wallet page when sign-in is ready
+      navigate("/wallet");
     }
   }, [walletAddress, username, navigate]);
 
@@ -94,7 +104,7 @@ const Welcome = () => {
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16">
             <button
-              onClick={handleSignIn} // Changed to call handleSignIn
+              onClick={handleSignIn}
               className="glass-button flex items-center justify-center gap-2 bg-gradient-to-r from-[#2DFFF9] to-[#FF7777] hover:shadow-lg"
             >
               Start Your Journey
@@ -114,6 +124,21 @@ const Welcome = () => {
           <div className="flex items-center justify-center gap-2 text-gray-600">
             <Shield className="w-5 h-5" />
             <span className="text-sm font-medium">Backed by Industry Leaders in Web3 & DeFi</span>
+          </div>
+
+          {/* Divider */}
+          <div className="my-12 border-t border-gray-200" />
+
+          {/* Mock Sign In (Development Only) */}
+          <div className="flex flex-col items-center gap-4">
+            <button
+              onClick={handleMockSignIn}
+              className="flex items-center justify-center gap-2 py-3 px-6 rounded-xl bg-gray-100 hover:bg-gray-200 text-gray-600 transition-all duration-300 font-medium"
+            >
+              <TestTubes className="w-5 h-5" />
+              Development Testing Sign In
+            </button>
+            <span className="text-xs text-gray-400">For development and testing purposes only</span>
           </div>
         </div>
       </div>
