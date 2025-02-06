@@ -50,8 +50,25 @@ const RepayLoan = () => {
   );
 
   // Loading & error states
-  if (isLoading || !loan) return <div className="container mx-auto p-6 text-center">Loading...</div>;
-  if (isError) return <div className="container mx-auto p-6 text-center">Error fetching data.</div>;
+  // Loading & error states
+  if (isLoading || !loan) {
+    return (
+      <div className="min-h-screen">
+        <Header title="Loan Status" />
+        <div className="flex justify-center items-center h-[calc(100vh-80px)]">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
+        </div>
+      </div>
+    );
+  }
+  if (isError) {
+    return (
+      <div className="min-h-screen">
+        <Header title="Loan Status" />
+        <div className="flex justify-center items-center h-[calc(100vh-80px)]">Error fetching data.</div>
+      </div>
+    );
+  }
 
   // No loan found
   if (loan[0] === false) {

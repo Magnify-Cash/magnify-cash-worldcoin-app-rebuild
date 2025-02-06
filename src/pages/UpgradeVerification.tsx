@@ -43,7 +43,7 @@ const UpgradeVerification = () => {
   if (isError) {
     return (
       <div className="min-h-screen">
-        <Header title="Get a Loan" />
+        <Header title="Upgrade Verification" />
         <div className="flex justify-center items-center h-[calc(100vh-80px)]">Error fetching data.</div>
       </div>
     );
