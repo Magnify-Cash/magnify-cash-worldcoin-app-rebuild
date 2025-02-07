@@ -21,7 +21,7 @@ const UpgradeVerification = () => {
       IconComponent = Globe;
     } else if (type === "Passport") {
       IconComponent = FileCheck;
-    } else if (type === "World ID") {
+    } else if (type === "Device") {
       IconComponent = Shield;
     } else {
       return null;
@@ -117,40 +117,50 @@ const UpgradeVerification = () => {
           >
             {({ open }) => (
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                {Object.entries(data?.allTiers).map(([index, tier]) => (
-                  <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.1 + parseInt(index) * 0.1 }}
-                    className={`glass-card p-6 ${
-                      tier.verificationStatus !== nftInfo.tier.verificationStatus
-                        ? "opacity-50"
-                        : "hover:shadow-lg transition-shadow"
-                    }`}
-                  >
-                    <IconMapping
-                      type={tier.verificationStatus.level}
-                      className="w-12 h-12 mx-auto mb-4 text-primary"
-                    />
-                    <h3 className="text-xl font-semibold mb-2 text-center">
-                      {tier.verificationStatus.level} Verification
-                    </h3>
-                    <Button
-                      className="w-full"
-                      variant="default"
-                      disabled={tier.verificationStatus === nftInfo.tier.verificationStatus}
-                      onClick={() => {
-                        setCurrentTier(tier);
-                        open();
-                      }}
-                    >
-                      {nftInfo.tier.tierId > tier.tierId ||
-                      tier.verificationStatus === nftInfo.tier.verificationStatus
-                        ? "Already claimed"
-                        : `Upgrade to ${tier.verificationStatus.level}`}
-                    </Button>
-                  </motion.div>
-                ))}
+                {Object.entries(data?.allTiers || {}).map(([index, tier]) => {
+                  console.log(tier.verificationStatus.level);
+                  // Check if the tier's verification level is not PASSPORT
+                  if (tier.verificationStatus.level !== "Passport") {
+                    return (
+                      <motion.div
+                        key={tier.tierId}
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.1 + parseInt(index) * 0.1 }}
+                        className={`glass-card p-6 ${
+                          tier.verificationStatus !== nftInfo.tier.verificationStatus
+                            ? "opacity-50"
+                            : "hover:shadow-lg transition-shadow"
+                        }`}
+                      >
+                        <IconMapping
+                          type={tier.verificationStatus.level}
+                          className="w-12 h-12 mx-auto mb-4 text-primary"
+                        />
+                        <h3 className="text-xl font-semibold mb-2 text-center">
+                          {tier.verificationStatus.level} Verification
+                        </h3>
+                        <Button
+                          className="w-full"
+                          variant="default"
+                          disabled={tier.verificationStatus === nftInfo.tier.verificationStatus}
+                          onClick={() => {
+                            setCurrentTier(tier);
+                            open();
+                          }}
+                        >
+                          {nftInfo.tier.tierId > tier.tierId ||
+                          tier.verificationStatus === nftInfo.tier.verificationStatus
+                            ? "Already claimed"
+                            : `Upgrade to ${tier.verificationStatus.level}`}
+                        </Button>
+                      </motion.div>
+                    );
+                  } else {
+                    // If the tier is PASSPORT, return null to not render it
+                    return null;
+                  }
+                })}
               </div>
             )}
           </IDKitWidget>
