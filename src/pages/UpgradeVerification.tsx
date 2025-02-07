@@ -1,8 +1,8 @@
+import { useState } from "react";
 import { Header } from "@/components/Header";
 import { useNavigate } from "react-router-dom";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { useMagnifyWorld } from "@/hooks/useMagnifyWorld";
+import { useMagnifyWorld, Tier } from "@/hooks/useMagnifyWorld";
 import { Shield, FileCheck, Globe } from "lucide-react";
 import { motion } from "framer-motion";
 import { IDKitWidget, VerificationLevel, ISuccessResult } from "@worldcoin/idkit";
@@ -12,6 +12,7 @@ const UpgradeVerification = () => {
   const navigate = useNavigate();
   const ls_wallet = localStorage.getItem("ls_wallet_address");
   const { data, isLoading, isError, refetch } = useMagnifyWorld(ls_wallet);
+  const [currentTier, setCurrentTier] = useState<Tier | null>(null);
 
   // icon mapping
   const IconMapping = ({ type, className, ...otherProps }) => {
@@ -58,6 +59,7 @@ const UpgradeVerification = () => {
 
   // - handle post-claim of verified NFT
   const handleSuccessfulClaim = () => {
+    setCurrentTier(null);
     refetch();
     setTimeout(() => navigate("/loan"), 1000);
   };
@@ -105,70 +107,53 @@ const UpgradeVerification = () => {
           </motion.div>
 
           {/* Verification cards */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {Object.entries(data?.allTiers).map(([index, tier]) => (
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.1 + parseInt(index) * 0.1 }}
-                className={`glass-card p-6 ${
-                  tier.verificationStatus !== nftInfo.tier.verificationStatus
-                    ? "opacity-50"
-                    : "hover:shadow-lg transition-shadow"
-                }`}
-              >
-                <IconMapping
-                  type={tier.verificationStatus.level}
-                  className="w-12 h-12 mx-auto mb-4 text-primary"
-                />
-                <h3 className="text-xl font-semibold mb-2 text-center">
-                  {tier.verificationStatus.level} Verification
-                </h3>
-                <IDKitWidget
-                  app_id="app_e1574897947a0a8633cd75b7c67125d7"
-                  action={tier.verificationStatus.action}
-                  signal={ls_wallet}
-                  onSuccess={handleSuccessfulClaim}
-                  handleVerify={(proof) => handleClaimNFT(proof, tier.verificationStatus.action)}
-                  verification_level={tier.verificationStatus.verification_level as VerificationLevel}
-                >
-                  {({ open }) => (
+          <IDKitWidget
+            app_id="app_e1574897947a0a8633cd75b7c67125d7"
+            action={currentTier?.verificationStatus.action}
+            signal={ls_wallet}
+            onSuccess={handleSuccessfulClaim}
+            handleVerify={(proof) => handleClaimNFT(proof, currentTier?.verificationStatus.action)}
+            verification_level={currentTier?.verificationStatus.verification_level as VerificationLevel}
+          >
+            {({ open }) => (
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                {Object.entries(data?.allTiers).map(([index, tier]) => (
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.1 + parseInt(index) * 0.1 }}
+                    className={`glass-card p-6 ${
+                      tier.verificationStatus !== nftInfo.tier.verificationStatus
+                        ? "opacity-50"
+                        : "hover:shadow-lg transition-shadow"
+                    }`}
+                  >
+                    <IconMapping
+                      type={tier.verificationStatus.level}
+                      className="w-12 h-12 mx-auto mb-4 text-primary"
+                    />
+                    <h3 className="text-xl font-semibold mb-2 text-center">
+                      {tier.verificationStatus.level} Verification
+                    </h3>
                     <Button
                       className="w-full"
                       variant="default"
                       disabled={tier.verificationStatus === nftInfo.tier.verificationStatus}
-                      onClick={() => open()}
+                      onClick={() => {
+                        setCurrentTier(tier);
+                        open();
+                      }}
                     >
                       {nftInfo.tier.tierId > tier.tierId ||
                       tier.verificationStatus === nftInfo.tier.verificationStatus
                         ? "Already claimed"
                         : `Upgrade to ${tier.verificationStatus.level}`}
                     </Button>
-                  )}
-                </IDKitWidget>
-              </motion.div>
-            ))}
-          </div>
-
-          <Dialog open={false} onOpenChange={() => {}}>
-            <DialogContent>
-              <DialogHeader>
-                <DialogTitle>Confirm Verification Upgrade</DialogTitle>
-                <DialogDescription>
-                  Are you sure you want to upgrade to verification? This will mint an NFT collateral to your
-                  WorldChain wallet.
-                </DialogDescription>
-              </DialogHeader>
-              <div className="flex justify-end space-x-2">
-                <Button variant="outline" onClick={() => {}}>
-                  Cancel
-                </Button>
-                <Button onClick={() => {}} disabled={isLoading}>
-                  {isLoading ? "Processing..." : "Confirm Upgrade"}
-                </Button>
+                  </motion.div>
+                ))}
               </div>
-            </DialogContent>
-          </Dialog>
+            )}
+          </IDKitWidget>
         </div>
       </div>
     );
