@@ -10,12 +10,16 @@ export const VERIFICATION_TIERS = {
     description: "World ID ORB Verified",
     color: "text-brand-success",
     message: "You're fully verified and eligible for maximum loan amounts!",
+    action: "mint-orb-verified-nft",
+    verification_level: "orb",
   },
   PASSPORT: {
     level: "Passport",
     description: "World ID Passport Verified",
     color: "text-brand-warning",
     message: "Get ORB verified to unlock $10 loans!",
+    action: "mint-passport-verified-nft",
+    verification_level: "passport",
   },
   NONE: {
     level: "Device",
@@ -23,6 +27,8 @@ export const VERIFICATION_TIERS = {
     color: "text-brand-info",
     message:
       "Get World ID verified to unlock higher loan amounts! Verify with Passport for $5 loans or get ORB verified for $10 loans.",
+    action: "mint-device-verified-nft",
+    verification_level: "device",
   },
 };
 
@@ -33,6 +39,8 @@ export interface VerificationTier {
   description: string;
   color: string;
   message: string;
+  action: string;
+  verification_level: string;
 }
 export interface Tier {
   loanAmount: bigint;

@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { useMagnifyWorld } from "@/hooks/useMagnifyWorld";
 import { Shield, FileCheck, Globe } from "lucide-react";
 import { motion } from "framer-motion";
+import { IDKitWidget, VerificationLevel, ISuccessResult } from "@worldcoin/idkit";
 
 const UpgradeVerification = () => {
   // hooks
@@ -25,6 +26,40 @@ const UpgradeVerification = () => {
       return null;
     }
     return <IconComponent className={className} {...otherProps} />;
+  };
+
+  // nft verification
+  // - handle claim of verified nft
+  const handleClaimNFT = async (proof: ISuccessResult, action: string) => {
+    try {
+      const res = await fetch("https://worldid-backend.kevin8396.workers.dev", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          proof,
+          signal: ls_wallet,
+          action: action,
+        }),
+      });
+      if (!res.ok) {
+        const error = await res.json();
+        throw new Error(error.message || "Verification failed");
+      }
+      const data = await res.json();
+      console.log("NFT minted successfully:", data);
+      return data;
+    } catch (error) {
+      console.error("Verification error:", error);
+      throw error;
+    }
+  };
+
+  // - handle post-claim of verified NFT
+  const handleSuccessfulClaim = () => {
+    refetch();
+    setTimeout(() => navigate("/loan"), 1000);
   };
 
   // Loading & error states
@@ -89,18 +124,28 @@ const UpgradeVerification = () => {
                 <h3 className="text-xl font-semibold mb-2 text-center">
                   {tier.verificationStatus.level} Verification
                 </h3>
-
-                <Button
-                  className="w-full"
-                  variant="default"
-                  disabled={tier.verificationStatus === nftInfo.tier.verificationStatus}
-                  onClick={() => {}}
+                <IDKitWidget
+                  app_id="app_e1574897947a0a8633cd75b7c67125d7"
+                  action={tier.verificationStatus.action}
+                  signal={ls_wallet}
+                  onSuccess={handleSuccessfulClaim}
+                  handleVerify={(proof) => handleClaimNFT(proof, tier.verificationStatus.action)}
+                  verification_level={tier.verificationStatus.verification_level as VerificationLevel}
                 >
-                  {nftInfo.tier.tierId > tier.tierId ||
-                  tier.verificationStatus === nftInfo.tier.verificationStatus
-                    ? "Already claimed"
-                    : `Upgrade to ${tier.verificationStatus.level}`}
-                </Button>
+                  {({ open }) => (
+                    <Button
+                      className="w-full"
+                      variant="default"
+                      disabled={tier.verificationStatus === nftInfo.tier.verificationStatus}
+                      onClick={() => open()}
+                    >
+                      {nftInfo.tier.tierId > tier.tierId ||
+                      tier.verificationStatus === nftInfo.tier.verificationStatus
+                        ? "Already claimed"
+                        : `Upgrade to ${tier.verificationStatus.level}`}
+                    </Button>
+                  )}
+                </IDKitWidget>
               </motion.div>
             ))}
           </div>
