@@ -90,7 +90,7 @@ const UpgradeVerification = () => {
   }
 
   // state
-  if (data) {
+  if (!isLoading && data) {
     const nftInfo = data?.nftInfo || { tokenId: null, tier: null };
     return (
       <div className="min-h-screen bg-background">

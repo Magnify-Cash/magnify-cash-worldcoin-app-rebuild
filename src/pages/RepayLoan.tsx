@@ -69,7 +69,7 @@ const RepayLoan = () => {
   }
 
   // No loan found
-  if (loan[0] === false) {
+  if (!isLoading && loan[0] === false) {
     return (
       <div className="min-h-screen bg-background">
         <Header title="Loan Status" />
@@ -89,7 +89,7 @@ const RepayLoan = () => {
   }
 
   // active loan
-  if (loan[0] === true) {
+  if (!isLoading && loan[0] === true) {
     const dueDateBigInt = BigInt(loanData.startTime) + BigInt(loanData.loanPeriod);
     const dueDateMs = Number(dueDateBigInt) * 1000; // Convert seconds to milliseconds and to Number type
     const [daysRemaining, hoursRemaining, minutesRemaining, dueDate] = calculateRemainingTime(

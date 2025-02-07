@@ -29,7 +29,7 @@ const Dashboard = () => {
     );
   }
 
-  if (data) {
+  if (!isLoading && data) {
     return (
       <div className="min-h-screen bg-background">
         <Header title="Profile" />

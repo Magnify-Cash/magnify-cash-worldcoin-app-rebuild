@@ -50,7 +50,7 @@ const Loan = () => {
     );
   }
 
-  if (nftInfo.tokenId === null) {
+  if (!isLoading && nftInfo.tokenId === null) {
     return (
       <div className="min-h-screen">
         <div className="p-6 space-y-6">
@@ -74,7 +74,7 @@ const Loan = () => {
     );
   }
 
-  if (hasActiveLoan) {
+  if (!isLoading && hasActiveLoan) {
     return (
       <div className="min-h-screen">
         <Header title="Get a Loan" />
