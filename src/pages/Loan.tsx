@@ -17,7 +17,6 @@ const Loan = () => {
   const { requestNewLoan, error, transactionId, isConfirming, isConfirmed } = useRequestLoan();
 
   // state
-  const nftInfo = data?.nftInfo || { tokenId: null, tier: null };
   const hasActiveLoan = data?.loan[0] === true;
 
   // Handle loan application
@@ -50,7 +49,7 @@ const Loan = () => {
     );
   }
 
-  if (!isLoading && nftInfo.tokenId === null) {
+  if (!isLoading && data && data?.nftInfo.tokenId === null) {
     return (
       <div className="min-h-screen">
         <div className="p-6 space-y-6">
@@ -102,7 +101,7 @@ const Loan = () => {
         <div className="glass-card p-6">
           <h2 className="text-lg font-semibold text-center">Current Loan Eligibility</h2>
           {Object.entries(data?.allTiers || {}).map(([index, tier]) => {
-            if (tier.verificationStatus.level !== "Passport" && nftInfo.tier.tierId >= tier.tierId) {
+            if (tier.verificationStatus.level !== "Passport" && data?.nftInfo.tier.tierId >= tier.tierId) {
               return (
                 <div key={index} className="mt-10">
                   <div className="flex items-center">
