@@ -22,10 +22,10 @@ const Loan = () => {
 
   // Handle loan application
   const handleApplyLoan = useCallback(
-    async (event: React.FormEvent) => {
+    async (requestedTierId: bigint) => {
       event.preventDefault();
       if (data?.nftInfo?.tokenId) {
-        await requestNewLoan();
+        await requestNewLoan(requestedTierId);
       } else {
         alert("Unable to apply for loan. Ensure you have a verified NFT.");
       }
@@ -100,50 +100,60 @@ const Loan = () => {
 
       <div className="p-6 space-y-6">
         <div className="glass-card p-6">
-          <h2 className="text-2xl font-semibold mb-4">Current Loan Eligibility</h2>
-
-          <div className="flex items-center mb-4">
-            <Shield className="w-6 h-6 mr-2" />
-            <span>{nftInfo.tier?.verificationStatus.description}</span>
-          </div>
-
-          <div className="space-y-2">
-            <p className="text-gray-600">
-              Loan Amount: ${formatUnits(nftInfo.tier?.loanAmount || 0, 6) || "$0"}
-            </p>
-            <p className="text-gray-600">
-              Interest Rate: {((nftInfo.tier?.interestRate || BigInt(0)) / BigInt(100)).toString() || "0"}%
-            </p>
-            <p className="text-gray-600">
-              Duration: {((nftInfo.tier?.loanPeriod || BigInt(0)) / BigInt(60 * 24 * 60)).toString() || "N/A"}{" "}
-              days
-            </p>
-          </div>
+          <h2 className="text-lg font-semibold text-center">Current Loan Eligibility</h2>
+          {Object.entries(data?.allTiers || {}).map(([index, tier]) => {
+            if (tier.verificationStatus.level !== "Passport" && nftInfo.tier.tierId >= tier.tierId) {
+              return (
+                <div key={index} className="mt-10">
+                  <div className="flex items-center">
+                    <Shield className="w-6 h-6 mr-2" />
+                    <span>{tier.verificationStatus.description}</span>
+                  </div>
+                  <div className="flex flex-col items-start space-y-3 my-3">
+                    <p className="text-gray-600">Loan Amount: ${formatUnits(tier.loanAmount, 6) || "$0"}</p>
+                    <p className="text-gray-600">
+                      Interest Rate: {((tier.interestRate || BigInt(0)) / BigInt(100)).toString() || "0"}%
+                    </p>
+                    <p className="text-gray-600">
+                      Duration: {((tier.loanPeriod || BigInt(0)) / BigInt(60 * 24 * 60)).toString() || "N/A"}{" "}
+                      days
+                    </p>
+                  </div>
+                  <Button
+                    onClick={() => handleApplyLoan(tier.tierId)}
+                    disabled={isConfirming || isConfirmed}
+                    className="w-full"
+                  >
+                    {isConfirming ? "Confirming..." : isConfirmed ? "Confirmed" : "Apply Now"}
+                  </Button>
+                  <hr className="border-t border-gray-300 mt-4" />
+                </div>
+              );
+            } else {
+              return null;
+            }
+          })}
+          {error && <p className="text-red-500">{error}</p>}
+          {transactionId && (
+            <div className="mt-4">
+              <p className="overflow-hidden text-ellipsis whitespace-nowrap">
+                Transaction ID:{" "}
+                <span title={transactionId}>
+                  {transactionId.slice(0, 10)}...{transactionId.slice(-10)}
+                </span>
+              </p>
+              {isConfirming && <p>Confirming transaction...</p>}
+              {isConfirmed && (
+                <>
+                  <p>Transaction confirmed!</p>
+                  <Button type="button" onClick={handleNavigateAfterTransaction} className="mt-2 w-full">
+                    View Loan Details
+                  </Button>
+                </>
+              )}
+            </div>
+          )}
         </div>
-
-        <Button onClick={handleApplyLoan} disabled={isConfirming || isConfirmed} className="w-full">
-          {isConfirming ? <>Confirming...</> : isConfirmed ? <>Confirmed</> : "Apply Now"}
-        </Button>
-        {error && <p className="text-red-500">{error}</p>}
-        {transactionId && (
-          <div className="mt-4">
-            <p className="overflow-hidden text-ellipsis whitespace-nowrap">
-              Transaction ID:{" "}
-              <span title={transactionId}>
-                {transactionId.slice(0, 10)}...{transactionId.slice(-10)}
-              </span>
-            </p>
-            {isConfirming && <p>Confirming transaction...</p>}
-            {isConfirmed && (
-              <>
-                <p>Transaction confirmed!</p>
-                <Button type="button" onClick={handleNavigateAfterTransaction} className="mt-2 w-full">
-                  View Loan Details
-                </Button>
-              </>
-            )}
-          </div>
-        )}
       </div>
     </div>
   );

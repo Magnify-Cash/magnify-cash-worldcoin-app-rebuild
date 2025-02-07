@@ -7,7 +7,7 @@ import { useEffect, useState, useCallback } from "react";
 export const VERIFICATION_TIERS = {
   ORB: {
     level: "Orb Scan",
-    description: "World ID ORB Verified",
+    description: "Orb Verified",
     color: "text-brand-success",
     message: "You're fully verified and eligible for maximum loan amounts!",
     claimAction: "mint-orb-verified-nft",
@@ -16,7 +16,7 @@ export const VERIFICATION_TIERS = {
   },
   PASSPORT: {
     level: "Passport",
-    description: "World ID Passport Verified",
+    description: "Passport Verified",
     color: "text-brand-warning",
     message: "Get ORB verified to unlock $10 loans!",
     claimAction: "mint-passport-verified-nft",
@@ -25,7 +25,7 @@ export const VERIFICATION_TIERS = {
   },
   NONE: {
     level: "Device",
-    description: "Device-Verified with World ID",
+    description: "Device Verified",
     color: "text-brand-info",
     message:
       "Get World ID verified to unlock higher loan amounts! Verify with Passport for $5 loans or get ORB verified for $10 loans.",

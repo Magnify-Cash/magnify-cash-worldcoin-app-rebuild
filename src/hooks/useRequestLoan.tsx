@@ -38,7 +38,7 @@ const useRequestLoan = () => {
     setIsConfirmed(isTransactionConfirmed);
   }, [isConfirmingTransaction, isTransactionConfirmed]);
 
-  const requestNewLoan = useCallback(async () => {
+  const requestNewLoan = useCallback(async (requestedTierId: bigInt) => {
     setError(null);
     setTransactionId(null);
     setIsConfirming(false);
@@ -52,7 +52,13 @@ const useRequestLoan = () => {
             address: MAGNIFY_WORLD_ADDRESS,
             abi: [
               {
-                inputs: [],
+                inputs: [
+                  {
+                    internalType: "uint256",
+                    name: "requestedTierId",
+                    type: "uint256",
+                  },
+                ],
                 name: "requestLoan",
                 outputs: [],
                 stateMutability: "nonpayable",
@@ -60,7 +66,7 @@ const useRequestLoan = () => {
               },
             ],
             functionName: "requestLoan",
-            args: [],
+            args: [requestedTierId],
           },
         ],
       });
