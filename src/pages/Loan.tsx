@@ -35,7 +35,7 @@ const Loan = () => {
   // Handle navigation after claiming loan
   const handleNavigateAfterTransaction = () => {
     refetch();
-    setTimeout(() => navigate("/profile"), 1000);
+    setTimeout(() => navigate("/repay-loan"), 1000);
   };
 
   if (isLoading) {
