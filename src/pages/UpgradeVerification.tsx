@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Header } from "@/components/Header";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { useMagnifyWorld, Tier } from "@/hooks/useMagnifyWorld";
+import { useMagnifyWorld, Tier, ContractData } from "@/hooks/useMagnifyWorld";
 import { Shield, FileCheck, Globe } from "lucide-react";
 import { motion } from "framer-motion";
 import { IDKitWidget, VerificationLevel, ISuccessResult } from "@worldcoin/idkit";
@@ -31,9 +31,13 @@ const UpgradeVerification = () => {
 
   // nft verification
   // - handle claim of verified nft
-  const handleClaimOrUpgradeNFT = async (proof: ISuccessResult, action: string) => {
+  const handleClaimOrUpgradeNFT = async (
+    proof: ISuccessResult,
+    action: string,
+    nftInfo: ContractData["nftInfo"],
+  ) => {
     try {
-      const res = await fetch("https://worldid-backend.kevin8396.workers.dev", {
+      const res = await fetch("https://worldid-backend-v2.kevin8396.workers.dev", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -42,6 +46,7 @@ const UpgradeVerification = () => {
           proof,
           signal: ls_wallet,
           action: action,
+          nftInfo: nftInfo,
         }),
       });
       if (!res.ok) {
@@ -126,6 +131,7 @@ const UpgradeVerification = () => {
                 nftInfo.tokenId === null
                   ? currentTier?.verificationStatus.claimAction
                   : currentTier?.verificationStatus.upgradeAction,
+                nftInfo,
               )
             }
             verification_level={currentTier?.verificationStatus.verification_level as VerificationLevel}
