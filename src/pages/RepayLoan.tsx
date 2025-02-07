@@ -7,6 +7,7 @@ import { Loan, useMagnifyWorld } from "@/hooks/useMagnifyWorld";
 import { calculateRemainingTime } from "@/utils/timeinfo";
 import useRepayLoan from "@/hooks/useRepayLoan";
 import { useToast } from "@/hooks/use-toast";
+import { formatUnits } from "viem";
 
 const RepayLoan = () => {
   // hooks
@@ -90,12 +91,11 @@ const RepayLoan = () => {
 
   // active loan
   if (!isLoading && loan[0] === true) {
-    const dueDateBigInt = BigInt(loanData.startTime) + BigInt(loanData.loanPeriod);
-    const dueDateMs = Number(dueDateBigInt) * 1000; // Convert seconds to milliseconds and to Number type
     const [daysRemaining, hoursRemaining, minutesRemaining, dueDate] = calculateRemainingTime(
       loanData.startTime,
       loanData.loanPeriod,
     );
+    const amountDue = loanData.amount + (loanData.amount * loanData.interestRate) / 10000n;
     return (
       <div className="min-h-screen bg-background">
         <Header title="Repay Loan" />
@@ -106,43 +106,52 @@ const RepayLoan = () => {
               TODO: NO LOAN TYPE
               <h3 className="text-lg font-semibold">{loan.type} Loan</h3>
               */}
-              <span className="px-3 py-1 rounded-full bg-primary/10 text-primary text-sm">
-                {minutesRemaining === 0 ? "defaulted" : "active"}
+              <span
+                className={`px-3 py-1 rounded-full ${minutesRemaining !== 0 ? "bg-green-300" : "bg-red-300"} text-black text-sm`}
+              >
+                {daysRemaining === 0 && hoursRemaining === 0 && minutesRemaining === 0
+                  ? "defaulted"
+                  : "active"}{" "}
+                loan
               </span>
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 gap-4">
               <div className="flex items-center gap-2">
                 <DollarSign className="w-5 h-5 text-primary" />
                 <div>
                   <p className="text-sm text-muted-foreground text-start">Loan Amount</p>
-                  <p className="text-start font-semibold">${loanData.amount?.toString()}</p>
+                  <p className="text-start font-semibold">${formatUnits(loanData.amount, 6)} </p>
                 </div>
               </div>
-
+              <div className="flex items-center gap-2">
+                <DollarSign className="w-5 h-5 text-primary" />
+                <div>
+                  <p className="text-sm text-muted-foreground text-start">Repayment Amount</p>
+                  <p className="text-start font-semibold">${formatUnits(amountDue, 6)}</p>
+                </div>
+              </div>
               <div className="flex items-center gap-2">
                 <Calendar className="w-5 h-5 text-primary" />
                 <div>
                   <p className="text-sm text-muted-foreground text-start">Due Date</p>
-                  <p className="text-start font-semibold">{dueDate.toLocaleDateString()}</p>
+                  <p className="text-start font-semibold">
+                    {new Date(dueDate).toLocaleDateString("en-US", {
+                      timeZone: "UTC",
+                      day: "2-digit",
+                      month: "short",
+                      hour: "2-digit",
+                    })}
+                  </p>{" "}
                 </div>
               </div>
-
               <div className="flex items-center gap-2">
                 <Clock className="w-5 h-5 text-primary" />
                 <div>
                   <p className="text-sm text-muted-foreground text-start">Time Remaining</p>
                   <p className="text-start font-semibold">
-                    {daysRemaining} days, {hoursRemaining} hours, {minutesRemaining} minutes
+                    {`${daysRemaining}d ${hoursRemaining}hr ${minutesRemaining}m`}
                   </p>
-                </div>
-              </div>
-
-              <div className="flex items-center gap-2">
-                <DollarSign className="w-5 h-5 text-primary" />
-                <div>
-                  <p className="text-sm text-muted-foreground text-start">Repayment Amount</p>
-                  <p className="text-start font-semibold">${loanData.amount?.toString()}</p>
                 </div>
               </div>
             </div>
