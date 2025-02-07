@@ -187,3 +187,197 @@ endLine: 110
 - Loan simulator
 - Verification progress tracker
 - Collateral health indicators
+
+# NFT Verification System Documentation
+
+## Table of Contents
+1. [Core Concept](#core-concept)
+2. [System Architecture](#system-architecture)
+3. [Technical Components](#technical-components)
+4. [Verification Process](#verification-process)
+5. [Key Integration Points](#key-integration-points)
+6. [Security Considerations](#security-considerations)
+7. [Future Improvements](#future-improvements)
+8. [Related Files](#related-files)
+
+## Core Concept
+Three-tier verification system using World ID credentials as NFT collateral:
+- **Tier 1 (Device)**: Base verification → $1 loans
+- **Tier 2 (Passport)**: Mid-tier → $5 loans
+- **Tier 3 (ORB)**: Premium → $10 loans
+
+```typescript
+// Verification tier definitions
+export const VERIFICATION_TIERS = {
+  ORB: {
+    level: "Orb Scan",
+    description: "World ID ORB Verified",
+    color: "text-brand-success",
+    message: "Eligible for $10 loans",
+    action: "mint-orb-nft"
+  },
+  PASSPORT: { /* ... */ },
+  NONE: { /* ... */ }
+};
+```
+
+## System Architecture
+```mermaid
+graph TD
+    A[User] --> B[World ID Auth]
+    B --> C{Verification Tier}
+    C -->|Tier 1| D[Device NFT]
+    C -->|Tier 2| E[Passport NFT]
+    C -->|Tier 3| F[ORB NFT]
+    D --> G[Loan Contract]
+    E --> G
+    F --> G
+    G --> H[Loan Terms]
+```
+
+## Technical Components
+
+### 1. Smart Contract Integration
+```solidity
+// Core verification functions
+function mintVerifiedNFT(string calldata proof) external {
+    (uint256 tierId, bool valid) = _verifyCredential(proof);
+    require(valid, "Invalid proof");
+    _mintWithTier(msg.sender, tierId);
+}
+
+mapping(address => uint256) public userNFT;
+mapping(uint256 => uint256) public nftToTier;
+```
+
+### 2. Frontend State Management
+```typescript
+// useMagnifyWorld hook
+const { data, refetch } = useMagnifyWorld(walletAddress);
+const currentTier = data?.nftInfo.tier?.verificationStatus;
+
+// Cache management
+let globalCache: Record<string, ContractData> = {};
+export function invalidateCache(walletAddress: `0x${string}`) {
+  delete globalCache[walletAddress];
+}
+```
+
+### 3. Verification UI
+```typescript
+// UpgradeVerification.tsx
+{Object.entries(data?.allTiers).map(([index, tier]) => (
+  <Button 
+    onClick={() => handleUpgrade(tier)}
+    disabled={tier.verificationStatus === currentTier}
+  >
+    {`Upgrade to ${tier.verificationStatus.level}`}
+  </Button>
+))}
+```
+
+## Verification Process
+1. User initiates World ID authentication
+2. System validates credential with Worldcoin backend
+3. Smart contract mints tier-specific NFT
+4. NFT metadata determines loan eligibility
+5. Loan terms locked until repayment/NFT burn
+
+```mermaid
+sequenceDiagram
+    participant User
+    participant App
+    participant Contract
+    participant WorldID
+    
+    User->>App: Start Verification
+    App->>WorldID: Request Credential
+    WorldID->>User: Authenticate
+    User->>App: Submit Proof
+    App->>Contract: mintVerifiedNFT(proof)
+    Contract->>WorldID: Verify Proof
+    WorldID->>Contract: Validation Result
+    Contract->>App: Mint NFT
+    App->>User: Display New Tier
+```
+
+## Key Integration Points
+
+| Component          | Responsibility                         | Key Functions                          |
+|--------------------|----------------------------------------|----------------------------------------|
+| `useMagnifyWorld`  | Tier state management                  | `fetchData`, `getVerificationStatus`   |
+| `UpgradeVerification` | User interaction                  | Tier comparison, upgrade initiation    |
+| Smart Contract      | NFT lifecycle management              | `mintVerifiedNFT`, `nftToTier`         |
+| World ID SDK        | Credential verification                | `verifyCredentialProof`                |
+
+## Security Considerations
+
+1. **Proof Validation**
+```typescript
+// Backend verification service
+async function validateProof(proof: string) {
+  return WorldID.verify(proof, {
+    nonce: generateCryptographicNonce(),
+    expiration: Date.now() + 300_000 // 5 minutes
+  });
+}
+```
+
+2. **Rate Limiting**
+```solidity
+uint256 public constant VERIFICATION_COOLDOWN = 1 hours;
+mapping(address => uint256) public lastVerificationAttempt;
+
+modifier checkCooldown() {
+  require(block.timestamp > lastVerificationAttempt[msg.sender] + VERIFICATION_COOLDOWN);
+  _;
+}
+```
+
+3. **Data Privacy**
+- Zero-knowledge proof validation
+- Credential data minimization
+- Encrypted proof storage
+
+## Future Improvements
+1. **Dynamic Tier System**
+```solidity
+function updateTierRequirements(
+  uint256 tierId, 
+  uint256 newLoanAmount, 
+  uint256 newInterestRate
+) external onlyOwner {
+  tiers[tierId] = Tier(newLoanAmount, newInterestRate);
+}
+```
+
+2. **Cross-Chain Support**
+```solidity
+function bridgeNFT(uint256 tokenId, uint256 chainId) external {
+  burn(tokenId);
+  crossChainBridge.mintOnOtherChain(chainId, msg.sender);
+}
+```
+
+3. **Credit History**
+```typescript
+// Proposed credit interface
+interface CreditHistory {
+  trackRepayment(tokenId: number): Promise<void>;
+  getCreditScore(wallet: string): Promise<number>;
+}
+```
+
+## Related Files
+1. `contracts/MagnifyWorldV1.sol` - Core NFT logic
+2. `src/hooks/useMagnifyWorld.tsx` - Tier state management
+3. `src/pages/UpgradeVerification.tsx` - User interface
+4. `src/utils/magnifyworldabi.ts` - Contract ABI definitions
+
+## Repositories
+- Frontend: [github.com/Magnify-Cash/magnify-world](https://github.com/Magnify-Cash/magnify-world)
+- Backend: [github.com/Magnify-Cash/magnify-worldcoin-backend](https://github.com/Magnify-Cash/magnify-worldcoin-backend)
+
+---
+
+> This document serves as the single source of truth for the NFT verification system. Last updated: {current_date}
