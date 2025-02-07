@@ -6,6 +6,7 @@ import { useMagnifyWorld, Tier, ContractData } from "@/hooks/useMagnifyWorld";
 import { Shield, FileCheck, Globe } from "lucide-react";
 import { motion } from "framer-motion";
 import { IDKitWidget, VerificationLevel, ISuccessResult } from "@worldcoin/idkit";
+import { WORLDCOIN_CLIENT_ID } from "@/utils/constants";
 
 const UpgradeVerification = () => {
   // hooks
@@ -117,7 +118,7 @@ const UpgradeVerification = () => {
 
           {/* Verification cards */}
           <IDKitWidget
-            app_id="app_5d33ab69e404d358e7fde190d5fb7241"
+            app_id={WORLDCOIN_CLIENT_ID}
             action={
               nftInfo.tokenId === null
                 ? currentTier?.verificationStatus.claimAction
