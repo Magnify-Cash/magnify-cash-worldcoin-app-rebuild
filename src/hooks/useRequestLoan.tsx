@@ -38,7 +38,7 @@ const useRequestLoan = () => {
     setIsConfirmed(isTransactionConfirmed);
   }, [isConfirmingTransaction, isTransactionConfirmed]);
 
-  const requestNewLoan = useCallback(async (requestedTierId: bigInt) => {
+  const requestNewLoan = useCallback(async (requestedTierId: bigint) => {
     setError(null);
     setTransactionId(null);
     setIsConfirming(false);
@@ -66,7 +66,7 @@ const useRequestLoan = () => {
               },
             ],
             functionName: "requestLoan",
-            args: [requestedTierId],
+            args: [requestedTierId.toString()],
           },
         ],
       });
