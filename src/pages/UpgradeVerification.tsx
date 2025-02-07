@@ -31,7 +31,7 @@ const UpgradeVerification = () => {
 
   // nft verification
   // - handle claim of verified nft
-  const handleClaimNFT = async (proof: ISuccessResult, action: string) => {
+  const handleClaimOrUpgradeNFT = async (proof: ISuccessResult, action: string) => {
     try {
       const res = await fetch("https://worldid-backend.kevin8396.workers.dev", {
         method: "POST",
@@ -58,7 +58,7 @@ const UpgradeVerification = () => {
   };
 
   // - handle post-claim of verified NFT
-  const handleSuccessfulClaim = () => {
+  const handleSuccessfulClaimOrUpgrade = () => {
     setCurrentTier(null);
     refetch();
     setTimeout(() => navigate("/loan"), 1000);
@@ -101,18 +101,33 @@ const UpgradeVerification = () => {
               <Shield className="w-12 h-12 text-primary" />
             </div>
             <h2 className="text-2xl font-bold text-gradient mb-2 text-center">Verification Level</h2>
-            <p className="text-muted-foreground text-center capitalize">
-              Currently: {nftInfo.tier.verificationStatus.level} Verified
-            </p>
+            {nftInfo.tokenId === null ? (
+              <p className="text-muted-foreground text-center text-lg">Unverified</p>
+            ) : (
+              <p className="text-muted-foreground text-center capitalize">
+                Currently: {nftInfo.tier.verificationStatus.level} Verified
+              </p>
+            )}
           </motion.div>
 
           {/* Verification cards */}
           <IDKitWidget
-            app_id="app_e1574897947a0a8633cd75b7c67125d7"
-            action={currentTier?.verificationStatus.action}
+            app_id="app_5d33ab69e404d358e7fde190d5fb7241"
+            action={
+              nftInfo.tokenId === null
+                ? currentTier?.verificationStatus.claimAction
+                : currentTier?.verificationStatus.upgradeAction
+            }
             signal={ls_wallet}
-            onSuccess={handleSuccessfulClaim}
-            handleVerify={(proof) => handleClaimNFT(proof, currentTier?.verificationStatus.action)}
+            onSuccess={handleSuccessfulClaimOrUpgrade}
+            handleVerify={(proof) =>
+              handleClaimOrUpgradeNFT(
+                proof,
+                nftInfo.tokenId === null
+                  ? currentTier?.verificationStatus.claimAction
+                  : currentTier?.verificationStatus.upgradeAction,
+              )
+            }
             verification_level={currentTier?.verificationStatus.verification_level as VerificationLevel}
           >
             {({ open }) => (
@@ -127,11 +142,7 @@ const UpgradeVerification = () => {
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.1 + parseInt(index) * 0.1 }}
-                        className={`glass-card p-6 ${
-                          tier.verificationStatus !== nftInfo.tier.verificationStatus
-                            ? "opacity-50"
-                            : "hover:shadow-lg transition-shadow"
-                        }`}
+                        className="glass-card p-6"
                       >
                         <IconMapping
                           type={tier.verificationStatus.level}
@@ -143,16 +154,21 @@ const UpgradeVerification = () => {
                         <Button
                           className="w-full"
                           variant="default"
-                          disabled={tier.verificationStatus === nftInfo.tier.verificationStatus}
+                          disabled={
+                            nftInfo?.tier?.tierId > tier.tierId ||
+                            tier.verificationStatus === nftInfo.tier?.verificationStatus
+                          }
                           onClick={() => {
                             setCurrentTier(tier);
                             open();
                           }}
                         >
-                          {nftInfo.tier.tierId > tier.tierId ||
-                          tier.verificationStatus === nftInfo.tier.verificationStatus
-                            ? "Already claimed"
-                            : `Upgrade to ${tier.verificationStatus.level}`}
+                          {nftInfo.tokenId === null
+                            ? "Claim NFT"
+                            : nftInfo.tier?.tierId > tier.tierId ||
+                                tier.verificationStatus === nftInfo.tier?.verificationStatus
+                              ? "Already claimed"
+                              : `Upgrade to ${tier.verificationStatus.level}`}
                         </Button>
                       </motion.div>
                     );
