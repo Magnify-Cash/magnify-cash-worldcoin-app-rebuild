@@ -47,7 +47,7 @@ const UpgradeVerification = () => {
           proof,
           signal: ls_wallet,
           action: action,
-          nftInfo: nftInfo,
+          tokenId: nftInfo.tokenId.toString()
         }),
       });
       if (!res.ok) {
