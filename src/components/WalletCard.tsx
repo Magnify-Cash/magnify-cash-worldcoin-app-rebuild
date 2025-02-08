@@ -46,11 +46,6 @@ export const WalletCard = ({
       className="flex items-center justify-between hover:bg-accent/5 rounded-lg transition-colors mb-8"
     >
       <div className="flex items-center content-between gap-4">
-        <div
-          className={`w-10 h-10 aspect-square rounded-full ${randomTailwindColor(symbol[0])} flex items-center justify-center`}
-        >
-          <span className="text-white font-bold">{symbol[0]}</span>
-        </div>
         <div className="text-start">
           <h3 className="font-medium text-foreground">{symbol}</h3>
           <p className="text-xs text-muted-foreground">{currency}</p>
