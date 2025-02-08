@@ -53,7 +53,7 @@ const RepayLoan = () => {
   if (isLoading || !loan) {
     return (
       <div className="min-h-screen">
-        <Header title="Loan Status" />
+        <Header title="Repay Loan" />
         <div className="flex justify-center items-center h-[calc(100vh-80px)]">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
         </div>
@@ -63,7 +63,7 @@ const RepayLoan = () => {
   if (isError) {
     return (
       <div className="min-h-screen">
-        <Header title="Loan Status" />
+        <Header title="Repay Loan" />
         <div className="flex justify-center items-center h-[calc(100vh-80px)]">Error fetching data.</div>
       </div>
     );
@@ -73,7 +73,7 @@ const RepayLoan = () => {
   if (!isLoading && loan[0] === false) {
     return (
       <div className="min-h-screen bg-background">
-        <Header title="Loan Status" />
+        <Header title="Repay Loan" />
         <div className="container max-w-2xl mx-auto p-6 space-y-6">
           <div className="glass-card p-6 space-y-4 hover:shadow-lg transition-all duration-200">
             <h3 className="text-lg font-semibold text-center">No Active Loans</h3>
