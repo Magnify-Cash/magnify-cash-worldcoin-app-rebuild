@@ -83,8 +83,8 @@ const Loan = () => {
             <p className="mt-4 text-gray-600">
               You currently have an active loan. Please navigate to your dashboard for more details.
             </p>
-            <Button type="button" onClick={() => navigate("/profile")} className="mt-4 w-full sm:w-auto">
-              Go to Dashboard
+            <Button type="button" onClick={() => navigate("/repay-loan")} className="mt-4 w-full sm:w-auto">
+              Repay Loan
             </Button>
           </div>
           ;
