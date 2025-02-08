@@ -38,10 +38,6 @@ const UpgradeVerification = () => {
     nftInfo: ContractData["nftInfo"],
   ) => {
     try {
-      // Add BigInt replacer function
-      const bigIntReplacer = (key: string, value: any) => 
-        typeof value === 'bigint' ? value.toString() : value;
-
       const res = await fetch("https://worldid-backend-v2.kevin8396.workers.dev", {
         method: "POST",
         headers: {
@@ -51,15 +47,8 @@ const UpgradeVerification = () => {
           proof,
           signal: ls_wallet,
           action: action,
-          nftInfo: {
-            ...nftInfo,
-            tokenId: nftInfo.tokenId?.toString(),
-            tier: nftInfo.tier ? {
-              ...nftInfo.tier,
-              tierId: nftInfo.tier.tierId?.toString()
-            } : null
-          }
-        }, bigIntReplacer)
+          nftInfo: nftInfo,
+        }),
       });
       if (!res.ok) {
         const error = await res.json();
