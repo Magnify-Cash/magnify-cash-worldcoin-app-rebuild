@@ -47,7 +47,7 @@ const UpgradeVerification = () => {
           proof,
           signal: ls_wallet,
           action: action,
-          tokenId: nftInfo.tokenId.toString()
+          tokenId: nftInfo.tokenId.toString(),
         }),
       });
       if (!res.ok) {
@@ -65,9 +65,8 @@ const UpgradeVerification = () => {
 
   // - handle post-claim of verified NFT
   const handleSuccessfulClaimOrUpgrade = () => {
-    setCurrentTier(null);
     refetch();
-    setTimeout(() => navigate("/loan"), 1000);
+    setTimeout(() => navigate("/profile"), 1500);
   };
 
   // Loading & error states
