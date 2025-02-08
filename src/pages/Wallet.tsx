@@ -169,7 +169,7 @@ const Wallet = () => {
               className="h-20 hover:bg-accent/10"
             >
               <div className="text-center">
-                <div className="text-2xl mb-1">📊</div>
+                <div className="text-2xl mb-1">🔄</div>
                 <span className="text-sm text-muted-foreground">Repay Loan</span>
               </div>
             </Button>
