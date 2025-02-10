@@ -43,6 +43,7 @@ const ProtectedRoute = ({ children }) => {
               description: "You don't have permission to access this area",
               variant: "destructive",
             });
+            setShouldRedirect(true);
           }
         }
       } catch (error) {
@@ -59,12 +60,6 @@ const ProtectedRoute = ({ children }) => {
       setIsLoading(false);
     }
   }, [isAuthorized, toast, isAdminRoute]);
-
-  useEffect(() => {
-    if (!isLoading && isAdminRoute && !isAdmin) {
-      setShouldRedirect(true);
-    }
-  }, [isLoading, isAdminRoute, isAdmin]);
 
   if (isLoading) {
     return (
