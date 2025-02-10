@@ -1,4 +1,3 @@
-
 import { Header } from "@/components/Header";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
@@ -147,7 +146,9 @@ const Announcements = () => {
     );
   }
 
-  const isAdmin = false; // TODO: Implement admin check using Supabase auth
+  // For now, we'll just allow all authenticated users to be admins
+  // TODO: Implement proper admin role checking with Supabase
+  const isAdmin = true;
 
   return (
     <div className="min-h-screen bg-background">

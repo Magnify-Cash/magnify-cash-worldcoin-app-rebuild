@@ -7,6 +7,7 @@ import Loan from "@/pages/Loan";
 import RepayLoan from "@/pages/RepayLoan";
 import UpgradeVerification from "@/pages/UpgradeVerification";
 import Announcements from "@/pages/Announcements";
+import CreateAnnouncement from "@/pages/admin/CreateAnnouncement";
 import ProtectedRoute from "@/pages/ProtectedPage";
 import "./App.css";
 import eruda from "eruda";
@@ -26,6 +27,14 @@ function App() {
             element={
               <ProtectedRoute>
                 <Announcements />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin/create-announcement"
+            element={
+              <ProtectedRoute>
+                <CreateAnnouncement />
               </ProtectedRoute>
             }
           />

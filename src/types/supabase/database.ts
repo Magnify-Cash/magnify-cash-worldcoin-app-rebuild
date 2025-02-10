@@ -1,4 +1,3 @@
-
 import type { AIAgentMetric, ChatMessage, ChatConversation, ChatQuery } from './chat';
 import type { DefiMarketData, DefiLlamaProtocol, DefiLlamaNews } from './defi';
 import type { TokenMetadata, MagTokenAnalytics } from './token';
