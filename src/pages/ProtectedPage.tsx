@@ -1,6 +1,6 @@
+
 import { Navigate, useLocation } from "react-router";
-import { useEffect, useState } from "react";
-import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
 
 interface ProtectedRouteProps {
@@ -10,62 +10,11 @@ interface ProtectedRouteProps {
 const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
   const location = useLocation();
   const { toast } = useToast();
-  const [isAdmin, setIsAdmin] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
-  const [shouldRedirect, setShouldRedirect] = useState(false);
+  const { isAdmin, isLoading } = useAuth();
   
   const isAdminRoute = location.pathname.startsWith("/admin");
   const isWalletRoute = !isAdminRoute;
   const isWorldIDAuthorized = localStorage.getItem("ls_wallet_address");
-  const hasSupabaseSession = !!localStorage.getItem("sb-" + supabase.projectId + "-auth-token");
-
-  useEffect(() => {
-    async function checkAdminRole() {
-      try {
-        // Only check admin role for admin routes or if there's a Supabase session
-        if (isAdminRoute || hasSupabaseSession) {
-          const { data: { user } } = await supabase.auth.getUser();
-          if (!user) {
-            setIsAdmin(false);
-            setIsLoading(false);
-            return;
-          }
-
-          const { data, error } = await supabase.rpc('has_role', {
-            role_to_check: 'admin'
-          });
-          
-          if (error) {
-            console.error("Error checking admin role:", error);
-            toast({
-              title: "Error",
-              description: "Failed to verify admin permissions",
-              variant: "destructive",
-            });
-            setIsAdmin(false);
-          } else {
-            setIsAdmin(data || false);
-            // If trying to access admin route without admin role
-            if (isAdminRoute && !data) {
-              toast({
-                title: "Access Denied",
-                description: "You don't have permission to access this area",
-                variant: "destructive",
-              });
-              setShouldRedirect(true);
-            }
-          }
-        }
-      } catch (error) {
-        console.error("Error in admin check:", error);
-        setIsAdmin(false);
-      } finally {
-        setIsLoading(false);
-      }
-    }
-
-    checkAdminRole();
-  }, [toast, isAdminRoute, hasSupabaseSession]);
 
   if (isLoading) {
     return (
@@ -111,10 +60,6 @@ const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
     if (!isWorldIDAuthorized) {
       return <Navigate to="/" replace />;
     }
-  }
-
-  if (shouldRedirect) {
-    return <Navigate to="/announcements" replace />;
   }
 
   return <>{children}</>;

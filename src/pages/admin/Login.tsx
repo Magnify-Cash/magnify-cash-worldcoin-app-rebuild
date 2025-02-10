@@ -1,51 +1,20 @@
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
 import { Header } from "@/components/Header";
+import { useAuth } from "@/contexts/AuthContext";
 
 const AdminLogin = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [isCheckingSession, setIsCheckingSession] = useState(true);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const navigate = useNavigate();
   const { toast } = useToast();
-
-  useEffect(() => {
-    let isMounted = true;
-
-    async function checkExistingSession() {
-      try {
-        const { data: { session } } = await supabase.auth.getSession();
-        if (session && isMounted) {
-          const { data: hasAdminRole, error: roleError } = await supabase.rpc('has_role', {
-            role_to_check: 'admin'
-          });
-
-          if (hasAdminRole && !roleError && isMounted) {
-            setIsLoggedIn(true);
-          }
-        }
-      } catch (error) {
-        console.error("Session check error:", error);
-      } finally {
-        if (isMounted) {
-          setIsCheckingSession(false);
-        }
-      }
-    }
-
-    checkExistingSession();
-    
-    return () => {
-      isMounted = false;
-    };
-  }, []);
+  const { isAdmin, checkAdminRole } = useAuth();
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -59,11 +28,9 @@ const AdminLogin = () => {
 
       if (error) throw error;
 
-      const { data: hasAdminRole, error: roleError } = await supabase.rpc('has_role', {
-        role_to_check: 'admin'
-      });
+      const isAdminUser = await checkAdminRole();
 
-      if (roleError || !hasAdminRole) {
+      if (!isAdminUser) {
         await supabase.auth.signOut();
         throw new Error("Access denied. Admin privileges required.");
       }
@@ -73,7 +40,7 @@ const AdminLogin = () => {
         description: "Logged in successfully",
       });
       
-      setIsLoggedIn(true);
+      navigate("/admin/create-announcement");
     } catch (error) {
       console.error("Login error:", error);
       toast({
@@ -93,7 +60,6 @@ const AdminLogin = () => {
         title: "Success",
         description: "Logged out successfully",
       });
-      setIsLoggedIn(false);
     } catch (error) {
       console.error("Logout error:", error);
       toast({
@@ -104,20 +70,12 @@ const AdminLogin = () => {
     }
   };
 
-  if (isCheckingSession) {
-    return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
-      </div>
-    );
-  }
-
   return (
     <div className="min-h-screen bg-background">
       <Header title="Admin Login" showBack={true} />
       
       <div className="container max-w-md mx-auto p-6 space-y-8">
-        {isLoggedIn ? (
+        {isAdmin ? (
           <div className="space-y-6 text-center">
             <p className="text-lg">You are currently logged in as an admin.</p>
             <div className="space-y-4">

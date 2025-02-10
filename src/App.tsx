@@ -11,6 +11,7 @@ import Announcements from "@/pages/Announcements";
 import CreateAnnouncement from "@/pages/admin/CreateAnnouncement";
 import AdminLogin from "@/pages/admin/Login";
 import ProtectedRoute from "@/pages/ProtectedPage";
+import { AuthProvider } from "@/contexts/AuthContext";
 import "./App.css";
 import eruda from "eruda";
 import { MiniKitProvider } from "./providers/MiniKitProvider";
@@ -20,77 +21,79 @@ eruda.init();
 function App() {
   return (
     <MiniKitProvider>
-      <Router>
-        <Routes>
-          <Route path="/" element={<Navigate to="/welcome" replace />} />
-          <Route path="/welcome" element={<Welcome />} />
-          <Route path="/admin/login" element={<AdminLogin />} />
-          <Route
-            path="/announcements"
-            element={
-              <ProtectedRoute>
-                <Announcements />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/admin/create-announcement"
-            element={
-              <ProtectedRoute>
-                <CreateAnnouncement />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/guide"
-            element={
-              <ProtectedRoute>
-                <Guide />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/profile"
-            element={
-              <ProtectedRoute>
-                <Profile />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/wallet"
-            element={
-              <ProtectedRoute>
-                <Wallet />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/loan"
-            element={
-              <ProtectedRoute>
-                <Loan />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/repay-loan"
-            element={
-              <ProtectedRoute>
-                <RepayLoan />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/upgrade-verification"
-            element={
-              <ProtectedRoute>
-                <UpgradeVerification />
-              </ProtectedRoute>
-            }
-          />
-        </Routes>
-      </Router>
+      <AuthProvider>
+        <Router>
+          <Routes>
+            <Route path="/" element={<Navigate to="/welcome" replace />} />
+            <Route path="/welcome" element={<Welcome />} />
+            <Route path="/admin/login" element={<AdminLogin />} />
+            <Route
+              path="/announcements"
+              element={
+                <ProtectedRoute>
+                  <Announcements />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/create-announcement"
+              element={
+                <ProtectedRoute>
+                  <CreateAnnouncement />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/guide"
+              element={
+                <ProtectedRoute>
+                  <Guide />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/profile"
+              element={
+                <ProtectedRoute>
+                  <Profile />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/wallet"
+              element={
+                <ProtectedRoute>
+                  <Wallet />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/loan"
+              element={
+                <ProtectedRoute>
+                  <Loan />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/repay-loan"
+              element={
+                <ProtectedRoute>
+                  <RepayLoan />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/upgrade-verification"
+              element={
+                <ProtectedRoute>
+                  <UpgradeVerification />
+                </ProtectedRoute>
+              }
+            />
+          </Routes>
+        </Router>
+      </AuthProvider>
     </MiniKitProvider>
   );
 }
