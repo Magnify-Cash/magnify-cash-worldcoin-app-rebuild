@@ -1,4 +1,3 @@
-
 import { Navigate, useLocation } from "react-router";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
@@ -85,7 +84,7 @@ const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
         description: "WorldID users cannot access admin areas",
         variant: "destructive",
       });
-      return <Navigate to="/wallet" replace />;
+      return <Navigate to="/announcements" replace />;
     }
     
     // If not admin, redirect to login
@@ -98,14 +97,14 @@ const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
 
   // Handle regular wallet routes
   if (isWalletRoute) {
-    // If admin tries to access wallet routes
+    // If admin tries to access wallet routes without WorldID
     if (isAdmin && !isWorldIDAuthorized) {
       toast({
         title: "Access Denied",
-        description: "Please use WorldID to access user features",
+        description: "Please verify with WorldID first",
         variant: "destructive",
       });
-      return <Navigate to="/admin/create-announcement" replace />;
+      return <Navigate to="/" replace />;
     }
 
     // If no WorldID auth, redirect to welcome
