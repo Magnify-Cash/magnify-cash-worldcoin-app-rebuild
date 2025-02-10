@@ -9,13 +9,14 @@ interface ProtectedRouteProps {
 }
 
 const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
-  const isAuthorized = localStorage.getItem("ls_wallet_address");
   const location = useLocation();
   const { toast } = useToast();
   const [isAdmin, setIsAdmin] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [shouldRedirect, setShouldRedirect] = useState(false);
   const isAdminRoute = location.pathname.startsWith("/admin");
+  const isWalletRoute = !isAdminRoute;
+  const isAuthorized = localStorage.getItem("ls_wallet_address");
 
   useEffect(() => {
     async function checkAdminRole() {
@@ -58,12 +59,8 @@ const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
       }
     }
 
-    if (isAuthorized) {
-      checkAdminRole();
-    } else {
-      setIsLoading(false);
-    }
-  }, [isAuthorized, toast, isAdminRoute]);
+    checkAdminRole();
+  }, [toast, isAdminRoute]);
 
   if (isLoading) {
     return (
@@ -73,15 +70,20 @@ const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
     );
   }
 
-  if (!isAuthorized) {
+  // Handle admin routes
+  if (isAdminRoute) {
+    if (!isAdmin) {
+      return <Navigate to="/admin/login" replace />;
+    }
+    return <>{children}</>;
+  }
+
+  // Handle regular wallet routes
+  if (isWalletRoute && !isAuthorized) {
     return <Navigate to="/" replace />;
   }
 
   if (shouldRedirect) {
-    return <Navigate to="/announcements" replace />;
-  }
-
-  if (isAdminRoute && !isAdmin) {
     return <Navigate to="/announcements" replace />;
   }
 

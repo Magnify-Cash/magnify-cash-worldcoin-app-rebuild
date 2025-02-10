@@ -1,3 +1,4 @@
+
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import Welcome from "@/pages/Welcome";
 import Guide from "@/pages/Guide";
@@ -8,6 +9,7 @@ import RepayLoan from "@/pages/RepayLoan";
 import UpgradeVerification from "@/pages/UpgradeVerification";
 import Announcements from "@/pages/Announcements";
 import CreateAnnouncement from "@/pages/admin/CreateAnnouncement";
+import AdminLogin from "@/pages/admin/Login";
 import ProtectedRoute from "@/pages/ProtectedPage";
 import "./App.css";
 import eruda from "eruda";
@@ -22,6 +24,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Navigate to="/welcome" replace />} />
           <Route path="/welcome" element={<Welcome />} />
+          <Route path="/admin/login" element={<AdminLogin />} />
           <Route
             path="/announcements"
             element={
