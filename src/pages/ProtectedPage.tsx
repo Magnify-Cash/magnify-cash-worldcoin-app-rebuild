@@ -10,6 +10,7 @@ const ProtectedRoute = ({ children }) => {
   const { toast } = useToast();
   const [isAdmin, setIsAdmin] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [shouldRedirect, setShouldRedirect] = useState(false);
   const isAdminRoute = location.pathname.startsWith("/admin");
 
   useEffect(() => {
@@ -45,6 +46,17 @@ const ProtectedRoute = ({ children }) => {
     }
   }, [isAuthorized, toast]);
 
+  useEffect(() => {
+    if (!isLoading && isAdminRoute && !isAdmin) {
+      toast({
+        title: "Access Denied",
+        description: "You don't have permission to access this area",
+        variant: "destructive",
+      });
+      setShouldRedirect(true);
+    }
+  }, [isLoading, isAdminRoute, isAdmin, toast]);
+
   if (isLoading) {
     return null; // Or a loading spinner
   }
@@ -53,12 +65,7 @@ const ProtectedRoute = ({ children }) => {
     return <Navigate to="/" replace />;
   }
 
-  if (isAdminRoute && !isAdmin) {
-    toast({
-      title: "Access Denied",
-      description: "You don't have permission to access this area",
-      variant: "destructive",
-    });
+  if (shouldRedirect) {
     return <Navigate to="/announcements" replace />;
   }
 
