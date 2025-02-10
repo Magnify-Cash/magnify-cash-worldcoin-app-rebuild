@@ -4,7 +4,11 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 
-const ProtectedRoute = ({ children }) => {
+interface ProtectedRouteProps {
+  children: React.ReactNode;
+}
+
+const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
   const isAuthorized = localStorage.getItem("ls_wallet_address");
   const location = useLocation();
   const { toast } = useToast();
@@ -16,8 +20,8 @@ const ProtectedRoute = ({ children }) => {
   useEffect(() => {
     async function checkAdminRole() {
       try {
-        const { data: userData } = await supabase.auth.getUser();
-        if (!userData.user) {
+        const { data: { user } } = await supabase.auth.getUser();
+        if (!user) {
           setIsAdmin(false);
           setIsLoading(false);
           return;
@@ -77,7 +81,11 @@ const ProtectedRoute = ({ children }) => {
     return <Navigate to="/announcements" replace />;
   }
 
-  return children;
+  if (isAdminRoute && !isAdmin) {
+    return <Navigate to="/announcements" replace />;
+  }
+
+  return <>{children}</>;
 };
 
 export default ProtectedRoute;

@@ -1,3 +1,4 @@
+
 import type { AIAgentMetric, ChatMessage, ChatConversation, ChatQuery } from './chat';
 import type { DefiMarketData, DefiLlamaProtocol, DefiLlamaNews } from './defi';
 import type { TokenMetadata, MagTokenAnalytics } from './token';
@@ -6,6 +7,14 @@ import type { MagRewards } from './rewards';
 import type { Transaction, WalletBalance } from '../wallet';
 
 export type AnnouncementType = 'new-feature' | 'security' | 'update' | 'announcement';
+export type AppRole = 'admin' | 'moderator' | 'user';
+
+export interface UserRole {
+  id: string;
+  user_id: string;
+  role: AppRole;
+  created_at: string;
+}
 
 export interface Announcement {
   id: number;
@@ -27,6 +36,11 @@ export interface Database {
         Row: Announcement;
         Insert: Omit<Announcement, 'id' | 'created_at'>;
         Update: Partial<Omit<Announcement, 'id' | 'created_at'>>;
+      };
+      user_roles: {
+        Row: UserRole;
+        Insert: Omit<UserRole, 'id' | 'created_at'>;
+        Update: Partial<Omit<UserRole, 'id' | 'created_at'>>;
       };
       ai_agent_metrics: {
         Row: AIAgentMetric;
@@ -100,9 +114,17 @@ export interface Database {
       };
     };
     Views: Record<string, never>;
-    Functions: Record<string, never>;
+    Functions: {
+      has_role: {
+        Args: {
+          role_to_check: AppRole;
+        };
+        Returns: boolean;
+      };
+    };
     Enums: {
       announcement_type: AnnouncementType;
+      app_role: AppRole;
     };
     CompositeTypes: Record<string, never>;
   };
