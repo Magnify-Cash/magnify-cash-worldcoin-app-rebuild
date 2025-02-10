@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -11,15 +11,33 @@ const AdminLogin = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [isCheckingSession, setIsCheckingSession] = useState(true);
   const navigate = useNavigate();
   const { toast } = useToast();
 
-  // Check if user is already authenticated with WorldID
-  const isWorldIDAuthorized = localStorage.getItem("ls_wallet_address");
-  if (isWorldIDAuthorized) {
-    navigate("/wallet");
-    return null;
-  }
+  useEffect(() => {
+    async function checkExistingSession() {
+      try {
+        const { data: { session } } = await supabase.auth.getSession();
+        if (session) {
+          // Check if user has admin role
+          const { data: hasAdminRole, error: roleError } = await supabase.rpc('has_role', {
+            role_to_check: 'admin'
+          });
+
+          if (hasAdminRole && !roleError) {
+            navigate("/admin/create-announcement");
+          }
+        }
+      } catch (error) {
+        console.error("Session check error:", error);
+      } finally {
+        setIsCheckingSession(false);
+      }
+    }
+
+    checkExistingSession();
+  }, [navigate]);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -60,6 +78,14 @@ const AdminLogin = () => {
       setIsLoading(false);
     }
   };
+
+  if (isCheckingSession) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-background">
