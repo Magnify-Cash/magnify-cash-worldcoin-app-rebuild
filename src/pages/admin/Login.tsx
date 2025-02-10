@@ -14,6 +14,13 @@ const AdminLogin = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
 
+  // Check if user is already authenticated with WorldID
+  const isWorldIDAuthorized = localStorage.getItem("ls_wallet_address");
+  if (isWorldIDAuthorized) {
+    navigate("/wallet");
+    return null;
+  }
+
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
@@ -27,11 +34,11 @@ const AdminLogin = () => {
       if (error) throw error;
 
       // Check if user has admin role
-      const { data: hasAdminRole } = await supabase.rpc('has_role', {
+      const { data: hasAdminRole, error: roleError } = await supabase.rpc('has_role', {
         role_to_check: 'admin'
       });
 
-      if (!hasAdminRole) {
+      if (roleError || !hasAdminRole) {
         await supabase.auth.signOut();
         throw new Error("Access denied. Admin privileges required.");
       }
