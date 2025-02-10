@@ -17,27 +17,34 @@ const AdminLogin = () => {
   const { toast } = useToast();
 
   useEffect(() => {
+    let isMounted = true;
+
     async function checkExistingSession() {
       try {
         const { data: { session } } = await supabase.auth.getSession();
-        if (session) {
-          // Check if user has admin role
+        if (session && isMounted) {
           const { data: hasAdminRole, error: roleError } = await supabase.rpc('has_role', {
             role_to_check: 'admin'
           });
 
-          if (hasAdminRole && !roleError) {
+          if (hasAdminRole && !roleError && isMounted) {
             setIsLoggedIn(true);
           }
         }
       } catch (error) {
         console.error("Session check error:", error);
       } finally {
-        setIsCheckingSession(false);
+        if (isMounted) {
+          setIsCheckingSession(false);
+        }
       }
     }
 
     checkExistingSession();
+    
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
   const handleLogin = async (e: React.FormEvent) => {
@@ -52,7 +59,6 @@ const AdminLogin = () => {
 
       if (error) throw error;
 
-      // Check if user has admin role
       const { data: hasAdminRole, error: roleError } = await supabase.rpc('has_role', {
         role_to_check: 'admin'
       });
@@ -67,7 +73,7 @@ const AdminLogin = () => {
         description: "Logged in successfully",
       });
       
-      navigate("/admin/create-announcement");
+      setIsLoggedIn(true);
     } catch (error) {
       console.error("Login error:", error);
       toast({
