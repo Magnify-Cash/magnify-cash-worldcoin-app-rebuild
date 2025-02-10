@@ -1,3 +1,4 @@
+
 import type { AIAgentMetric, ChatMessage, ChatConversation, ChatQuery } from './chat';
 import type { DefiMarketData, DefiLlamaProtocol, DefiLlamaNews } from './defi';
 import type { TokenMetadata, MagTokenAnalytics } from './token';
@@ -5,9 +6,29 @@ import type { LiquidityPool, UserPoolPosition } from './liquidity';
 import type { MagRewards } from './rewards';
 import type { Transaction, WalletBalance } from '../wallet';
 
+export type AnnouncementType = 'new-feature' | 'security' | 'update' | 'announcement';
+
+export interface Announcement {
+  id: number;
+  title: string;
+  content: string;
+  date: string;
+  type: AnnouncementType;
+  is_highlighted: boolean;
+  is_new: boolean;
+  action?: string | null;
+  created_at: string;
+  created_by: string | null;
+}
+
 export interface Database {
   public: {
     Tables: {
+      announcements: {
+        Row: Announcement;
+        Insert: Omit<Announcement, 'id' | 'created_at'>;
+        Update: Partial<Omit<Announcement, 'id' | 'created_at'>>;
+      };
       ai_agent_metrics: {
         Row: AIAgentMetric;
         Insert: Omit<AIAgentMetric, 'id' | 'created_at'>;
@@ -81,7 +102,9 @@ export interface Database {
     };
     Views: Record<string, never>;
     Functions: Record<string, never>;
-    Enums: Record<string, never>;
+    Enums: {
+      announcement_type: AnnouncementType;
+    };
     CompositeTypes: Record<string, never>;
   };
 }

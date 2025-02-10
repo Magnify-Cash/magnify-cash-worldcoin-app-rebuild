@@ -1,62 +1,14 @@
+
 import { Header } from "@/components/Header";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Star, Check } from "lucide-react";
+import { Star, Check, Plus } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useToast } from "@/hooks/use-toast";
-
-interface Announcement {
-  id: number;
-  title: string;
-  date: string;
-  content: string;
-  action?: string;
-  type: "new-feature" | "security" | "update" | "announcement";
-  isHighlighted?: boolean;
-  isNew?: boolean;
-}
-
-// Sample announcements data - can be moved to an API/database later
-const announcements: Announcement[] = [
-  {
-    id: 1,
-    title: "V2 is live",
-    date: "2024-03-21",
-    content: "V2 is now live featuring a new loan type \"Passport Verification\". Try it out!",
-    action: "/loan",
-    type: "new-feature",
-    isHighlighted: true,
-    isNew: true
-  },
-  {
-    id: 2,
-    title: "Welcome to Magnify Cash v2",
-    date: "2024-03-20",
-    content: "We're excited to launch the new version of Magnify Cash with improved features and user experience.",
-    type: "announcement",
-    isNew: true,
-    isHighlighted: true
-  },
-  {
-    id: 3,
-    title: "New Wallet Features",
-    date: "2024-03-19",
-    content: "Check out our enhanced wallet functionality with better transaction tracking and real-time updates.",
-    type: "update",
-    isNew: false
-  },
-  {
-    id: 4,
-    title: "Security Updates",
-    date: "2024-03-18",
-    content: "We've implemented additional security measures to keep your assets safe.",
-    type: "security",
-    isNew: false,
-    isHighlighted: true
-  },
-];
+import { supabase } from "@/integrations/supabase/client";
+import type { Announcement } from "@/types/supabase/database";
 
 const getBadgeVariant = (type: Announcement['type']) => {
   switch (type) {
@@ -86,7 +38,6 @@ const getBadgeText = (type: Announcement['type']) => {
 
 type GroupedAnnouncements = [string, Announcement[]][];
 
-// Helper function to group announcements by month
 const groupAnnouncementsByMonth = (announcements: Announcement[]): GroupedAnnouncements => {
   const groups = announcements.reduce((acc, announcement) => {
     const date = new Date(announcement.date);
@@ -106,7 +57,6 @@ const groupAnnouncementsByMonth = (announcements: Announcement[]): GroupedAnnoun
   });
 };
 
-// Helper function to check if announcement is recent (less than 7 days old)
 const isRecent = (date: string) => {
   const announcementDate = new Date(date);
   const now = new Date();
@@ -118,6 +68,8 @@ const isRecent = (date: string) => {
 const Announcements = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
+  const [announcements, setAnnouncements] = useState<Announcement[]>([]);
+  const [loading, setLoading] = useState(true);
   const [readAnnouncements, setReadAnnouncements] = useState<number[]>(() => {
     const saved = localStorage.getItem('readAnnouncements');
     return saved ? JSON.parse(saved) : [];
@@ -126,6 +78,45 @@ const Announcements = () => {
   useEffect(() => {
     localStorage.setItem('readAnnouncements', JSON.stringify(readAnnouncements));
   }, [readAnnouncements]);
+
+  useEffect(() => {
+    const fetchAnnouncements = async () => {
+      try {
+        const { data, error } = await supabase
+          .from('announcements')
+          .select('*')
+          .order('date', { ascending: false });
+
+        if (error) throw error;
+        setAnnouncements(data || []);
+      } catch (error) {
+        console.error('Error fetching announcements:', error);
+        toast({
+          title: "Error",
+          description: "Failed to load announcements",
+          variant: "destructive",
+        });
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchAnnouncements();
+
+    // Subscribe to real-time changes
+    const subscription = supabase
+      .channel('announcements_channel')
+      .on('postgres_changes', 
+        { event: '*', schema: 'public', table: 'announcements' },
+        (payload) => {
+          fetchAnnouncements();
+      })
+      .subscribe();
+
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, [toast]);
 
   const markAsRead = (id: number) => {
     if (!readAnnouncements.includes(id)) {
@@ -141,11 +132,39 @@ const Announcements = () => {
   const isRead = (id: number) => readAnnouncements.includes(id);
   const groupedAnnouncements = groupAnnouncementsByMonth(announcements);
 
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-background">
+        <Header title="Announcements" showBack={false} />
+        <div className="container max-w-2xl mx-auto p-6">
+          <div className="animate-pulse space-y-4">
+            {[1, 2, 3].map((i) => (
+              <div key={i} className="h-32 bg-muted rounded-lg" />
+            ))}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  const isAdmin = false; // TODO: Implement admin check using Supabase auth
+
   return (
     <div className="min-h-screen bg-background">
       <Header title="Announcements" showBack={false} />
       
       <div className="container max-w-2xl mx-auto p-6 space-y-8">
+        {isAdmin && (
+          <Button
+            onClick={() => navigate("/admin/create-announcement")}
+            className="w-full"
+            size="lg"
+          >
+            <Plus className="mr-2 h-4 w-4" />
+            Create Announcement
+          </Button>
+        )}
+
         {groupedAnnouncements.map(([monthYear, monthAnnouncements], groupIndex) => (
           <motion.div
             key={monthYear}
@@ -162,17 +181,17 @@ const Announcements = () => {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: (groupIndex + index) * 0.1 }}
                   className={`glass-card p-6 hover-lift transition-all duration-200 hover:shadow-lg relative 
-                    ${announcement.isHighlighted 
+                    ${announcement.is_highlighted 
                       ? "border-2 border-primary ring-2 ring-primary/20 bg-primary/5" 
                       : ""
                     }`}
                 >
-                  {announcement.isNew && !isRead(announcement.id) && (
+                  {announcement.is_new && !isRead(announcement.id) && (
                     <div className="absolute -top-1 -right-1 w-3 h-3 bg-primary rounded-full animate-pulse" />
                   )}
                   <div className="flex justify-between items-start mb-2">
                     <div className="flex items-center gap-2 flex-wrap">
-                      {announcement.isHighlighted && (
+                      {announcement.is_highlighted && (
                         <Star className="h-5 w-5 text-primary animate-pulse" />
                       )}
                       <h3 className="text-lg font-semibold text-foreground">

@@ -56,6 +56,45 @@ export type Database = {
           },
         ]
       }
+      announcements: {
+        Row: {
+          action: string | null
+          content: string
+          created_at: string
+          created_by: string | null
+          date: string
+          id: number
+          is_highlighted: boolean | null
+          is_new: boolean | null
+          title: string
+          type: Database["public"]["Enums"]["announcement_type"]
+        }
+        Insert: {
+          action?: string | null
+          content: string
+          created_at?: string
+          created_by?: string | null
+          date?: string
+          id?: number
+          is_highlighted?: boolean | null
+          is_new?: boolean | null
+          title: string
+          type: Database["public"]["Enums"]["announcement_type"]
+        }
+        Update: {
+          action?: string | null
+          content?: string
+          created_at?: string
+          created_by?: string | null
+          date?: string
+          id?: number
+          is_highlighted?: boolean | null
+          is_new?: boolean | null
+          title?: string
+          type?: Database["public"]["Enums"]["announcement_type"]
+        }
+        Relationships: []
+      }
       chat_conversations: {
         Row: {
           context: Json | null
@@ -805,7 +844,7 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      announcement_type: "new-feature" | "security" | "update" | "announcement"
     }
     CompositeTypes: {
       [_ in never]: never
