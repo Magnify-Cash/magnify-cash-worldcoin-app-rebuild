@@ -1,5 +1,8 @@
-import { ArrowLeft, Home } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+
+import { ArrowLeft, Home, LogOut } from "lucide-react";
+import { useNavigate, useLocation } from "react-router-dom";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -16,6 +19,27 @@ interface HeaderProps {
 
 export const Header = ({ title, showBack = true }: HeaderProps) => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const { toast } = useToast();
+  const isAdminRoute = location.pathname.startsWith("/admin");
+
+  const handleLogout = async () => {
+    try {
+      await supabase.auth.signOut();
+      toast({
+        title: "Success",
+        description: "Logged out successfully",
+      });
+      navigate("/admin/login");
+    } catch (error) {
+      console.error("Logout error:", error);
+      toast({
+        title: "Error",
+        description: "Failed to log out",
+        variant: "destructive",
+      });
+    }
+  };
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -69,6 +93,16 @@ export const Header = ({ title, showBack = true }: HeaderProps) => {
               </button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-56">
+              {isAdminRoute && (
+                <>
+                  <DropdownMenuItem onClick={handleLogout} className="text-red-600">
+                    <LogOut className="mr-2 h-4 w-4" />
+                    Logout
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                </>
+              )}
+              
               <DropdownMenuLabel>Quick Access</DropdownMenuLabel>
               <DropdownMenuItem onClick={() => navigate("/welcome")}>
                 <Home className="mr-2 h-4 w-4" />
