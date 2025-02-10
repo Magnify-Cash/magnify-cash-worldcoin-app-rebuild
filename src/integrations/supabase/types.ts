@@ -9,7 +9,45 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      [_ in never]: never
+      announcements: {
+        Row: {
+          action: string | null
+          content: string
+          created_at: string
+          created_by: string | null
+          date: string
+          id: number
+          is_highlighted: boolean
+          is_new: boolean
+          title: string
+          type: Database["public"]["Enums"]["announcement_type"]
+        }
+        Insert: {
+          action?: string | null
+          content: string
+          created_at?: string
+          created_by?: string | null
+          date?: string
+          id?: number
+          is_highlighted?: boolean
+          is_new?: boolean
+          title: string
+          type?: Database["public"]["Enums"]["announcement_type"]
+        }
+        Update: {
+          action?: string | null
+          content?: string
+          created_at?: string
+          created_by?: string | null
+          date?: string
+          id?: number
+          is_highlighted?: boolean
+          is_new?: boolean
+          title?: string
+          type?: Database["public"]["Enums"]["announcement_type"]
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
@@ -18,7 +56,7 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      announcement_type: "new-feature" | "security" | "update" | "announcement"
     }
     CompositeTypes: {
       [_ in never]: never
