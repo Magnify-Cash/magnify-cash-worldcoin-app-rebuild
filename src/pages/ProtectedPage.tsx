@@ -16,6 +16,13 @@ const ProtectedRoute = ({ children }) => {
   useEffect(() => {
     async function checkAdminRole() {
       try {
+        const { data: userData } = await supabase.auth.getUser();
+        if (!userData.user) {
+          setIsAdmin(false);
+          setIsLoading(false);
+          return;
+        }
+
         const { data, error } = await supabase.rpc('has_role', {
           role_to_check: 'admin'
         });
@@ -24,12 +31,19 @@ const ProtectedRoute = ({ children }) => {
           console.error("Error checking admin role:", error);
           toast({
             title: "Error",
-            description: "Failed to verify admin permissions",
+            description: "Failed to verify admin permissions. Please try again.",
             variant: "destructive",
           });
           setIsAdmin(false);
         } else {
           setIsAdmin(data || false);
+          if (isAdminRoute && !data) {
+            toast({
+              title: "Access Denied",
+              description: "You don't have permission to access this area",
+              variant: "destructive",
+            });
+          }
         }
       } catch (error) {
         console.error("Error in admin check:", error);
@@ -44,21 +58,20 @@ const ProtectedRoute = ({ children }) => {
     } else {
       setIsLoading(false);
     }
-  }, [isAuthorized, toast]);
+  }, [isAuthorized, toast, isAdminRoute]);
 
   useEffect(() => {
     if (!isLoading && isAdminRoute && !isAdmin) {
-      toast({
-        title: "Access Denied",
-        description: "You don't have permission to access this area",
-        variant: "destructive",
-      });
       setShouldRedirect(true);
     }
-  }, [isLoading, isAdminRoute, isAdmin, toast]);
+  }, [isLoading, isAdminRoute, isAdmin]);
 
   if (isLoading) {
-    return null; // Or a loading spinner
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
+      </div>
+    );
   }
 
   if (!isAuthorized) {
