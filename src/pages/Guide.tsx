@@ -7,10 +7,12 @@ const Guide = () => {
 
   return (
     <div className="min-h-screen">
-      <Header title="How to Use Magnify Cash" />
+      <Header title="Help Center" />
       
       <div className="p-6">
         <section className="mb-8">
+          <h1 className="text-3xl font-bold mb-6">How to Use Magnify Cash</h1>
+
           <h2 className="text-2xl font-semibold mb-4">1. Verify Your Identity</h2>
           <p className="text-gray-600 mb-4">
             Use World ID to verify your identity and access loans tailored to your
@@ -71,12 +73,24 @@ const Guide = () => {
           </div>
         </section>
 
-        <button 
+        {/* <button 
           onClick={() => navigate("/wallet")} 
-          className="glass-button w-full"
+          className="glass-button w-full mb-8"
         >
           Got it, thanks!
-        </button>
+        </button> */}
+
+        <section className="mb-8">
+          <h1 className="text-3xl font-bold mb-6">FAQ</h1>
+          <div className="mb-4">
+            <h2 className="text-xl font-semibold">1. How do I win?</h2>
+            <p className="text-gray-600">Work hard!</p>
+          </div>
+          <div className="mb-4">
+            <h2 className="text-xl font-semibold">2. How do I lose?</h2>
+            <p className="text-gray-600">Don't work hard!</p>
+          </div>
+        </section>
       </div>
     </div>
   );
