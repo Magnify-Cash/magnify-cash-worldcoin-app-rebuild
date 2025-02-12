@@ -9,9 +9,9 @@ const Guide = () => {
     <div className="min-h-screen">
       <Header title="Help Center" />
       
-      <div className="p-6">
-        <section className="mb-8">
-          <h1 className="text-3xl font-bold mb-6">How to Use Magnify Cash</h1>
+      <div className="p-6 text-left">
+        <section className="mb-8 border-b border-gray-300 pb-6">
+          <h1 className="text-3xl font-bold mb-6 underline">How to Use Magnify Cash</h1>
 
           <h2 className="text-2xl font-semibold mb-4">1. Verify Your Identity</h2>
           <p className="text-gray-600 mb-4">
@@ -20,14 +20,14 @@ const Guide = () => {
           </p>
 
           <LoanCard
-            title="WORLD ID"
+            title="DEVICE"
             amount="$1"
             interest="2%"
             duration="30 days"
             icon="world"
           />
           <LoanCard
-            title="PASSPORT"
+            title="PASSPORT (COMING SOON)"
             amount="$5"
             interest="2%"
             duration="60 days"
@@ -47,7 +47,7 @@ const Guide = () => {
           </div>
         </section>
 
-        <section className="mb-8">
+        <section className="mb-8 border-b border-gray-300 pb-6">
           <h2 className="text-2xl font-semibold mb-4">2. Apply for a Loan</h2>
           <p className="text-gray-600 mb-4">
             Choose your loan amount and duration based on your verification level
@@ -58,7 +58,7 @@ const Guide = () => {
           </div>
         </section>
 
-        <section className="mb-8">
+        <section className="mb-8 border-b border-gray-300 pb-6">
           <h2 className="text-2xl font-semibold mb-4">3. Track & Repay</h2>
           <p className="text-gray-600 mb-4">
             Easily monitor your active loans and make repayments directly through
@@ -73,15 +73,14 @@ const Guide = () => {
           </div>
         </section>
 
-        {/* <button 
+{/* <button 
           onClick={() => navigate("/wallet")} 
           className="glass-button w-full mb-8"
         >
           Got it, thanks!
         </button> */}
-
-        <section className="mb-8">
-          <h1 className="text-3xl font-bold mb-6">FAQ</h1>
+        <section className="mb-8 border-t border-gray-300 pt-6">
+          <h1 className="text-3xl font-bold mb-6 underline">FAQ</h1>
           <div className="mb-4">
             <h2 className="text-xl font-semibold">1. How do I win?</h2>
             <p className="text-gray-600">Work hard!</p>

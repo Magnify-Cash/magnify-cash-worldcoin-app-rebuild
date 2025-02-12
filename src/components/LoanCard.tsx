@@ -37,12 +37,12 @@ export const LoanCard = ({
           <h3 className="text-lg font-medium">{title}</h3>
         </div>
         <div className="mt-4 text-center">
-          <p className="text-2xl font-bold text-primary mb-2">{amount}</p>
+          <p className="text-2xl font-bold text-primary mb-2">Loan Amount: {amount}</p>
         </div>
       </div>
       <div className="space-y-2 mt-auto">
-        <p className="text-gray-600 dark:text-gray-400">{interest}</p>
-        <p className="text-gray-600 dark:text-gray-400">{duration}</p>
+        <p className="text-gray-600 dark:text-gray-400">Interest Rate: {interest}</p>
+        <p className="text-gray-600 dark:text-gray-400">Duration: {duration}</p>
       </div>
     </div>
   );
