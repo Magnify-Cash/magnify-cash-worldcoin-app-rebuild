@@ -30,19 +30,17 @@ export const LoanCard = ({
   const { Icon, color } = getIcon();
 
   return (
-    <div className="glass-card w-64 aspect-square p-6 mb-4 flex flex-col justify-between hover:scale-105 transition-transform duration-300">
+    <div className="glass-card w-64 p-6 mb-1 flex flex-col justify-between hover:scale-105 transition-transform duration-300">
       <div>
         <div className="flex items-center mb-4">
           <Icon className={`w-8 h-8 mr-3 ${color}`} />
           <h3 className="text-lg font-medium">{title}</h3>
         </div>
-        <div className="mt-4 text-center">
-          <p className="text-2xl font-bold text-primary mb-2">{amount}</p>
-        </div>
       </div>
-      <div className="space-y-2 mt-auto">
-        <p className="text-gray-600 dark:text-gray-400">{interest}</p>
-        <p className="text-gray-600 dark:text-gray-400">{duration}</p>
+      <div className="space-y+1 mt-auto">
+        <p className="text-gray-600 dark:text-gray-400">Loan Amount: {amount}</p>
+        <p className="text-gray-600 dark:text-gray-400">Interest Rate: {interest}</p>
+        <p className="text-gray-600 dark:text-gray-400">Duration: {duration}</p>
       </div>
     </div>
   );

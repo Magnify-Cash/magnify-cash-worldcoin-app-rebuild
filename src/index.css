@@ -97,8 +97,7 @@
 }
 
 .tip-card {
-  @apply bg-muted/50 dark:bg-muted/20 p-4 rounded-xl 
-         text-muted-foreground my-4 border border-border;
+  @apply bg-accent/50 p-4 rounded-lg;     
 }
 
 /* Add smooth scrolling */
