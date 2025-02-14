@@ -102,7 +102,11 @@ const Guide = () => {
             <p className="text-gray-600">When you first verify your identity on the app, Magnify Cash mints a unique NFT for you! This NFT comes with several tiers that represent your verification level. It also serves as collateral whenever you apply for a loan. You can check the collateral availability of your NFT on your Profile page.</p>
           </div>
           <div className="mb-4">
-            <h2 className="text-xl font-semibold">6. Where can I get the latest updates on Magnify?</h2>
+            <h2 className="text-xl font-semibold">6. What is $MAG?</h2>
+            <p className="text-gray-600">$MAG is the native token of Magnify Cash, available on both Base and Mainnet.</p>
+          </div>
+          <div className="mb-4">
+            <h2 className="text-xl font-semibold">7. Where can I get the latest updates on Magnify?</h2>
             <p className="text-gray-600">You can stay updated by joining us on <a className="text-blue-600 underline" href="https://t.me/MagnifyCommunity">Telegram</a> and <a className="text-blue-600 underline" href="https://discord.gg/magnifycash">Discord</a>.</p>
           </div>
         </section>
