@@ -83,15 +83,27 @@ const Guide = () => {
           <h1 className="text-2xl font-bold mb-6 underline">FAQ</h1>
           <div className="mb-4">
             <h2 className="text-xl font-semibold">1. How many loans can I apply for at a time?</h2>
-            <p className="text-gray-600">Currently you can only apply for one loan at a time</p>
+            <p className="text-gray-600">Currently you can only apply for one loan at a time.</p>
           </div>
           <div className="mb-4">
-            <h2 className="text-xl font-semibold">2. What happens if I don't pay back my loan before the loan due date?</h2>
-            <p className="text-gray-600">If you default your loan, you will be unable to repay the loan. Being unable to repay your loan means you will no longer be able to apply for new loans as well. So be sure to repay your loans on time! For current loan defaulters who want to continue making loans, look out for further updates!</p>
+            <h2 className="text-xl font-semibold">2. What happens if I don't repay my loan before the due date?</h2>
+            <p className="text-gray-600">If you default on your loan, you will lose the ability to repay it. Defaulting also means you will no longer be eligible to apply for new loans. To avoid this, ensure you repay your loans on time! For current defaulters who wish to continue borrowing in the future, stay tuned for further updates.</p>
           </div>
           <div className="mb-4">
-            <h2 className="text-xl font-semibold">3. What is this NFT collateral?</h2>
-            <p className="text-gray-600">When first verifying your identity on the app, Magnify Cash mints you your very own NFT! This NFT has several tiers, which help indicate your verification level. This NFT also acts as collateral whenever you apply for a loan.</p>
+            <h2 className="text-xl font-semibold">3. What currencies are supported for loans on the app?</h2>
+            <p className="text-gray-600">We currently only provide loans in USDc.</p>
+          </div>
+          <div className="mb-4">
+            <h2 className="text-xl font-semibold">4. Can I repay my loan with a currency other than USDc?</h2>
+            <p className="text-gray-600">No, loans can only be repaid using USDc. Other currencies are currently not supported for loan repayment.</p>
+          </div>
+          <div className="mb-4">
+            <h2 className="text-xl font-semibold">5. What is an NFT collateral?</h2>
+            <p className="text-gray-600">When you first verify your identity on the app, Magnify Cash mints a unique NFT for you! This NFT comes with several tiers that represent your verification level. It also serves as collateral whenever you apply for a loan. You can check the collateral availability of your NFT on your Profile page.</p>
+          </div>
+          <div className="mb-4">
+            <h2 className="text-xl font-semibold">6. Where can I get the latest updates on Magnify?</h2>
+            <p className="text-gray-600">You can stay updated by joining us on <a className="text-blue-600 underline" href="https://t.me/MagnifyCommunity">Telegram</a> and <a className="text-blue-600 underline" href="https://discord.gg/magnifycash">Discord</a>.</p>
           </div>
         </section>
       </div>
