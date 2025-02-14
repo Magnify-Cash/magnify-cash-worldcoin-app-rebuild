@@ -87,7 +87,6 @@ const Loan = () => {
               Repay Loan
             </Button>
           </div>
-          ;
         </div>
       </div>
     );
