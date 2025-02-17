@@ -18,18 +18,18 @@ const Guide = () => {
   };
 
   return (
-    <div className="min-h-screen relative">
+    <div className="min-h-screen relative bg-white">
       <Header title="Help Center" />
       
       <div className="p-6 text-left max-w-4xl mx-auto">
         <section className="mb-12">
-          <h1 className="text-4xl font-bold mb-8 text-gradient">
+          <h1 className="text-4xl font-bold mb-8 bg-gradient-to-r from-[#1A1E8F] via-[#5A1A8F] to-[#A11F75] bg-clip-text text-transparent">
             How to Use Magnify Cash
           </h1>
 
           <div className="space-y-8">
-            <div className="glass-card p-8">
-              <h2 className="text-2xl font-semibold mb-6 bg-gradient-to-r from-[#1A1E8F] to-[#5A1A8F] bg-clip-text text-transparent">
+            <div className="glass-card p-8 hover:shadow-[0_0_15px_rgba(90,26,143,0.1)] transition-all duration-300">
+              <h2 className="text-2xl font-semibold mb-6 bg-gradient-to-r from-[#1A1E8F] via-[#5A1A8F] to-[#A11F75] bg-clip-text text-transparent">
                 1. Verify Your Identity
               </h2>
               <p className="text-gray-600 mb-6">
@@ -37,7 +37,7 @@ const Guide = () => {
                 verification level:
               </p>
 
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
                 <LoanCard
                   title="DEVICE"
                   amount="$1"
@@ -61,7 +61,7 @@ const Guide = () => {
                 />
               </div>
 
-              <div className="glass-card p-4 border-l-4 border-[#5A1A8F]">
+              <div className="glass-card p-4 border-l-4 border-[#5A1A8F] bg-gradient-to-r from-[#5A1A8F]/5 to-transparent">
                 <div className="flex items-start gap-3">
                   <Info className="w-5 h-5 text-[#5A1A8F] flex-shrink-0 mt-1" />
                   <p className="text-gray-600">
@@ -71,14 +71,14 @@ const Guide = () => {
               </div>
             </div>
 
-            <div className="glass-card p-8">
-              <h2 className="text-2xl font-semibold mb-6 bg-gradient-to-r from-[#1A1E8F] to-[#5A1A8F] bg-clip-text text-transparent">
+            <div className="glass-card p-8 hover:shadow-[0_0_15px_rgba(90,26,143,0.1)] transition-all duration-300">
+              <h2 className="text-2xl font-semibold mb-6 bg-gradient-to-r from-[#1A1E8F] via-[#5A1A8F] to-[#A11F75] bg-clip-text text-transparent">
                 2. Apply for a Loan
               </h2>
               <p className="text-gray-600 mb-6">
                 Choose your loan amount and duration based on your verification level
               </p>
-              <div className="glass-card p-4 border-l-4 border-[#5A1A8F]">
+              <div className="glass-card p-4 border-l-4 border-[#5A1A8F] bg-gradient-to-r from-[#5A1A8F]/5 to-transparent">
                 <div className="flex items-start gap-3">
                   <Info className="w-5 h-5 text-[#5A1A8F] flex-shrink-0 mt-1" />
                   <p className="text-gray-600">
@@ -89,8 +89,8 @@ const Guide = () => {
               </div>
             </div>
 
-            <div className="glass-card p-8">
-              <h2 className="text-2xl font-semibold mb-6 bg-gradient-to-r from-[#1A1E8F] to-[#5A1A8F] bg-clip-text text-transparent">
+            <div className="glass-card p-8 hover:shadow-[0_0_15px_rgba(90,26,143,0.1)] transition-all duration-300">
+              <h2 className="text-2xl font-semibold mb-6 bg-gradient-to-r from-[#1A1E8F] via-[#5A1A8F] to-[#A11F75] bg-clip-text text-transparent">
                 3. Track & Repay
               </h2>
               <p className="text-gray-600 mb-6">
@@ -100,7 +100,7 @@ const Guide = () => {
               <ul className="list-disc list-inside text-gray-600 mb-6 ml-4 space-y-2">
                 <li>View your loan details, repayment schedule, and status.</li>
               </ul>
-              <div className="glass-card p-4 border-l-4 border-[#5A1A8F]">
+              <div className="glass-card p-4 border-l-4 border-[#5A1A8F] bg-gradient-to-r from-[#5A1A8F]/5 to-transparent">
                 <div className="flex items-start gap-3">
                   <Info className="w-5 h-5 text-[#5A1A8F] flex-shrink-0 mt-1" />
                   <p className="text-gray-600">
@@ -114,8 +114,10 @@ const Guide = () => {
         </section>
 
         <section className="mb-12">
-          <h1 className="text-4xl font-bold mb-8 text-gradient">FAQ</h1>
-          <div className="glass-card p-8">
+          <h1 className="text-4xl font-bold mb-8 bg-gradient-to-r from-[#1A1E8F] via-[#5A1A8F] to-[#A11F75] bg-clip-text text-transparent">
+            FAQ
+          </h1>
+          <div className="glass-card p-8 hover:shadow-[0_0_15px_rgba(90,26,143,0.1)] transition-all duration-300">
             <Accordion type="single" collapsible className="space-y-4">
               <AccordionItem value="item-1" className="border-b border-gray-200">
                 <AccordionTrigger className="text-xl font-semibold hover:text-[#5A1A8F] transition-colors">
@@ -192,9 +194,13 @@ const Guide = () => {
 
         <button
           onClick={scrollToTop}
-          className="fixed bottom-6 right-6 p-3 rounded-full bg-white shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-200"
+          className="fixed bottom-6 right-6 p-3 rounded-full bg-white 
+                   shadow-[0_0_15px_rgba(90,26,143,0.1)]
+                   hover:shadow-[0_0_20px_rgba(90,26,143,0.2)] 
+                   transition-all duration-300 
+                   border border-[#5A1A8F]/10"
         >
-          <ChevronUp className="w-6 h-6 text-gray-600" />
+          <ChevronUp className="w-6 h-6 text-[#5A1A8F]" />
         </button>
       </div>
     </div>
