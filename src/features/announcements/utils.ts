@@ -32,8 +32,13 @@ export const getBadgeText = (type: Announcement['type']) => {
 
 export const groupAnnouncementsByMonth = (announcements: Announcement[]): GroupedAnnouncements => {
   const groups = announcements.reduce((acc, announcement) => {
+    // Parse the date string into a Date object
     const date = new Date(announcement.date);
-    const monthYear = date.toLocaleString('default', { month: 'long', year: 'numeric' });
+    // Format the month and year
+    const monthYear = new Intl.DateTimeFormat('en-US', { 
+      month: 'long',
+      year: 'numeric'
+    }).format(date);
     
     if (!acc[monthYear]) {
       acc[monthYear] = [];
