@@ -80,7 +80,7 @@ const Welcome = () => {
           {/* Trust Badge */}
           <div className="flex items-center justify-center gap-2 text-gray-600">
             <Shield className="w-5 h-5" />
-            <span className="text-sm font-medium">Powered by $MAG and settled on World Chain.</span>
+            <span className="text-sm font-medium">Verified by World ID. Settled on World Chain. Powered by $MAG. </span>
           </div>
         </div>
       </div>
