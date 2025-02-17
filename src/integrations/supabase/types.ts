@@ -48,6 +48,35 @@ export type Database = {
         }
         Relationships: []
       }
+      user_announcement_reads: {
+        Row: {
+          announcement_id: number | null
+          id: string
+          read_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          announcement_id?: number | null
+          id?: string
+          read_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          announcement_id?: number | null
+          id?: string
+          read_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_announcement_reads_announcement_id_fkey"
+            columns: ["announcement_id"]
+            isOneToOne: false
+            referencedRelation: "announcements"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       user_roles: {
         Row: {
           created_at: string

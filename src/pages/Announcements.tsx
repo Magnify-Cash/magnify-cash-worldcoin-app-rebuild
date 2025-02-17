@@ -1,3 +1,4 @@
+
 import { Header } from "@/components/Header";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
@@ -6,57 +7,12 @@ import { Badge } from "@/components/ui/badge";
 import { Star, Check } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import type { Tables } from "@/types/supabase/database";
+import { Skeleton } from "@/components/ui/skeleton";
 
-interface Announcement {
-  id: number;
-  title: string;
-  date: string;
-  content: string;
-  action?: string;
-  type: "new-feature" | "security" | "update" | "announcement";
-  isHighlighted?: boolean;
-  isNew?: boolean;
-}
-
-// Sample announcements data - can be moved to an API/database later
-const announcements: Announcement[] = [
-  {
-    id: 1,
-    title: "V2 is live",
-    date: "2024-03-21",
-    content: "V2 is now live featuring a new loan type \"Passport Verification\". Try it out!",
-    action: "/loan",
-    type: "new-feature",
-    isHighlighted: true,
-    isNew: true
-  },
-  {
-    id: 2,
-    title: "Welcome to Magnify Cash v2",
-    date: "2024-03-20",
-    content: "We're excited to launch the new version of Magnify Cash with improved features and user experience.",
-    type: "announcement",
-    isNew: true,
-    isHighlighted: true
-  },
-  {
-    id: 3,
-    title: "New Wallet Features",
-    date: "2024-03-19",
-    content: "Check out our enhanced wallet functionality with better transaction tracking and real-time updates.",
-    type: "update",
-    isNew: false
-  },
-  {
-    id: 4,
-    title: "Security Updates",
-    date: "2024-03-18",
-    content: "We've implemented additional security measures to keep your assets safe.",
-    type: "security",
-    isNew: false,
-    isHighlighted: true
-  },
-];
+type Announcement = Tables<"announcements">;
 
 const getBadgeVariant = (type: Announcement['type']) => {
   switch (type) {
@@ -86,7 +42,6 @@ const getBadgeText = (type: Announcement['type']) => {
 
 type GroupedAnnouncements = [string, Announcement[]][];
 
-// Helper function to group announcements by month
 const groupAnnouncementsByMonth = (announcements: Announcement[]): GroupedAnnouncements => {
   const groups = announcements.reduce((acc, announcement) => {
     const date = new Date(announcement.date);
@@ -106,7 +61,6 @@ const groupAnnouncementsByMonth = (announcements: Announcement[]): GroupedAnnoun
   });
 };
 
-// Helper function to check if announcement is recent (less than 7 days old)
 const isRecent = (date: string) => {
   const announcementDate = new Date(date);
   const now = new Date();
@@ -118,28 +72,93 @@ const isRecent = (date: string) => {
 const Announcements = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
-  const [readAnnouncements, setReadAnnouncements] = useState<number[]>(() => {
-    const saved = localStorage.getItem('readAnnouncements');
-    return saved ? JSON.parse(saved) : [];
+  const queryClient = useQueryClient();
+
+  const { data: announcements, isLoading: isLoadingAnnouncements } = useQuery({
+    queryKey: ['announcements'],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('announcements')
+        .select('*')
+        .order('date', { ascending: false });
+
+      if (error) {
+        throw error;
+      }
+
+      return data;
+    },
   });
 
-  useEffect(() => {
-    localStorage.setItem('readAnnouncements', JSON.stringify(readAnnouncements));
-  }, [readAnnouncements]);
+  const { data: readAnnouncements } = useQuery({
+    queryKey: ['announcement-reads'],
+    queryFn: async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return [];
 
-  const markAsRead = (id: number) => {
-    if (!readAnnouncements.includes(id)) {
-      const newReadAnnouncements = [...readAnnouncements, id];
-      setReadAnnouncements(newReadAnnouncements);
+      const { data, error } = await supabase
+        .from('user_announcement_reads')
+        .select('announcement_id')
+        .eq('user_id', user.id);
+
+      if (error) {
+        throw error;
+      }
+
+      return data.map(read => read.announcement_id);
+    },
+  });
+
+  const markAsReadMutation = useMutation({
+    mutationFn: async (announcementId: number) => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) throw new Error("User not authenticated");
+
+      const { error } = await supabase
+        .from('user_announcement_reads')
+        .upsert({
+          user_id: user.id,
+          announcement_id: announcementId,
+        });
+
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['announcement-reads'] });
       toast({
         title: "Marked as read",
         description: "This announcement has been marked as read",
       });
-    }
-  };
+    },
+    onError: (error) => {
+      toast({
+        title: "Error",
+        description: "Failed to mark announcement as read",
+        variant: "destructive",
+      });
+      console.error("Error marking announcement as read:", error);
+    },
+  });
 
-  const isRead = (id: number) => readAnnouncements.includes(id);
-  const groupedAnnouncements = groupAnnouncementsByMonth(announcements);
+  const isRead = (id: number) => readAnnouncements?.includes(id) ?? false;
+
+  if (isLoadingAnnouncements) {
+    return (
+      <div className="min-h-screen bg-background">
+        <Header title="Announcements" showBack={false} />
+        <div className="container max-w-2xl mx-auto p-6 space-y-8">
+          {[1, 2, 3].map((i) => (
+            <div key={i} className="space-y-4">
+              <Skeleton className="h-8 w-48" />
+              <Skeleton className="h-32 w-full" />
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  const groupedAnnouncements = groupAnnouncementsByMonth(announcements || []);
 
   return (
     <div className="min-h-screen bg-background">
@@ -162,17 +181,17 @@ const Announcements = () => {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: (groupIndex + index) * 0.1 }}
                   className={`glass-card p-6 hover-lift transition-all duration-200 hover:shadow-lg relative 
-                    ${announcement.isHighlighted 
+                    ${announcement.is_highlighted 
                       ? "border-2 border-primary ring-2 ring-primary/20 bg-primary/5" 
                       : ""
                     }`}
                 >
-                  {announcement.isNew && !isRead(announcement.id) && (
+                  {announcement.is_new && !isRead(announcement.id) && (
                     <div className="absolute -top-1 -right-1 w-3 h-3 bg-primary rounded-full animate-pulse" />
                   )}
                   <div className="flex justify-between items-start mb-2">
                     <div className="flex items-center gap-2 flex-wrap">
-                      {announcement.isHighlighted && (
+                      {announcement.is_highlighted && (
                         <Star className="h-5 w-5 text-primary animate-pulse" />
                       )}
                       <h3 className="text-lg font-semibold text-foreground">
@@ -197,7 +216,7 @@ const Announcements = () => {
                         variant="ghost"
                         size="icon"
                         className={`${isRead(announcement.id) ? 'text-primary' : 'text-muted-foreground'}`}
-                        onClick={() => markAsRead(announcement.id)}
+                        onClick={() => markAsReadMutation.mutate(announcement.id)}
                       >
                         <Check className="h-4 w-4" />
                       </Button>
