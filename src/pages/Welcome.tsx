@@ -1,14 +1,11 @@
-
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { MiniKit } from "@worldcoin/minikit-js";
 import { ArrowRight, Shield } from "lucide-react";
 import { toast } from "sonner";
-
 const Welcome = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
-
   const handleSignIn = async () => {
     const wallet_address = localStorage.getItem("ls_wallet_address");
     const username = localStorage.getItem("ls_username");
@@ -47,12 +44,11 @@ const Welcome = () => {
       toast.error("Failed to sign in. Please try again.");
     }
   };
-
   return <div className="min-h-screen bg-white">
       {/* Navigation */}
       <nav className="px-6 py-4 flex justify-between items-center border-b border-gray-100">
         <div className="flex items-center gap-2">
-          <img src="/lovable-uploads/f590c0ed-415e-4ed0-8f6b-631288f14028.png" alt="Magnify Cash Logo" className="w-8 h-8 rounded-[20%]" />
+          <img alt="Magnify Cash Logo" className="w-8 h-8 rounded-[20%]" src="/lovable-uploads/a58f7265-4f91-4fe4-9870-a88ac9aadba9.jpg" />
           <div className="text-gray-900 text-2xl font-medium">Magnify Cash</div>
         </div>
       </nav>
@@ -70,11 +66,7 @@ const Welcome = () => {
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16">
-            <button 
-              disabled={loading} 
-              onClick={handleSignIn}
-              className="glass-button flex items-center justify-center gap-2"
-            >
+            <button disabled={loading} onClick={handleSignIn} className="glass-button flex items-center justify-center gap-2">
               {loading ? "Connecting..." : "Start Your Journey"}
               <ArrowRight className="w-5 h-5" />
             </button>
@@ -94,5 +86,4 @@ const Welcome = () => {
       </div>
     </div>;
 };
-
 export default Welcome;
