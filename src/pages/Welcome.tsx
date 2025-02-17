@@ -56,7 +56,7 @@ const Welcome = () => {
       {/* Hero Section */}
       <div className="container mx-auto px-6 pt-20 pb-24">
         <div className="max-w-4xl mx-auto text-center">
-          <h1 className="text-5xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-[#2DFFF9] to-[#FF7777] text-transparent bg-clip-text animate-gradient">Get a loan just for being you.</h1>
+          <h1 className="text-5xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-[#2DFFF9] to-[#FF7777] text-transparent bg-clip-text animate-gradient">Get a loan just by being you.</h1>
 
           <p className="text-lg md:text-xl text-gray-700 mb-12 max-w-2xl mx-auto font-medium">
             Get instant loans backed by your World ID. No collateral needed, just your verified digital
