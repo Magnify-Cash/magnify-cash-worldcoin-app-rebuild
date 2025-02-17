@@ -109,6 +109,10 @@ export type Database = {
         }
         Returns: boolean
       }
+      is_admin: {
+        Args: Record<PropertyKey, never>
+        Returns: boolean
+      }
     }
     Enums: {
       announcement_type: "new-feature" | "security" | "update" | "announcement"
