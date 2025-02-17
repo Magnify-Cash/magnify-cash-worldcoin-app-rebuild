@@ -1,11 +1,14 @@
+
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { MiniKit } from "@worldcoin/minikit-js";
 import { ArrowRight, Shield } from "lucide-react";
 import { toast } from "sonner";
+
 const Welcome = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+
   const handleSignIn = async () => {
     const wallet_address = localStorage.getItem("ls_wallet_address");
     const username = localStorage.getItem("ls_username");
@@ -44,6 +47,7 @@ const Welcome = () => {
       toast.error("Failed to sign in. Please try again.");
     }
   };
+
   return <div className="min-h-screen bg-white">
       {/* Navigation */}
       <nav className="px-6 py-4 flex justify-between items-center border-b border-gray-100">
@@ -56,7 +60,9 @@ const Welcome = () => {
       {/* Hero Section */}
       <div className="container mx-auto px-6 pt-20 pb-24">
         <div className="max-w-4xl mx-auto text-center">
-          <h1 className="text-5xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-[#2DFFF9] to-[#FF7777] text-transparent bg-clip-text animate-gradient">Get a loan just by being you.</h1>
+          <h1 className="text-5xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-[#1A1E8F] via-[#5A1A8F] to-[#A11F75] text-transparent bg-clip-text animate-gradient">
+            Get a loan just by being you.
+          </h1>
 
           <p className="text-lg md:text-xl text-gray-700 mb-12 max-w-2xl mx-auto font-medium">
             Get instant loans backed by your World ID. No collateral needed, just your verified digital
@@ -64,8 +70,11 @@ const Welcome = () => {
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16">
-            <button disabled={loading} onClick={handleSignIn} // Changed to call handleSignIn
-          className="glass-button flex items-center justify-center gap-2 bg-gradient-to-r from-[#2DFFF9] to-[#FF7777] hover:shadow-lg">
+            <button 
+              disabled={loading} 
+              onClick={handleSignIn}
+              className="glass-button flex items-center justify-center gap-2"
+            >
               {loading ? "Connecting..." : "Start Your Journey"}
               <ArrowRight className="w-5 h-5" />
             </button>
@@ -85,4 +94,5 @@ const Welcome = () => {
       </div>
     </div>;
 };
+
 export default Welcome;
