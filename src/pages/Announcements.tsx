@@ -19,6 +19,7 @@ const Announcements = () => {
     queryKey: ['session'],
     queryFn: async () => {
       const { data: { session } } = await supabase.auth.getSession();
+      console.log('Session status:', session ? 'Authenticated' : 'Not authenticated');
       return session;
     },
   });
@@ -26,15 +27,18 @@ const Announcements = () => {
   const { data: announcements, isLoading: isLoadingAnnouncements } = useQuery({
     queryKey: ['announcements'],
     queryFn: async () => {
+      console.log('Fetching announcements...');
       const { data, error } = await supabase
         .from('announcements')
         .select('*')
         .order('date', { ascending: false });
 
       if (error) {
+        console.error('Error fetching announcements:', error);
         throw error;
       }
 
+      console.log('Fetched announcements:', data);
       return data;
     },
   });
@@ -50,9 +54,11 @@ const Announcements = () => {
         .eq('user_id', session.user.id);
 
       if (error) {
+        console.error('Error fetching read announcements:', error);
         throw error;
       }
 
+      console.log('Fetched read announcements:', data);
       return data.map(read => read.announcement_id);
     },
     enabled: !!session?.user,
@@ -106,7 +112,9 @@ const Announcements = () => {
     );
   }
 
+  console.log('Rendering announcements:', announcements);
   const groupedAnnouncements = groupAnnouncementsByMonth(announcements || []);
+  console.log('Grouped announcements:', groupedAnnouncements);
 
   return (
     <div className="min-h-screen bg-background">
