@@ -14,6 +14,15 @@ const Announcements = () => {
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
+  // Check if user is authenticated
+  const { data: session } = useQuery({
+    queryKey: ['session'],
+    queryFn: async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      return session;
+    },
+  });
+
   const { data: announcements, isLoading: isLoadingAnnouncements } = useQuery({
     queryKey: ['announcements'],
     queryFn: async () => {
@@ -33,13 +42,12 @@ const Announcements = () => {
   const { data: readAnnouncements } = useQuery({
     queryKey: ['announcement-reads'],
     queryFn: async () => {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) return [];
+      if (!session?.user) return [];
 
       const { data, error } = await supabase
         .from('user_announcement_reads')
         .select('announcement_id')
-        .eq('user_id', user.id);
+        .eq('user_id', session.user.id);
 
       if (error) {
         throw error;
@@ -47,17 +55,17 @@ const Announcements = () => {
 
       return data.map(read => read.announcement_id);
     },
+    enabled: !!session?.user,
   });
 
   const markAsReadMutation = useMutation({
     mutationFn: async (announcementId: number) => {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) throw new Error("User not authenticated");
+      if (!session?.user) throw new Error("User not authenticated");
 
       const { error } = await supabase
         .from('user_announcement_reads')
         .upsert({
-          user_id: user.id,
+          user_id: session.user.id,
           announcement_id: announcementId,
         });
 
@@ -112,7 +120,17 @@ const Announcements = () => {
             announcements={monthAnnouncements}
             groupIndex={groupIndex}
             isRead={isRead}
-            onMarkRead={(id) => markAsReadMutation.mutate(id)}
+            onMarkRead={(id) => {
+              if (!session?.user) {
+                toast({
+                  title: "Authentication required",
+                  description: "Please sign in to mark announcements as read",
+                  variant: "destructive",
+                });
+                return;
+              }
+              markAsReadMutation.mutate(id);
+            }}
           />
         ))}
 
