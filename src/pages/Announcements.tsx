@@ -16,50 +16,55 @@ const Announcements = () => {
 
   // Check if user is authenticated
   const { data: session } = useQuery({
-    queryKey: ['session'],
+    queryKey: ["session"],
     queryFn: async () => {
-      const { data: { session } } = await supabase.auth.getSession();
-      console.log('Session status:', session ? 'Authenticated' : 'Not authenticated');
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
+      console.log(
+        "Session status:",
+        session ? "Authenticated" : "Not authenticated"
+      );
       return session;
     },
   });
 
   const { data: announcements, isLoading: isLoadingAnnouncements } = useQuery({
-    queryKey: ['announcements'],
+    queryKey: ["announcements"],
     queryFn: async () => {
-      console.log('Fetching announcements...');
+      console.log("Fetching announcements...");
       const { data, error } = await supabase
-        .from('announcements')
-        .select('*')
-        .order('date', { ascending: false });
+        .from("announcements")
+        .select("*")
+        .order("date", { ascending: false });
 
       if (error) {
-        console.error('Error fetching announcements:', error);
+        console.error("Error fetching announcements:", error);
         throw error;
       }
 
-      console.log('Fetched announcements:', data);
+      console.log("Fetched announcements:", data);
       return data;
     },
   });
 
   const { data: readAnnouncements } = useQuery({
-    queryKey: ['announcement-reads'],
+    queryKey: ["announcement-reads"],
     queryFn: async () => {
       if (!session?.user) return [];
 
       const { data, error } = await supabase
-        .from('user_announcement_reads')
-        .select('announcement_id')
-        .eq('user_id', session.user.id);
+        .from("user_announcement_reads")
+        .select("announcement_id")
+        .eq("user_id", session.user.id);
 
       if (error) {
-        console.error('Error fetching read announcements:', error);
+        console.error("Error fetching read announcements:", error);
         throw error;
       }
 
-      console.log('Fetched read announcements:', data);
-      return data.map(read => read.announcement_id);
+      console.log("Fetched read announcements:", data);
+      return data.map((read) => read.announcement_id);
     },
     enabled: !!session?.user,
   });
@@ -68,17 +73,15 @@ const Announcements = () => {
     mutationFn: async (announcementId: number) => {
       if (!session?.user) throw new Error("User not authenticated");
 
-      const { error } = await supabase
-        .from('user_announcement_reads')
-        .upsert({
-          user_id: session.user.id,
-          announcement_id: announcementId,
-        });
+      const { error } = await supabase.from("user_announcement_reads").upsert({
+        user_id: session.user.id,
+        announcement_id: announcementId,
+      });
 
       if (error) throw error;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['announcement-reads'] });
+      queryClient.invalidateQueries({ queryKey: ["announcement-reads"] });
       toast({
         title: "Marked as read",
         description: "This announcement has been marked as read",
@@ -100,7 +103,7 @@ const Announcements = () => {
     return (
       <div className="min-h-screen bg-background">
         <Header title="Announcements" showBack={false} />
-        <div className="container max-w-2xl mx-auto p-6 space-y-8">
+        <div className="container max-w-2xl mx-auto p-4 sm:p-6 space-y-6 sm:space-y-8">
           {[1, 2, 3].map((i) => (
             <div key={i} className="space-y-4">
               <Skeleton className="h-8 w-48" />
@@ -112,15 +115,15 @@ const Announcements = () => {
     );
   }
 
-  console.log('Rendering announcements:', announcements);
+  console.log("Rendering announcements:", announcements);
   const groupedAnnouncements = groupAnnouncementsByMonth(announcements || []);
-  console.log('Grouped announcements:', groupedAnnouncements);
+  console.log("Grouped announcements:", groupedAnnouncements);
 
   return (
     <div className="min-h-screen bg-background">
       <Header title="Announcements" showBack={false} />
-      
-      <div className="container max-w-2xl mx-auto p-6 space-y-8">
+
+      <div className="container max-w-2xl mx-auto p-4 sm:p-6 space-y-6 sm:space-y-8">
         {groupedAnnouncements.map(([monthYear, monthAnnouncements], groupIndex) => (
           <AnnouncementGroup
             key={monthYear}
@@ -142,10 +145,10 @@ const Announcements = () => {
           />
         ))}
 
-        <div className="flex justify-center pt-6">
+        <div className="flex justify-center pt-4 sm:pt-6">
           <Button
             onClick={() => navigate("/wallet")}
-            className="w-full max-w-xs"
+            className="w-full sm:w-auto px-8"
             size="lg"
           >
             Go to Wallet
